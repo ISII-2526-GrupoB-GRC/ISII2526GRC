@@ -20,5 +20,18 @@ namespace AppForSEII2526.API.Models
 
         [Required]
         public int Quantity { get; set; }
+
+
+
+        public PurchaseItem() { } //constructor vacio
+
+        public PurchaseItem(string? description, int deviceId, double price, int purchaseID, int quantity) //constructor con parametros
+        {
+            this.Description = description;
+            this.DeviceId = deviceId;
+            this.Price = price;
+            this.PurchaseID = purchaseID;
+            this.Quantity = quantity;
+        }
     }
 }

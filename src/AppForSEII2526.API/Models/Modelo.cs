@@ -16,6 +16,12 @@ namespace AppForSEII2526.API.Models
 
 
 
+        public Modelo() { } //constructor vacio
+        public Modelo(int id, string nameModel) { //constructor con parametros
+            this.Id = id;
+            this.NameModel = nameModel;
+
+        }
 
     }
 }
