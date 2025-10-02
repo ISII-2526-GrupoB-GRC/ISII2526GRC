@@ -36,6 +36,23 @@ namespace AppForSEII2526.API.Models
         public int TotalQuanty { get; set; }
 
 
+
+        public Purchase() { } //constructor vacio
+
+
+        public Purchase(string customerUserName, string customerUserSurname, String deliveryAddress, int id, PaymentMethodTypes paymentMethod, DateTime purchaseDate, double totalPrice, int totalQuanty) //constructor con parametros
+        {
+            this.CustomerUserName = customerUserName;
+            this.CustomerUserSurname = customerUserSurname;
+            this.DeliveryAddress = deliveryAddress;
+            this.Id = id;
+            this.PaymentMethod = paymentMethod;
+            this.PurchaseDate = purchaseDate;
+            this.TotalPrice = totalPrice;
+            this.TotalQuanty = totalQuanty;
+        }
+
+
         public enum PaymentMethodTypes
         {
             Cash,
