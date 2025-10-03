@@ -35,6 +35,8 @@ namespace AppForSEII2526.API.Models
         [Required]
         public int TotalQuanty { get; set; }
 
+        public List<PurchaseItem> PurchaseItems { get; set; } //Relacion con PurchaseItem
+
 
 
         public Purchase() { } //constructor vacio

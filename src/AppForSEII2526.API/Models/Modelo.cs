@@ -14,7 +14,7 @@ namespace AppForSEII2526.API.Models
         [Required]
         public string NameModel { get; set; }
 
-
+        public List<Device> Devices { get; set; } //Relacion con Device
 
         public Modelo() { } //constructor vacio
         public Modelo(int id, string nameModel) { //constructor con parametros
