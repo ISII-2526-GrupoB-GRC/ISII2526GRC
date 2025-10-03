@@ -23,7 +23,7 @@ public class RentDevice
 
 	public RentDevice(int deviceID, double price, int quantity, int rentId)
 	{
-		DeviceID = deviceID;
+		DeviceId = deviceID;
 		Price = price;
 		Quantity = quantity;
 		RentId = rentId;
