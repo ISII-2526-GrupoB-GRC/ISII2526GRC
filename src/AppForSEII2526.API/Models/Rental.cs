@@ -1,5 +1,5 @@
-﻿System.ComponentModel.DataAnnotations;
-System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AppForSEII2526.API.Models
 {
@@ -49,12 +49,12 @@ namespace AppForSEII2526.API.Models
 
         public Rental() { }
 
-        public Rental(string deliveryAdress, int id, int name, int surname, DateTime rentalDate, DateTime rentalDateFrom, DateTime rentalDateTo, double totalPrice)
+        public Rental(string deliveryAdress, int id, string name, string surname, DateTime rentalDate, DateTime rentalDateFrom, DateTime rentalDateTo, double totalPrice)
         {
             this.DeliveryAdress = deliveryAdress;
             this.Id = id;
             this.Name = name;
-            this.surname = surname;
+            this.Surname = surname;
             this.RentalDate = rentalDate; ;
             this.RentalDateFrom = rentalDateFrom;
             this.RentalDateTo = rentalDateTo;
