@@ -5,14 +5,25 @@
         [Key]
         public int Id { get; set; }
         [Required]
-        public string? Description { get; set; }
+        public string Description { get; set; }
         [Required]
         public float Cost { get; set; }
         [Required]
-        public string? Name { get; set; }
+        public string Name { get; set; }
         [Required]
         [ForeignKey("Scale")]
         public int ScaleId { get; set; }
+
+        public Repair() { }
+        
+        public Repair(int id, string description, float cost, string name, int scaleId)
+        {
+            this.Id = id;
+            this.Description = description;
+            this.Cost = cost;
+            this.Name = name;
+            this.ScaleId = scaleId;
+        }
 
         public override bool Equals(object? obj)
         {
