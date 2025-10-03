@@ -20,7 +20,15 @@ namespace AppForSEII2526.API.Models
         [StringLength(100, ErrorMessage = "Máximo número de caracteres alcanzado (100)", MinimumLength = 1)]
         public string Surname { get; set; }
 
-        public PaymentMethod PaymentMethod { get; set; }
+        [Required]
+        public PaymentMethodTypes PaymentMethod { get; set; }
+
+        public enum PaymentMethodTypes
+        {
+            TarjetaCrédito,
+            Efectivo,
+            PayPal
+        }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
@@ -34,6 +42,7 @@ namespace AppForSEII2526.API.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime RentalDateTo { get; set; }
 
+        [Required]
         public double TotalPrice { get; set; }
 
         // Constructores:
