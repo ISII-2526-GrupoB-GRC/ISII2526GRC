@@ -8,6 +8,13 @@
         [Required]
         public string Name { get; set; }
 
+        public Scale() { }
+
+        public Scale(int id, string name)
+        {
+            this.Id = id;
+            this.Name = name;
+        }
         public override bool Equals(object obj)
         {
             if (obj is Scale scale)

@@ -4,13 +4,21 @@
     {
         [Key]
         [Required]
-        public string? Model { get; set; }
+        public string Model { get; set; }
         [Required]
         [ForeignKey("Repair")]
         public int RepairId { get; set; }
         [Required]
         [ForeignKey("Receipt")]
         public int ReceiptId { get; set; }
+
+        public ReceiptIteam() { }
+        public ReceiptIteam(string model, int repairId, int receiptId)
+        {
+            this.Model = model;
+            this.RepairId = repairId;
+            this.ReceiptId = receiptId;
+        }
 
         public override bool Equals(object obj)
         {

@@ -7,15 +7,26 @@
         public int Id { get; set; }
         [Required]
         //[StringLength(20, ErrorMessage = "Name of Customer can be neither longer than 20 characters nor shorter than 1", MinimumLength = 1)]
-        public string? CustomerNameSurname { get; set; }
+        public string CustomerNameSurname { get; set; }
         [Required]
-        public string? DeliveryAddress { get; set; }
+        public string DeliveryAddress { get; set; }
         [Required]
         public PaymentMethodTypes PaymentMethod { get; set; }
         [Required]
         public DateTime ReceiptDate { get; set; }
         [Required]
         public double TotalPrice { get; set; }
+
+        public Receipt() { }
+        public Receipt(int id, string customerNameSurname, string deliveryAddress, PaymentMethodTypes paymentMethod, DateTime receiptDate, double totalPrice)
+        {
+            this.Id = id;
+            this.CustomerNameSurname = customerNameSurname;
+            this.DeliveryAddress = deliveryAddress;
+            this.PaymentMethod = paymentMethod;
+            this.ReceiptDate = receiptDate;
+            this.TotalPrice = totalPrice;
+        }
 
         public enum PaymentMethodTypes
         {
