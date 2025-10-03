@@ -1,12 +1,32 @@
-﻿using System;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 public class RentDevice
 {
-	public RentDevice()
+	[Required]
+	[ForeignKey("Device")]
+	public int DeviceId { get; set; }
+
+	[Required]
+	public double Price { get; set; }
+
+	[Required]
+	public int Quantity { get; set; }
+
+	[Required]
+	[ForeignKey("Rental")]
+	public int RentId { get; set; }
+
+	//Constructores
+
+	public RentDevice() { }
+
+	public RentDevice(int deviceID, double price, int quantity, int rentId)
 	{
-		public int DeviceId { get; set; }
-	    public double price { get; set; }
-	    public int Quantity { get; set; }
-	    public int RentId { get; set; }
+		DeviceID = deviceID;
+		Price = price;
+		Quantity = quantity;
+		RentId = rentId;
 	}
+
 }
