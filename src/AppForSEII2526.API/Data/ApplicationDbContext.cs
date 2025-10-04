@@ -10,4 +10,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Purchase> Purchase { get; set; }
     public DbSet<PurchaseItem> PurchaseItem { get; set; }
     public DbSet<Device> Device { get; set; }
+    public DbSet<Scale> Scale { get; set; }
+    public DbSet<Repair> Repair { get; set; }
+    public DbSet<Receipt> Receipt { get; set; }
+    public DbSet<ReceiptItem> ReceiptItem { get; set; }
+
 }
