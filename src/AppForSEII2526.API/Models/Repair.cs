@@ -11,7 +11,6 @@
         [Required]
         public string Name { get; set; }
         [Required]
-        [ForeignKey("Scale")]
         public int ScaleId { get; set; }
 
         public Repair() { }
@@ -25,6 +24,9 @@
             this.ScaleId = scaleId;
         }
 
+        //Relaciones entre clases
+        public Scale Scale { get; set; }
+        public IList<ReceiptItem> ReceiptItems { get; set; }
         public override bool Equals(object? obj)
         {
             if (obj is Repair repair)

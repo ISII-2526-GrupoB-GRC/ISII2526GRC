@@ -27,5 +27,9 @@
         {
             return HashCode.Combine(Id, Name);
         }
-    }
+
+        //Relaciones entre clases
+        public IList<Repair> Repairs { get; set; }
+
+        }
 }
