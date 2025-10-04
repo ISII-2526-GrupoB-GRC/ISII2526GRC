@@ -6,7 +6,6 @@ namespace AppForSEII2526.API.Models
 	public class RentDevice
 	{
 		[Required]
-		[ForeignKey("Device")]
 		public int DeviceId { get; set; }
 
 		[Required]
@@ -16,7 +15,6 @@ namespace AppForSEII2526.API.Models
 		public int Quantity { get; set; }
 
 		[Required]
-		[ForeignKey("Rental")]
 		public int RentId { get; set; }
 
 		public IList<Device> Devices { get; set; } // Relación con Device

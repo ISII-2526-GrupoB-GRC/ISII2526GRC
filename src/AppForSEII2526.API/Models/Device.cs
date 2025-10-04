@@ -23,10 +23,10 @@ namespace AppForSEII2526.API.Models
         public string Name { get; set; }
 
         [Required]
-        public double PriceForPurchace { get; set; }
+        public double priceForPurchace { get; set; }
 
         [Required]
-        public double PriceForRent { get; set; }
+        public double priceForRent { get; set; }
 
         public List<PurchaseItem> PurchaseItems { get; set; } // Relación con PurchaseItem
 
@@ -67,8 +67,8 @@ namespace AppForSEII2526.API.Models
             this.Color = color;
             this.Id = id;
             this.Name = name;
-            this.PriceForPurchace = pricePurchase;
-            this.PriceForRent = priceRent;
+            this.priceForPurchace = pricePurchase;
+            this.priceForRent = priceRent;
             this.PurchaseItems = purchaseItems;
             this.Quality = quality;
             this.quanityForPurchase = quantityPurchase;
