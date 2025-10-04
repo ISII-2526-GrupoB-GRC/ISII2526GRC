@@ -1,25 +1,81 @@
-﻿using System;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
-public class Device
+namespace AppForSEII2526.API.Models
 {
-	public Device()
+	public class Device
 	{
-		public string Brand { get; set; }
-		public string Color { get; set; }
-		public int Id { get; set; }
-		public string Name { get; set; }
-		public double PriceForPurchace { get; set; }
-		public string PriceForRent { get; set; }
-		public List<PurchaseItem> PurchaseItems { get; set; }
-		public QualityType Quality { get; set; }
-		public int quanityForPurchase { get; set; }
-		public int quantityForRent { get; set;}
-		public List<ReviewItems> ReviewItems { get; set; }
-		public int Year { get; set; }
 
-		public Modelo Model { get; set; } // Relacion con Modelo
+        [Required]
+        [StringLength(50, ErrorMessage = "Máximo número de caracteres alcanzado (50)", MinimumLength = 1)]
+        public string Brand { get; set; }
+
+        [Required]
+        [StringLength(30, ErrorMessage = "Máximo número de caracteres alcanzado (30)", MinimumLength = 1)]
+        public string Color { get; set; }
+
+        [Key]
+        public int Id { get; set; }
+
+        [Required]
+        [StringLength(100, ErrorMessage = "Máximo número de caracteres alcanzado (100)", MinimumLength = 1)]
+        public string Name { get; set; }
+
+        [Required]
+        public double priceForPurchace { get; set; }
+
+        [Required]
+        public double priceForRent { get; set; }
+
+        public List<PurchaseItem> PurchaseItems { get; set; } // Relación con PurchaseItem
+
+        public QualityType Quality { get; set; }
+
+        public enum QualityType
+        {
+            Low,
+            Medium,
+            High
+        }
+
+        [Required]
+        public int quanityForPurchase { get; set; }
+
+        [Required]
+        public int quantityForRent { get; set; }
+
+        // [Required]
+        // public List<ReviewItem> ReviewItems { get; set; }
 
 
+        [Required]
+        public int Year { get; set; }
 
-}
+        
+        public Modelo Model { get; set; } // Relacion con Modelo
+        public IList<RentDevice> RentDevices { get; set; } // Relación con RentDevice
+
+
+        // Constructores
+
+        public Device() { }
+
+        public Device(string brand, string color, int id, string name, double pricePurchase, double priceRent, List<PurchaseItem> purchaseItems, QualityType quality, int quantityPurchase, int quantityRent, int year) // IList<ReviewItem> reviewItems
+        {
+            this.Brand = brand;
+            this.Color = color;
+            this.Id = id;
+            this.Name = name;
+            this.priceForPurchace = pricePurchase;
+            this.priceForRent = priceRent;
+            this.PurchaseItems = purchaseItems;
+            this.Quality = quality;
+            this.quanityForPurchase = quantityPurchase;
+            this.quantityForRent = quantityRent;
+            // this.ReviewItems = reviewItems;
+            this.Year = year;
+
+        }
+	}
 }
