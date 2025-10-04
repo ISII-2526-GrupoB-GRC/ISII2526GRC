@@ -2,7 +2,7 @@
 {
     public class Receipt
     {
-        
+        [Key]
         [Required]
         public int Id { get; set; }
         [Required]
@@ -16,8 +16,10 @@
         public DateTime ReceiptDate { get; set; }
         [Required]
         public double TotalPrice { get; set; }
-
-        public Receipt() { }
+        public IList<ReceiptItem> ReceiptItems { get; set; }
+        public Receipt() {
+            ReceiptItems = new List<ReceiptItem>();
+        }
         public Receipt(int id, string customerNameSurname, string deliveryAddress, PaymentMethodTypes paymentMethod, DateTime receiptDate, double totalPrice)
         {
             this.Id = id;

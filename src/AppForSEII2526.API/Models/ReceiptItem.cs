@@ -1,28 +1,30 @@
 ﻿namespace AppForSEII2526.API.Models
 {
-    public class ReceiptIteam
+    [PrimaryKey(nameof(RepairId), nameof(ReceiptId))]
+    public class ReceiptItem
     {
-        [Key]
         [Required]
         public string Model { get; set; }
+        public Repair Repair { get; set; }
         [Required]
-        [ForeignKey("Repair")]
         public int RepairId { get; set; }
+        public Receipt Receipt { get; set; }
         [Required]
-        [ForeignKey("Receipt")]
         public int ReceiptId { get; set; }
 
-        public ReceiptIteam() { }
-        public ReceiptIteam(string model, int repairId, int receiptId)
+        public ReceiptItem() { }
+        public ReceiptItem(string model, Repair repair, Receipt receipt)
         {
             this.Model = model;
-            this.RepairId = repairId;
-            this.ReceiptId = receiptId;
+            this.Repair = repair;
+            this.RepairId = repair.Id;
+            this.Receipt = receipt;
+            this.ReceiptId = receipt.Id;
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is ReceiptIteam receiptIteam)
+            if (obj is ReceiptItem receiptIteam)
             {
                 return Model == receiptIteam.Model && RepairId == receiptIteam.RepairId && ReceiptId == receiptIteam.ReceiptId;
             }
