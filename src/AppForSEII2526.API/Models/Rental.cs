@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AppForSEII2526.API.Models
 {
+    using System.ComponentModel.DataAnnotations;
     public class Rental
     {
         [Required]
@@ -25,27 +26,29 @@ namespace AppForSEII2526.API.Models
 
         public enum PaymentMethodTypes
         {
-            TarjetaCrédito,
-            Efectivo,
+            Cash,
+            CreditCard,
             PayPal
         }
 
-        [DataType(DataType.Date)]
+        [DataType(DataType.Date), Display(Name = "Fecha de alquiler")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime RentalDate { get; set; }
 
-        [DataType(DataType.Date)]
+        [DataType(DataType.Date), Display(Name = "Alquiler desde")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime RentalDateFrom { get; set; }
 
-        [DataType(DataType.Date)]
+        [DataType(DataType.Date), Display(Name = "Alquiler hasta")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime RentalDateTo { get; set; }
 
         [Required]
         public double TotalPrice { get; set; }
 
-        // Constructores:
+        public RentDevice RentDevice { get; set; } // Relación con RentDevice
+
+        // Constructores
 
         public Rental() { }
 
