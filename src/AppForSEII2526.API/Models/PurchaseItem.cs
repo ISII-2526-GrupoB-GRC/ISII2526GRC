@@ -31,13 +31,15 @@ namespace AppForSEII2526.API.Models
 
         public PurchaseItem() { } //constructor vacio
 
-        public PurchaseItem(string? description, int deviceId, double price, int purchaseID, int quantity) //constructor con parametros
+        public PurchaseItem(string? description, int quantity, Device device,Purchase purchase) //constructor con parametros
         {
             this.Description = description;
-            this.DeviceId = deviceId;
-            this.Price = price;
-            this.PurchaseID = purchaseID;
+            this.DeviceId = device.Id;
+            this.Price = device.PriceForPurchace;
+            this.PurchaseID = purchase.Id;
             this.Quantity = quantity;
+            this.Device = device;
+            this.Purchase = purchase;
         }
     }
 }
