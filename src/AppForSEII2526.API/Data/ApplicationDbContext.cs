@@ -14,5 +14,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Repair> Repair { get; set; }
     public DbSet<Receipt> Receipt { get; set; }
     public DbSet<ReceiptItem> ReceiptItem { get; set; }
+    public DbSet<Rental> Rental { get; set; }
+    public DbSet<RentDevice> RentDevice { get; set; }
 
 }
