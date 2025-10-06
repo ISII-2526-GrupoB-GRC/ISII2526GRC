@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="AppForSEII2526.API.Models.Scale">
+    <Position X="1.25" Y="4" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAQAAAgAAAAAQAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Scale.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Repairs" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="AppForSEII2526.API.Models.Repair">
+    <Position X="4.25" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>ACACAAAAAAAgAAAQgAIAABQAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Repair.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Scale" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="ReceiptItems" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="AppForSEII2526.API.Models.ReceiptItem">
+    <Position X="8.25" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAAAAgAAAAAEAACAAAIAAACgAAAAAAAA=</HashCode>
+      <FileName>Models\ReceiptItem.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Repair" />
+      <Property Name="Receipt" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="AppForSEII2526.API.Models.Receipt">
+    <Position X="12.75" Y="2.75" Width="2.25" />
+    <NestedTypes>
+      <Enum Name="AppForSEII2526.API.Models.Receipt.PaymentMethodTypes" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Models\Receipt.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAHAAAAAAAAAAAQgCAAAAAAAAQAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Receipt.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="ReceiptItems" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
