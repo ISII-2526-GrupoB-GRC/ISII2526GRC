@@ -7,17 +7,17 @@ public class ApplicationUser : IdentityUser {
 
     public ApplicationUser() { }
 
-
-    public ApplicationUser(string id, string name, string surname, string userName)
+    public ApplicationUser(string name, string surname, string address)
     {
-        this.Id = id;
         this.Name = name;
         this.Surname = surname;
-        this.UserName = userName;
-        this.Email = userName;
+        this.DeliveryAddress = address;
+
     }
 
+    [Key]
     [Display(Name = "Name")]
+    [StringLength(50, ErrorMessage = "Máximo número de caracteres alcanzado (50)", MinimumLength = 1)]
     public string Name
     {
         get;
@@ -25,14 +25,16 @@ public class ApplicationUser : IdentityUser {
     }
 
     [Display(Name = "Surname")]
+    [StringLength(80, ErrorMessage = "Máximo número de caracteres alcanzado (50)", MinimumLength = 1)]
     public string Surname
     {
         get;
         set;
     }
 
-    [Display(Name = "Country")]
-    public string Country {
+    [Display(Name = "Delivery Address")]
+    [StringLength(80, ErrorMessage = "Máximo número de caracteres alcanzado (50)", MinimumLength = 1)]
+    public string DeliveryAddress {
         get;
         set;
     }
