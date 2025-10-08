@@ -56,17 +56,10 @@
   </Class>
   <Class Name="AppForSEII2526.API.Models.ApplicationUser">
     <Position X="10.75" Y="3.75" Width="2" />
-    <Members>
-      <Property Name="purchases" Hidden="true" />
-      <Property Name="rentals" Hidden="true" />
-    </Members>
     <TypeIdentifier>
-      <HashCode>AAAAAAAMAAAAAAAAACAAAAQABAAAAAAAAAEAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAACAAAAQABAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\ApplicationUser.cs</FileName>
     </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="receipts" />
-    </ShowAsCollectionAssociation>
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

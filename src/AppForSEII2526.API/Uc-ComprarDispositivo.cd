@@ -21,7 +21,7 @@
     </NestedTypes>
     <AssociationLine Name="PurchaseItems" Type="AppForSEII2526.API.Models.PurchaseItem">
       <MemberNameLabel ManuallyPlaced="true">
-        <Position X="0.064" Y="0.173" />
+        <Position X="-2.339" Y="0.162" />
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
@@ -67,18 +67,11 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="AppForSEII2526.API.Models.ApplicationUser">
-    <Position X="14.25" Y="0.5" Width="2.25" />
-    <Members>
-      <Property Name="receipts" Hidden="true" />
-      <Property Name="rentals" Hidden="true" />
-    </Members>
+    <Position X="13.75" Y="0.75" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAMAAAAAAAAACAAAAQABAAAAAAAAAEAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAACAAAAQABAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\ApplicationUser.cs</FileName>
     </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="purchases" />
-    </ShowAsCollectionAssociation>
   </Class>
   <Font Name="Segoe UI" Size="9.22" />
 </ClassDiagram>
