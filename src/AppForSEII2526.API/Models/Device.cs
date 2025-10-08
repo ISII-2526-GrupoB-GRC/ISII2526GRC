@@ -54,7 +54,7 @@ namespace AppForSEII2526.API.Models
 
         
         public Modelo Model { get; set; } // Relacion con Modelo
-        public IList<RentDevice> RentDevices { get; set; } // Relación con RentDevice
+        public IList<RentDevice> RentedDevices { get; set; } // Relación con RentDevice
 
 
         // Constructores

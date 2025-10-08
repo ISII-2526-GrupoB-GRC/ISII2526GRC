@@ -39,6 +39,9 @@ public class ApplicationUser : IdentityUser {
         set;
     }
 
+    public IList<Rental> rentals { get; set; }
+    public IList<Purchase> purchases { get; set; }
+    public IList<Receipt> receipts { get; set; }
 
 
 }
