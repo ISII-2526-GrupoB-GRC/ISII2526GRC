@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AppForSEII2526.API.Models
 {
+	[PrimaryKey(nameof(DeviceId),nameof(RentId))]
 	public class RentDevice
 	{
 		[Required]
