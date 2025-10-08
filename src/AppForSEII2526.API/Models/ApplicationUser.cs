@@ -15,7 +15,6 @@ public class ApplicationUser : IdentityUser {
 
     }
 
-    [Key]
     [Display(Name = "Name")]
     [StringLength(80, ErrorMessage = "Máximo número de caracteres alcanzado (80)", MinimumLength = 1)]
     public string Name
