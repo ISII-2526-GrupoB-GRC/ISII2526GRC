@@ -11,7 +11,7 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="AppForSEII2526.API.Models.Purchase">
-    <Position X="8" Y="0.5" Width="3.5" />
+    <Position X="8.75" Y="0.5" Width="3.5" />
     <NestedTypes>
       <Enum Name="AppForSEII2526.API.Models.Purchase.PaymentMethodTypes" Collapsed="true">
         <TypeIdentifier>
@@ -19,16 +19,24 @@
         </TypeIdentifier>
       </Enum>
     </NestedTypes>
+    <AssociationLine Name="PurchaseItems" Type="AppForSEII2526.API.Models.PurchaseItem">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-2.339" Y="0.162" />
+      </MemberNameLabel>
+    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAADAgAAAABAAAAQAKAAAAAAAAAAQAAAAAAAAAAAAAE=</HashCode>
+      <HashCode>AAADAgAAAABAAAAQAIAAAAAAAAAAQAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Purchase.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="ApplicationUser" />
+    </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Property Name="PurchaseItems" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="AppForSEII2526.API.Models.PurchaseItem">
-    <Position X="6.5" Y="5.5" Width="2" />
+    <Position X="10" Y="4.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAQAgAgQAAAAAAAAAAAAAAAAAEAAAgAAAAAA=</HashCode>
       <FileName>Models\PurchaseItem.cs</FileName>
@@ -39,7 +47,7 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="AppForSEII2526.API.Models.Device">
-    <Position X="1.75" Y="2" Width="2.75" />
+    <Position X="4" Y="3.5" Width="2.75" />
     <NestedTypes>
       <Enum Name="AppForSEII2526.API.Models.Device.QualityType" Collapsed="true">
         <TypeIdentifier>
@@ -57,6 +65,13 @@
     <ShowAsCollectionAssociation>
       <Property Name="PurchaseItems" />
     </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="AppForSEII2526.API.Models.ApplicationUser">
+    <Position X="13.75" Y="0.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAACAAAAQABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ApplicationUser.cs</FileName>
+    </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9.22" />
 </ClassDiagram>

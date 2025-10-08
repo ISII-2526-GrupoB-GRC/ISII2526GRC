@@ -8,18 +8,9 @@ namespace AppForSEII2526.API.Models
 {
     public class Purchase
     {
-        [Required]
-        public string CustomerUserName { get; set; }
-
-        [Required]
-        public string CustomerUserSurname { get; set; }
-
-        [Required]
-        public String DeliveryAddress { get; set; }
 
         [Key]
         public int Id { get; set; }
-
         
         [Required]
         public PaymentMethodTypes PaymentMethod { get; set; } //modificar
@@ -37,17 +28,14 @@ namespace AppForSEII2526.API.Models
 
         public List<PurchaseItem> PurchaseItems { get; set; } //Relacion con PurchaseItem
 
-
+        public ApplicationUser ApplicationUser { get; set; } // Relación con ApplicationUser
 
         public Purchase() { } //constructor vacio
 
 
-        public Purchase(string customerUserName, string customerUserSurname, String deliveryAddress, int id, PaymentMethodTypes paymentMethod, DateTime purchaseDate, double totalPrice, int totalQuanty, IList<PurchaseItem> purchasesItems) //constructor con parametros
+        public Purchase(int id, PaymentMethodTypes paymentMethod, DateTime purchaseDate, double totalPrice, int totalQuanty, IList<PurchaseItem> purchasesItems) //constructor con parametros
         {
-            
-            this.CustomerUserName = customerUserName;
-            this.CustomerUserSurname = customerUserSurname;
-            this.DeliveryAddress = deliveryAddress;
+
             this.Id = id;
             this.PaymentMethod = paymentMethod;
             this.PurchaseDate = purchaseDate;
