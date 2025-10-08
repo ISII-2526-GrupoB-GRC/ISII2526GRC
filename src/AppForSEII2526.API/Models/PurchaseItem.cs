@@ -35,7 +35,7 @@ namespace AppForSEII2526.API.Models
         {
             this.Description = description;
             this.DeviceId = device.Id;
-            this.Price = device.PriceForPurchace;
+            this.Price = device.priceForPurchace;
             this.PurchaseID = purchase.Id;
             this.Quantity = quantity;
             this.Device = device;
