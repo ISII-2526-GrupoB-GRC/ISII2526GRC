@@ -9,15 +9,21 @@
         </TypeIdentifier>
       </Enum>
     </NestedTypes>
+    <AssociationLine Name="RentedDevices" Type="AppForSEII2526.API.Models.RentDevice" FixedToPoint="true">
+      <Path>
+        <Point X="3.75" Y="3.438" />
+        <Point X="8.5" Y="3.438" />
+      </Path>
+    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAICAAAABABFAABAAAAAIAQAAAAAAAAAAAgAhAABAAA=</HashCode>
+      <HashCode>AAISAAAABABFAABAAAAAIAQAAAAAAAAAAAgAgAABAAA=</HashCode>
       <FileName>Models\Device.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Model" />
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
-      <Property Name="RentDevices" />
+      <Property Name="RentedDevices" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="AppForSEII2526.API.Models.Modelo">
@@ -45,6 +51,18 @@
         </TypeIdentifier>
       </Enum>
     </NestedTypes>
+    <AssociationLine Name="RentDevice" Type="AppForSEII2526.API.Models.RentDevice" FixedFromPoint="true">
+      <Path>
+        <Point X="12.75" Y="2.375" />
+        <Point X="10.5" Y="2.375" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="ApplicationUser" Type="AppForSEII2526.API.Models.ApplicationUser" FixedFromPoint="true">
+      <Path>
+        <Point X="13" Y="3.776" />
+        <Point X="13" Y="4.75" />
+      </Path>
+    </AssociationLine>
     <TypeIdentifier>
       <HashCode>EAADAAAAAAAAAAAQBAACAEAAAAAAQAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Rental.cs</FileName>
@@ -56,6 +74,18 @@
   </Class>
   <Class Name="AppForSEII2526.API.Models.RentDevice">
     <Position X="8.5" Y="1.75" Width="2" />
+    <AssociationLine Name="Devices" Type="AppForSEII2526.API.Models.Device" FixedFromPoint="true">
+      <Path>
+        <Point X="8.5" Y="2.875" />
+        <Point X="3.75" Y="2.875" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="Rentals" Type="AppForSEII2526.API.Models.Rental" FixedToPoint="true">
+      <Path>
+        <Point X="10.5" Y="2.938" />
+        <Point X="12.75" Y="2.938" />
+      </Path>
+    </AssociationLine>
     <TypeIdentifier>
       <HashCode>AAgAAAAAAQAAAAAAAAAAAAAAQAAAAAEAEAAAgAAAAAA=</HashCode>
       <FileName>Models\RentDevice.cs</FileName>
@@ -66,11 +96,27 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="AppForSEII2526.API.Models.ApplicationUser">
-    <Position X="10.5" Y="4" Width="2.25" />
+    <Position X="12.25" Y="4.75" Width="2.25" />
+    <Members>
+      <Property Name="purchases" Hidden="true" />
+      <Property Name="receipts" Hidden="true" />
+    </Members>
+    <AssociationLine Name="rentals" Type="AppForSEII2526.API.Models.Rental" FixedFromPoint="true">
+      <Path>
+        <Point X="13.688" Y="4.75" />
+        <Point X="13.688" Y="3.776" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-1.623" Y="0.193" />
+      </MemberNameLabel>
+    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAACAAAAQABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAMAAAAAAAAACAAAAQABAAAAAAAAAEAAAAAAAA=</HashCode>
       <FileName>Models\ApplicationUser.cs</FileName>
     </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="rentals" />
+    </ShowAsCollectionAssociation>
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

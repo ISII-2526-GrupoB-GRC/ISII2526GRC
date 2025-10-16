@@ -6,7 +6,7 @@ namespace AppForSEII2526.API.Models
     using System.ComponentModel.DataAnnotations;
     public class Rental
     {
-        [Key]
+
         public int Id { get; set; }
 
         [Required]
