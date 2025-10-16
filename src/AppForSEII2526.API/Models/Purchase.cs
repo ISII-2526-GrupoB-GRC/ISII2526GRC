@@ -34,6 +34,7 @@ namespace AppForSEII2526.API.Models
 
         [Required(ErrorMessage ="El precio total de compra es obligatorio introducirlo")]
         [Precision(10,2)]
+
         public double TotalPrice { get; set; }
 
         [Required(ErrorMessage = "La cantidad minima en una compra debe de ser de al meno 1 dispositivo.")]
