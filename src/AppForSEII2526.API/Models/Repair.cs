@@ -2,13 +2,17 @@
 {
     public class Repair
     {
-        [Key]
+        
         public int Id { get; set; }
         [Required]
-        public string Description { get; set; }
+        [StringLength(80, ErrorMessage = "La descripción no puede tener más de 80 caracteres")]
+        public string? Description { get; set; }
         [Required]
+        [Range(0.5, float.MaxValue, ErrorMessage = "El precio minimo de la reparación es 0.50")]
+        [Precision(10,2)]
         public float Cost { get; set; }
         [Required]
+        [StringLength(50, ErrorMessage = "El nombre no puede tener más de 50 caracteres")]
         public string Name { get; set; }
         [Required]
         public int ScaleId { get; set; }

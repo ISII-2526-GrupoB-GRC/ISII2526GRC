@@ -4,6 +4,7 @@
     public class ReceiptItem
     {
         [Required]
+        [StringLength(15, ErrorMessage = "El nombre del modelo no puede ser superior a 15 caracteres")]
         public string Model { get; set; }
         public Repair Repair { get; set; }
         [Required]
