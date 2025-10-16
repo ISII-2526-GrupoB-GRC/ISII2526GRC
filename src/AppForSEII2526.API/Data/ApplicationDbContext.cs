@@ -16,5 +16,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<ReceiptItem> ReceiptItem { get; set; }
     public DbSet<Rental> Rental { get; set; }
     public DbSet<RentDevice> RentDevice { get; set; }
+    public DbSet<ApplicationUser> ApplicationUser { get; set; }
 
 }
