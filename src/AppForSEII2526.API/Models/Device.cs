@@ -28,7 +28,7 @@ namespace AppForSEII2526.API.Models
         [Required]
         public double priceForRent { get; set; }
 
-        public List<PurchaseItem> PurchaseItems { get; set; } // Relación con PurchaseItem
+        public IList<PurchaseItem> PurchaseItems { get; set; } // Relación con PurchaseItem
 
         public QualityType Quality { get; set; }
 
@@ -61,7 +61,7 @@ namespace AppForSEII2526.API.Models
 
         public Device() { }
 
-        public Device(string brand, string color, int id, string name, double pricePurchase, double priceRent, List<PurchaseItem> purchaseItems, QualityType quality, int quantityPurchase, int quantityRent, int year) // IList<ReviewItem> reviewItems
+        public Device(string brand, string color, int id, string name, double pricePurchase, double priceRent, IList<PurchaseItem> purchaseItems, QualityType quality, int quantityPurchase, int quantityRent, int year) // IList<ReviewItem> reviewItems
         {
             this.Brand = brand;
             this.Color = color;

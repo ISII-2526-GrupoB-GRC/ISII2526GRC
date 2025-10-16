@@ -8,20 +8,22 @@ namespace AppForSEII2526.API.Models
     [PrimaryKey(nameof(DeviceId),nameof(PurchaseID))]
     public class PurchaseItem
     {
+        [StringLength(50, ErrorMessage = "La descripcion no puede tener mas de 50 caracteres.")]
         public string? Description { get; set; }
 
-        [Required]
-        
+        [Required(ErrorMessage = "El ID del dispositivo es obligatorio.")]
+
         public int DeviceId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "El precio es obligatorio.")]
         public double Price { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "El ID de compra es obligatorio.")]
         
         public int PurchaseID { get; set; }
 
         [Required]
+        [Range(1,int.MaxValue, ErrorMessage = "La cantidad minima que se compra del producto debe ser 1.")]
         public int Quantity { get; set; }
 
         public Purchase Purchase { get; set; } //Relacion con Purchase
