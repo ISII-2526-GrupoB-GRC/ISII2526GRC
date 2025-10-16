@@ -15,7 +15,6 @@ namespace AppForSEII2526.API.Models
         [StringLength(30, ErrorMessage = "Máximo número de caracteres alcanzado (30)", MinimumLength = 1)]
         public string Color { get; set; }
 
-        [Key]
         public int Id { get; set; }
 
         [Required]

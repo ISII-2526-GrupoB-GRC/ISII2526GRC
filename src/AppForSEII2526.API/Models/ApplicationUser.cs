@@ -24,7 +24,7 @@ public class ApplicationUser : IdentityUser {
     }
 
     [Display(Name = "Surname")]
-    [StringLength(80, ErrorMessage = "Máximo número de caracteres alcanzado (50)", MinimumLength = 1)]
+    [StringLength(80, ErrorMessage = "Máximo número de caracteres alcanzado (80)", MinimumLength = 1)]
     public string Surname
     {
         get;
@@ -32,7 +32,7 @@ public class ApplicationUser : IdentityUser {
     }
 
     [Display(Name = "Delivery Address")]
-    [StringLength(80, ErrorMessage = "Máximo número de caracteres alcanzado (50)", MinimumLength = 1)]
+    [StringLength(80, ErrorMessage = "Máximo número de caracteres alcanzado (80)", MinimumLength = 1)]
     public string DeliveryAddress {
         get;
         set;
