@@ -2,15 +2,19 @@
 {
     public class Receipt
     {
-        [Key]
+        
         [Required]
         public int Id { get; set; }
 
         [Required]
         public PaymentMethodTypes PaymentMethod { get; set; }
         [Required]
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime ReceiptDate { get; set; }
         [Required]
+        [Precision(10, 2)]
+        [Range(0.5, double.MaxValue, ErrorMessage = "El precio minimo es 0.50")]
         public double TotalPrice { get; set; }
         public IList<ReceiptItem> ReceiptItems { get; set; }
 
@@ -31,8 +35,8 @@
 
         public enum PaymentMethodTypes
         {
-            TarjetaCrédito,
-            Efectivo,
+            Cash,
+            CreditCard,
             PayPal
         }
 
