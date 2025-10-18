@@ -34,7 +34,6 @@ namespace AppForSEII2526.API.Models
 
         [Required(ErrorMessage ="El precio total de compra es obligatorio introducirlo")]
         [Precision(10,2)]
-
         public double TotalPrice { get; set; }
 
         [Required(ErrorMessage = "La cantidad minima en una compra debe de ser de al meno 1 dispositivo.")]
@@ -48,9 +47,11 @@ namespace AppForSEII2526.API.Models
         public Purchase() { } //constructor vacio
 
 
-        public Purchase(int id, PaymentMethodTypes paymentMethod, DateTime purchaseDate, double totalPrice, int totalQuanty, IList<PurchaseItem> purchasesItems) //constructor con parametros
+        public Purchase(string CustomerUserName, string CustomerUserSurname, string DeliveryAddress, int id, PaymentMethodTypes paymentMethod, DateTime purchaseDate, double totalPrice, int totalQuanty, IList<PurchaseItem> purchasesItems) //constructor con parametros
         {
-
+            this.CustomerUserName = CustomerUserName;
+            this.CustomerUserSurname = CustomerUserSurname;
+            this.DeliveryAddress = DeliveryAddress;
             this.Id = id;
             this.PaymentMethod = paymentMethod;
             this.PurchaseDate = purchaseDate;
