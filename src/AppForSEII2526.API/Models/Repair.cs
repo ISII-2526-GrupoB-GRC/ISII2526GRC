@@ -9,7 +9,6 @@
         public string? Description { get; set; }
         [Required]
         [Range(0.5, float.MaxValue, ErrorMessage = "El precio minimo de la reparación es 0.50")]
-        [Precision(10,2)]
         public float Cost { get; set; }
         [Required]
         [StringLength(50, ErrorMessage = "El nombre no puede tener más de 50 caracteres")]
@@ -18,14 +17,15 @@
         public int ScaleId { get; set; }
 
         public Repair() { }
-        
-        public Repair(int id, string description, float cost, string name, int scaleId)
+
+        public Repair(int id, string description, float cost, string name, Scale scale)
         {
             this.Id = id;
             this.Description = description;
             this.Cost = cost;
             this.Name = name;
-            this.ScaleId = scaleId;
+            this.Scale = scale;
+            this.ScaleId = scale.Id;
         }
 
         //Relaciones entre clases

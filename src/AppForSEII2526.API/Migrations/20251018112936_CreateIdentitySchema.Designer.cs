@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppForSEII2526.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251016185555_CreateIdentitySchema")]
+    [Migration("20251018112936_CreateIdentitySchema")]
     partial class CreateIdentitySchema
     {
         /// <inheritdoc />
@@ -365,8 +365,7 @@ namespace AppForSEII2526.API.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<float>("Cost")
-                        .HasPrecision(10, 2)
-                        .HasColumnType("real(10)");
+                        .HasColumnType("real");
 
                     b.Property<string>("Description")
                         .IsRequired()
