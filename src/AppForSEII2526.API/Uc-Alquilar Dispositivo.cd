@@ -10,14 +10,14 @@
       </Enum>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAICAAAABABFAABAAAAAIAQAAAAAAAAAAAgAhAABAAA=</HashCode>
+      <HashCode>AAISAAAABABFAABAAAAAIAQAAAAAAAAAAAgAgAABAAA=</HashCode>
       <FileName>Models\Device.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Model" />
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
-      <Property Name="RentDevices" />
+      <Property Name="RentedDevices" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="AppForSEII2526.API.Models.Modelo">
@@ -66,11 +66,19 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="AppForSEII2526.API.Models.ApplicationUser">
-    <Position X="10.5" Y="4" Width="2.25" />
+    <Position X="12.5" Y="5.25" Width="2.25" />
+    <AssociationLine Name="rentals" Type="AppForSEII2526.API.Models.Rental">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-1.636" Y="0.131" />
+      </MemberNameLabel>
+    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAACAAAAQABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAMAAAAAAAAACAAAAQABAAAAAAAAAEAAAAAAAA=</HashCode>
       <FileName>Models\ApplicationUser.cs</FileName>
     </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="rentals" />
+    </ShowAsCollectionAssociation>
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

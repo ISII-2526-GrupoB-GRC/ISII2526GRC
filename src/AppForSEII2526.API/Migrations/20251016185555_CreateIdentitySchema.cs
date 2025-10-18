@@ -59,7 +59,7 @@ namespace AppForSEII2526.API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NameModel = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    NameModel = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -86,7 +86,7 @@ namespace AppForSEII2526.API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -205,11 +205,14 @@ namespace AppForSEII2526.API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CustomerUserName = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    CustomerUserSurname = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    DeliveryAddress = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     PaymentMethod = table.Column<int>(type: "int", nullable: false),
                     PurchaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TotalPrice = table.Column<double>(type: "float", nullable: false),
+                    TotalPrice = table.Column<double>(type: "float(10)", precision: 10, scale: 2, nullable: false),
                     TotalQuanty = table.Column<int>(type: "int", nullable: false),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -218,7 +221,8 @@ namespace AppForSEII2526.API.Migrations
                         name: "FK_Purchase_AspNetUsers_ApplicationUserId",
                         column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -229,8 +233,8 @@ namespace AppForSEII2526.API.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PaymentMethod = table.Column<int>(type: "int", nullable: false),
                     ReceiptDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TotalPrice = table.Column<double>(type: "float", nullable: false),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    TotalPrice = table.Column<double>(type: "float(10)", precision: 10, scale: 2, nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -239,7 +243,8 @@ namespace AppForSEII2526.API.Migrations
                         name: "FK_Receipt_AspNetUsers_ApplicationUserId",
                         column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -250,11 +255,11 @@ namespace AppForSEII2526.API.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Brand = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Color = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     priceForPurchace = table.Column<double>(type: "float", nullable: false),
                     priceForRent = table.Column<double>(type: "float", nullable: false),
                     Quality = table.Column<int>(type: "int", nullable: false),
-                    quanityForPurchase = table.Column<int>(type: "int", nullable: false),
+                    quantityForPurchase = table.Column<int>(type: "int", nullable: false),
                     quantityForRent = table.Column<int>(type: "int", nullable: false),
                     Year = table.Column<int>(type: "int", nullable: false),
                     ModelId = table.Column<int>(type: "int", nullable: false)
@@ -283,7 +288,7 @@ namespace AppForSEII2526.API.Migrations
                     TotalPrice = table.Column<double>(type: "float", nullable: false),
                     RentDeviceDeviceId = table.Column<int>(type: "int", nullable: false),
                     RentDeviceRentId = table.Column<int>(type: "int", nullable: false),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -292,7 +297,8 @@ namespace AppForSEII2526.API.Migrations
                         name: "FK_Rental_AspNetUsers_ApplicationUserId",
                         column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Rental_RentDevice_RentDeviceDeviceId_RentDeviceRentId",
                         columns: x => new { x.RentDeviceDeviceId, x.RentDeviceRentId },
@@ -307,9 +313,9 @@ namespace AppForSEII2526.API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Cost = table.Column<float>(type: "real", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: false),
+                    Cost = table.Column<float>(type: "real(10)", precision: 10, scale: 2, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     ScaleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -354,7 +360,7 @@ namespace AppForSEII2526.API.Migrations
                 {
                     DeviceId = table.Column<int>(type: "int", nullable: false),
                     PurchaseID = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Price = table.Column<double>(type: "float", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false)
                 },
@@ -381,7 +387,7 @@ namespace AppForSEII2526.API.Migrations
                 {
                     RepairId = table.Column<int>(type: "int", nullable: false),
                     ReceiptId = table.Column<int>(type: "int", nullable: false),
-                    Model = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Model = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false)
                 },
                 constraints: table =>
                 {

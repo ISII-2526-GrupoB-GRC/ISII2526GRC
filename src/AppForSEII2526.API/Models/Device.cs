@@ -15,18 +15,19 @@ namespace AppForSEII2526.API.Models
         [StringLength(30, ErrorMessage = "Máximo número de caracteres alcanzado (30)", MinimumLength = 1)]
         public string Color { get; set; }
 
-        [Key]
         public int Id { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "Máximo número de caracteres alcanzado (100)", MinimumLength = 1)]
+        [StringLength(50, ErrorMessage = "Máximo número de caracteres alcanzado (50)", MinimumLength = 1)]
         public string Name { get; set; }
 
         [Required]
-        public double priceForPurchace { get; set; }
+        [Range(0, double.MaxValue, ErrorMessage = "El precio minimo es 0")]
+        public double priceForPurchace { get; set; }  //Puede ser 0 ya que podemos querer solo alquilar
 
         [Required]
-        public double priceForRent { get; set; }
+        [Range(0, double.MaxValue, ErrorMessage = "El precio minimo es 0")]
+        public double priceForRent { get; set; }      //Puede ser 0 ya que podemos querer solo vender
 
         public IList<PurchaseItem> PurchaseItems { get; set; } // Relación con PurchaseItem
 
@@ -40,10 +41,10 @@ namespace AppForSEII2526.API.Models
         }
 
         [Required]
-        public int quanityForPurchase { get; set; }
+        public int quantityForPurchase { get; set; }  //Puede ser 0 ya que podemos querer solo alquilar
 
         [Required]
-        public int quantityForRent { get; set; }
+        public int quantityForRent { get; set; }      //Puede ser 0 ya que podemos querer solo comprar
 
         // [Required]
         // public List<ReviewItem> ReviewItems { get; set; }
@@ -53,7 +54,7 @@ namespace AppForSEII2526.API.Models
         public int Year { get; set; }
 
         
-        public Modelo Model { get; set; } // Relacion con Modelo
+        public Model Model { get; set; } // Relacion con Modelo
         public IList<RentDevice> RentedDevices { get; set; } // Relación con RentDevice
 
 
@@ -71,7 +72,7 @@ namespace AppForSEII2526.API.Models
             this.priceForRent = priceRent;
             this.PurchaseItems = purchaseItems;
             this.Quality = quality;
-            this.quanityForPurchase = quantityPurchase;
+            this.quantityForPurchase = quantityPurchase;
             this.quantityForRent = quantityRent;
             // this.ReviewItems = reviewItems;
             this.Year = year;
