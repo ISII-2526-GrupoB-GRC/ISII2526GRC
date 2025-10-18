@@ -314,7 +314,7 @@ namespace AppForSEII2526.API.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Description = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: false),
-                    Cost = table.Column<float>(type: "real(10)", precision: 10, scale: 2, nullable: false),
+                    Cost = table.Column<float>(type: "real", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     ScaleId = table.Column<int>(type: "int", nullable: false)
                 },

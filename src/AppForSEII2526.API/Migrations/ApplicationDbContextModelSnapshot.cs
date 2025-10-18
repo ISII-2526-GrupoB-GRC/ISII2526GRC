@@ -362,8 +362,7 @@ namespace AppForSEII2526.API.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<float>("Cost")
-                        .HasPrecision(10, 2)
-                        .HasColumnType("real(10)");
+                        .HasColumnType("real");
 
                     b.Property<string>("Description")
                         .IsRequired()
