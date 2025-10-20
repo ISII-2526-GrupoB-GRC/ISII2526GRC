@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace AppForSEII2526.API.Models
 {
     using System.ComponentModel.DataAnnotations;
+    using static AppForSEII2526.API.Models.PaymentMethod;
+
     public class Rental
     {
         public int Id { get; set; }
@@ -11,12 +13,7 @@ namespace AppForSEII2526.API.Models
         [Required]
         public PaymentMethodTypes PaymentMethod { get; set; }
 
-        public enum PaymentMethodTypes
-        {
-            Cash,
-            CreditCard,
-            PayPal
-        }
+        
 
         [DataType(DataType.Date), Display(Name = "Fecha de alquiler")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
