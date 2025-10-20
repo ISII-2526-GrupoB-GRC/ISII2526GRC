@@ -1,4 +1,6 @@
-﻿namespace AppForSEII2526.API.Models
+﻿using static AppForSEII2526.API.Models.PaymentMethod;
+
+namespace AppForSEII2526.API.Models
 {
     public class Receipt
     {
@@ -33,13 +35,7 @@
             this.TotalPrice = totalPrice;
         }
 
-        public enum PaymentMethodTypes
-        {
-            Cash,
-            CreditCard,
-            PayPal
-        }
-
+        
         /*public override bool Equals(object obj)
         {
             if (obj is Receipt receipt)
