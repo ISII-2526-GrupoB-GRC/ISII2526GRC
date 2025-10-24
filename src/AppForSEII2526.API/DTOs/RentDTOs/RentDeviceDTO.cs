@@ -3,13 +3,13 @@
     public class RentDeviceDTO
     {
         // Este DTO sirve para mostrar la información de cada dispositivo alquilado en un alquiler
-        public Model Model { get; set; }
-        public double priceForRent { get; set; }
-        public int Quantity { get; set; }
+        public string NameModel { get; set; }         // Obtiene de Model
+        public double priceForRent { get; set; } // Obtiene de Device
+        public int Quantity { get; set; }        // Obtiene de RentDevice
 
-        public RentDeviceDTO(Model model, double priceRent, int quantity)
+        public RentDeviceDTO(string model, double priceRent, int quantity)
         {
-            Model = model;
+            NameModel = model;
             priceForRent = priceRent;
             Quantity = quantity;
         }

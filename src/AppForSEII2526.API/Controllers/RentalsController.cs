@@ -27,7 +27,7 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType(typeof(RentalDetailDTO), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
 
-        public async Task<ActionResult> Get_Details_Rental_DTO(int id)
+        public async Task<ActionResult> Get_Rental_Detail_DTO(int id)
         {
             if (_context.Rental == null)
             {
@@ -35,14 +35,34 @@ namespace AppForSEII2526.API.Controllers
                 return NotFound();
             }
 
-            
+            var rental = await _context.Rental
+                .Where(r => r.Id == id)
+                .Include(r => r.ApplicationUser)   // join tabla ApplicationUser
+                .Include(r => r.RentDevice)        // join table RentDevice
+                    .ThenInclude(rd => rd.Devices) // después join tabla Devices
+                .Select(r => new RentalDetailDTO(
+                    r.ApplicationUser.Name,
+                    r.ApplicationUser.Surname,
+                    r.ApplicationUser.DeliveryAddress,
+                    r.RentalDate,
+                    r.TotalPrice,
+                    r.RentalDateFrom,
+                    r.RentalDateTo,
+                    r.RentDevice.Devices
+                        .Select(rd => new RentDeviceDTO(
+                            rd.Model.NameModel,          // model
+                            rd.priceForRent,             // price for rent
+                            r.RentDevice.Quantity        // quantity
+                        )).ToList()
+                ))
+                .FirstOrDefaultAsync();
+
 
             if (rental == null)
             {
                 _logger.LogError($"Error: Rental with id {id} does not exist");
                 return NotFound();
             }
-
 
             return Ok(rental);
         }
