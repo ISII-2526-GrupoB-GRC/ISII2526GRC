@@ -4,6 +4,7 @@
 
     {
         // Este DTO sirve para mostrar la información detallada de un alquiler
+        //Apartado 7
         public string Name { get; set; }                // Obtiene de ApplicationUser
         public string Surname { get; set; }             // Obtiene de ApplicationUser
         public string DeliveryAddress { get; set; }
@@ -11,9 +12,9 @@
         public double TotalPrice { get; set; }          //Obtiene de Rental
         public DateTime RentalDateFrom { get; set; }    //Obtiene de Rental
         public DateTime RentalDateTo { get; set; }      //Obtiene de Rental
-        public IList<RentDeviceDTO> RentedDevices { get; set; } //Obtiene de RentDevice
+        public IList<RentalItemDTO> RentedDevices { get; set; } //Obtiene de RentDevice
 
-        public RentalDetailDTO(string name, string surname, string deliveryAddress, DateTime rentalDate, double totalPrice, DateTime rentalDateFrom, DateTime rentalDateTo, IList<RentDeviceDTO> rentedDevices)
+        public RentalDetailDTO(string name, string surname, string deliveryAddress, DateTime rentalDate, double totalPrice, DateTime rentalDateFrom, DateTime rentalDateTo, IList<RentalItemDTO> rentedDevices)
         {
             Name = name;
             Surname = surname;
@@ -24,5 +25,6 @@
             RentalDateTo = rentalDateTo;
             RentedDevices = rentedDevices;
         }
+
     }
 }

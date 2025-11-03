@@ -1,4 +1,4 @@
-﻿using static AppForSEII2526.API.Models.PaymentMethod;
+﻿using static AppForSEII2526.API.Models.PaymentMethodTypes;
 
 namespace AppForSEII2526.API.Models
 {

@@ -3,7 +3,7 @@ using Microsoft.Identity.Client;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
-using static AppForSEII2526.API.Models.PaymentMethod;
+using static AppForSEII2526.API.Models.PaymentMethodTypes;
 
 namespace AppForSEII2526.API.Models
 {

@@ -78,5 +78,42 @@ namespace AppForSEII2526.API.Models
             this.Year = year;
 
         }
-	}
+
+        public override bool Equals(object? obj)
+        {
+            return obj is Device device &&
+                   Brand == device.Brand &&
+                   Color == device.Color &&
+                   Id == device.Id &&
+                   Name == device.Name &&
+                   priceForPurchace == device.priceForPurchace &&
+                   priceForRent == device.priceForRent &&
+                   EqualityComparer<IList<PurchaseItem>>.Default.Equals(PurchaseItems, device.PurchaseItems) &&
+                   Quality == device.Quality &&
+                   quantityForPurchase == device.quantityForPurchase &&
+                   quantityForRent == device.quantityForRent &&
+                   Year == device.Year &&
+                   EqualityComparer<Model>.Default.Equals(Model, device.Model) &&
+                   EqualityComparer<IList<RentDevice>>.Default.Equals(RentedDevices, device.RentedDevices);
+        }
+
+        public override int GetHashCode()
+        {
+            HashCode hash = new HashCode();
+            hash.Add(Brand);
+            hash.Add(Color);
+            hash.Add(Id);
+            hash.Add(Name);
+            hash.Add(priceForPurchace);
+            hash.Add(priceForRent);
+            hash.Add(PurchaseItems);
+            hash.Add(Quality);
+            hash.Add(quantityForPurchase);
+            hash.Add(quantityForRent);
+            hash.Add(Year);
+            hash.Add(Model);
+            hash.Add(RentedDevices);
+            return hash.ToHashCode();
+        }
+    }
 }
