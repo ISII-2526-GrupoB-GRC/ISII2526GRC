@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
 namespace AppForSEII2526.API.Models
 {
@@ -77,6 +78,15 @@ namespace AppForSEII2526.API.Models
             // this.ReviewItems = reviewItems;
             this.Year = year;
 
+        }
+
+        public Device(Model model, string brand, int year, string color, double priceRent)
+        {
+            this.Model = model;
+            this.Brand = brand;
+            this.Year = year;
+            this.Color = color;
+            this.priceForRent = priceRent;
         }
 
         public override bool Equals(object? obj)

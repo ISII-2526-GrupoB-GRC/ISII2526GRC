@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -24,6 +25,10 @@ namespace AppForSEII2526.API.Models
             this.Devices = (IList<Device>)devices;
 
         }
-
+        //Para pruebas de GetDevices
+        public Model(string nameModel)
+        {
+            this.NameModel = nameModel;
+        }
     }
 }

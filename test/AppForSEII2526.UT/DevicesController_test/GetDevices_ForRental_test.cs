@@ -1,141 +1,90 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace AppForSEII2526.UT.DevicesController_test
 {
     using AppForSEII2526.API.DTOs.RentDTOs;
+    using AppForSEII2526.API.Models;
 
     public class GetDevices_ForRental_test : AppForSEII25264SqliteUT
     {
         public GetDevices_ForRental_test()
         {
-            // Plan (pseudocódigo):
-            // - Crear el contexto con CreateContext() y asegurar la BD.
-            // - Si ya hay dispositivos, no resembrar.
-            // - Sembrar datos mínimos:
-            //   * 1 Modelo.
-            //   * 3 Dispositivos del modelo (2 disponibles, 1 alquilado).
-            //   * 1 Rental activo (hoy a hoy+3).
-            //   * 1 RentDevice que vincule el Rental con el dispositivo alquilado.
-            // - Guardar cambios.
-            // - Uso de helpers SetAny/SetIfExists para asignar propiedades con nombres variables.
-
-            using var ctx = CreateContext();
-            ctx.Database.EnsureCreated();
-
-            if (ctx.Device.Any())
-                return;
-
-            var today = DateTime.UtcNow.Date;
-
-            // Modelo
-            var model = Activator.CreateInstance(typeof(Model))!;
-            SetAny(model, new[] { "Name", "Nombre" }, "Modelo Pruebas");
-            SetAny(model, new[] { "Description", "Descripcion" }, "Modelo base para pruebas de alquiler");
-            ctx.Modelo.Add((Model)model);
-            ctx.SaveChanges();
-            var modelId = GetPrimaryKeyValue<int>(ctx, model);
-
-            // Dispositivo disponible 1
-            var device1 = Activator.CreateInstance(typeof(Device))!;
-            SetAny(device1, new[] { "ModelId", "ModeloId" }, modelId);
-            SetAny(device1, new[] { "SerialNumber", "NumeroSerie" }, "SN-ALQ-001");
-            SetAny(device1, new[] { "IsAvailable", "Disponible" }, true);
-            SetAny(device1, new[] { "Status", "Estado" }, "Disponible");
-            ctx.Device.Add((Device)device1);
-
-            // Dispositivo disponible 2
-            var device2 = Activator.CreateInstance(typeof(Device))!;
-            SetAny(device2, new[] { "ModelId", "ModeloId" }, modelId);
-            SetAny(device2, new[] { "SerialNumber", "NumeroSerie" }, "SN-ALQ-002");
-            SetAny(device2, new[] { "IsAvailable", "Disponible" }, true);
-            SetAny(device2, new[] { "Status", "Estado" }, "Disponible");
-            ctx.Device.Add((Device)device2);
-
-            // Dispositivo que estará alquilado
-            var device3 = Activator.CreateInstance(typeof(Device))!;
-            SetAny(device3, new[] { "ModelId", "ModeloId" }, modelId);
-            SetAny(device3, new[] { "SerialNumber", "NumeroSerie" }, "SN-ALQ-003");
-            SetAny(device3, new[] { "IsAvailable", "Disponible" }, false);
-            SetAny(device3, new[] { "Status", "Estado" }, "Alquilado");
-            ctx.Device.Add((Device)device3);
-
-            ctx.SaveChanges();
-
-            var device3Id = GetPrimaryKeyValue<int>(ctx, device3);
-
-            // Rental activo (hoy -> hoy + 3 días)
-            var rental = Activator.CreateInstance(typeof(Rental))!;
-            SetAny(rental, new[] { "StartDate", "FechaInicio" }, today);
-            SetAny(rental, new[] { "EndDate", "FechaFin" }, today.AddDays(3));
-            SetAny(rental, new[] { "Status", "Estado" }, "Activo");
-            SetAny(rental, new[] { "CustomerName", "ClienteNombre", "Customer", "Cliente" }, "Cliente Pruebas");
-            ctx.Rental.Add((Rental)rental);
-            ctx.SaveChanges();
-
-            var rentalId = GetPrimaryKeyValue<int>(ctx, rental);
-
-            // Vincular el Rental con el dispositivo 3 (alquilado)
-            var rentDevice = Activator.CreateInstance(typeof(RentDevice))!;
-            SetAny(rentDevice, new[] { "RentalId" }, rentalId);
-            SetAny(rentDevice, new[] { "DeviceId" }, device3Id);
-            ctx.RentDevice.Add((RentDevice)rentDevice);
-
-            ctx.SaveChanges();
-        }
-
-        private static void SetIfExists(object entity, string propertyName, object? value)
-        {
-            var prop = entity.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-            if (prop == null || !prop.CanWrite) return;
-
-            try
+            var models = new List<Model>()
             {
-                if (value is not null)
-                {
-                    var targetType = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
-                    var converted = prop.PropertyType.IsInstanceOfType(value) ? value : Convert.ChangeType(value, targetType);
-                    prop.SetValue(entity, converted);
-                }
-                else
-                {
-                    prop.SetValue(entity, null);
-                }
-            }
-            catch
+                new Model("Portátil"),
+                new Model("Ordenador de Sobremesa"),
+                new Model("Tablet"),
+                new Model("Monitor")
+            };
+
+            var devices = new List<Device>()
             {
-                // Ignorar conversiones inválidas.
-            }
+                new Device(models[0], "Dell", 2023, "Gris", 45),
+                new Device(models[0], "HP", 2023, "Plata", 50),
+                new Device(models[0], "Apple", 2023, "Gris Espacial", 48),
+                new Device(models[1], "Lenovo", 2023, "Negro", 22),
+                //Con error en precio, debería ser 10, pero es 0:
+                new Device(models[2], "Samsung", 2023, "Negro", 0)
+            };
+
+            ApplicationUser user1 = new ApplicationUser("Ana", "González", "Calle Serrano 45, Madrid");
+
+            var rental = new Rental("Ana", "Gonzalez", "Calle Serrano 45, Madrid", DateTime.Now, PaymentMethodTypes.CreditCard, DateTime.Today.AddDays(2), DateTime.Today.AddDays(5), new List<RentDevice>(), user1);
+
+            rental.RentDevices.Add(new RentDevice(devices[0], rental));
+
+            _context.Add(user1);
+            _context.AddRange(models);
+            _context.AddRange(devices);
+            _context.Add(rental);
+            _context.SaveChanges();
         }
 
-        private static void SetAny(object entity, IEnumerable<string> candidatePropertyNames, object? value)
+        public static IEnumerable<object[]> GetDevices_ForRental_TestData()
         {
-            foreach (var name in candidatePropertyNames)
+            var deviceDTOs = new List<DeviceForRentalDTO>()
             {
-                var prop = entity.GetType().GetProperty(name, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-                if (prop != null && prop.CanWrite)
-                {
-                    SetIfExists(entity, name, value);
-                    return;
-                }
-            }
-        }
+                new DeviceForRentalDTO("Dell XPS 13", "Portátil", "Dell", 2023, "Gris", 45),
+                new DeviceForRentalDTO("HP Spectre x360", "Portátil", "HP", 2023, "Plata", 50),
+                new DeviceForRentalDTO("MacBook Air M2", "Portátil", "Apple", 2023, "Gris Espacial", 48),
+                new DeviceForRentalDTO("Lenovo ThinkCentre M90", "Ordenador de Sobremesa", "Lenovo", 2023, "Negro", 22),
+            };
 
-        private static TKey GetPrimaryKeyValue<TKey>(DbContext ctx, object entity)
-        {
-            var entry = ctx.Entry(entity);
-            var key = entry.Metadata.FindPrimaryKey();
-            if (key == null || key.Properties.Count == 0)
-                return default!;
+            var deviceDTOsTC1 = new List<DeviceForRentalDTO>() { deviceDTOs[1], deviceDTOs[2] }
+                    //El método GetDevicesForRental devuelve los dispositivos ordenados por modelo
+                    .OrderBy(d => d.Model).ToList();
 
-            var pkProp = key.Properties[0].Name;
-            var value = entry.Property(pkProp).CurrentValue;
-            return value is null ? default! : (TKey)Convert.ChangeType(value, typeof(TKey));
+            var deviceDTOsTC2 = new List<DeviceForRentalDTO>() { deviceDTOs[1] };
+            var deviceDTOsTC3 = new List<DeviceForRentalDTO>() { deviceDTOs[2] };
+
+            var deviceDTOsTC4 = new List<DeviceForRentalDTO>() { deviceDTOs[0], deviceDTOs[1], deviceDTOs[2] }
+                //the GetMoviesForPurchase method returns the movies ordered by title
+                .OrderBy(d => d.Model).ToList();
+
+            var allTests = new List<object[]>
+            {
+                //filters to apply
+                // Nombre(dispositivo), modelo, marca, año, color, precio(alquiler)
+                new object[] { null, null, null, null, null, deviceDTOsTC1,  },
+                new object[] { null, null, null, null, null, deviceDTOsTC2, },
+                new object[] { null, null, "Drama", null, null, deviceDTOsTC3, },
+                new object[] { null, null, null, DateTime.Today.AddDays(6), DateTime.Today.AddDays(8), deviceDTOsTC4 },
+            };
+
+
+
+
+
+
+
+
+
         }
-    }
+    }    
 }

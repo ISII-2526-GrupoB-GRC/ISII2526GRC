@@ -29,21 +29,37 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType(typeof(IList<DeviceForRentalDTO>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult> GetDevicesForRental(string? nameModel, double? price)
         {
-            var devices = await _context.Device
-                .Where(d => (d.Model.NameModel == null || d.Model.NameModel.Contains(nameModel)) && (price == null || d.priceForRent == price))
-                .Select(d => new DeviceForRentalDTO(
-                    d.Name,
-                    d.Model.NameModel,
-                    d.Brand,
-                    d.Year,
-                    d.Color,
-                    d.priceForRent
-                ))
-                .ToListAsync();
-            return Ok(devices);
+            if (nameModel != null || price != null)
+            {
+                var devices = await _context.Device
+                    .Where(d => (d.Model.NameModel == null || d.Model.NameModel.Contains(nameModel)) && (price == null || d.priceForRent == price))
+                    .Select(d => new DeviceForRentalDTO(
+                        d.Name,
+                        d.Model.NameModel,
+                        d.Brand,
+                        d.Year,
+                        d.Color,
+                        d.priceForRent
+                    ))
+                    .ToListAsync();
+                return Ok(devices);
+            }
+            else
+            {
+                var devices = await _context.Device
+                    .Select(d => new DeviceForRentalDTO(
+                        d.Name,
+                        d.Model.NameModel,
+                        d.Brand,
+                        d.Year,
+                        d.Color,
+                        d.priceForRent
+                    ))
+                    .ToListAsync();
+                return Ok(devices);
+            }
+
         }
     }
-
-
 
 }

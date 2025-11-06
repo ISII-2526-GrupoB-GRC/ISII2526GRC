@@ -7,16 +7,16 @@
         public string Brand { get; set; } // Nuevo
         public string NameModel { get; set; }         // Obtiene de Model
         public double priceForRent { get; set; }      // Obtiene de Device
-        public int quantity { get; set; }             // Obtiene de Device
+        public int Quantity { get; set; }             // Obtiene de Device
 
         public RentalItemDTO() { }
 
-        public RentalItemDTO(string brand, string nameModel, double priceForRent, int quantity)
+        public RentalItemDTO(string brand, string nameModel, double priceRent, int quantity)
         {
             Brand = brand;
             NameModel = nameModel;
-            this.priceForRent = priceForRent;
-            this.quantity = quantity;
+            priceForRent = priceRent;
+            Quantity = quantity;
         }
 
         public override bool Equals(object? obj)
@@ -24,8 +24,9 @@
             return obj is RentalItemDTO dTO &&
                    NameModel == dTO.NameModel &&
                    priceForRent == dTO.priceForRent &&
-                   quantity == dTO.quantity &&
+                   Quantity == dTO.Quantity &&
                    Brand == dTO.Brand;
         }
     }
 }
+ 

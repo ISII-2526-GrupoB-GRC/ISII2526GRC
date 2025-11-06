@@ -44,6 +44,12 @@ namespace AppForSEII2526.API.Models
             RentalId = rental.Id; // Cambiado
         }
 
+        public RentDevice(Device device, Rental rental)
+        {
+            Device = device;
+            Rental = rental;
+        }
+
         public override bool Equals(object? obj)
 		{
 			return obj is RentDevice device &&
