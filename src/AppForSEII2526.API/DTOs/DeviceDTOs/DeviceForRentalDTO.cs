@@ -1,5 +1,4 @@
-﻿
-namespace AppForSEII2526.API.DTOs.RentDTOs
+﻿namespace AppForSEII2526.API.DTOs.DeviceDTOs
 {
     public class DeviceForRentalDTO
     {

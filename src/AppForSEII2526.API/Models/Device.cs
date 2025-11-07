@@ -63,7 +63,7 @@ namespace AppForSEII2526.API.Models
 
         public Device() { }
 
-        public Device(string brand, string color, int id, string name, double pricePurchase, double priceRent, IList<PurchaseItem> purchaseItems, QualityType quality, int quantityPurchase, int quantityRent, int year) // IList<ReviewItem> reviewItems
+        public Device(string brand, Model model, string color, int id, string name, double pricePurchase, double priceRent, QualityType quality, int quantityPurchase, int quantityRent, int year)
         {
             this.Brand = brand;
             this.Color = color;
@@ -71,22 +71,12 @@ namespace AppForSEII2526.API.Models
             this.Name = name;
             this.priceForPurchace = pricePurchase;
             this.priceForRent = priceRent;
-            this.PurchaseItems = purchaseItems;
             this.Quality = quality;
             this.quantityForPurchase = quantityPurchase;
             this.quantityForRent = quantityRent;
             // this.ReviewItems = reviewItems;
             this.Year = year;
-
-        }
-
-        public Device(Model model, string brand, int year, string color, double priceRent)
-        {
             this.Model = model;
-            this.Brand = brand;
-            this.Year = year;
-            this.Color = color;
-            this.priceForRent = priceRent;
         }
 
         public override bool Equals(object? obj)

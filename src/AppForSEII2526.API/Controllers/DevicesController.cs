@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppForSEII2526.API.Controllers
 {
-    using AppForSEII2526.API.DTOs.RentDTOs; // DeviceForRentalDTO está en este espacio de nombres
+    using AppForSEII2526.API.DTOs.DeviceDTOs;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
 
     [Route("api/[controller]")]
@@ -29,7 +29,7 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType(typeof(IList<DeviceForRentalDTO>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult> GetDevicesForRental(string? nameModel, double? price)
         {
-            if (nameModel != null || price != null)
+            if (nameModel != null || price != null) //¿Controlar si cantidad disponible = 0?
             {
                 var devices = await _context.Device
                     .Where(d => (d.Model.NameModel == null || d.Model.NameModel.Contains(nameModel)) && (price == null || d.priceForRent == price))
@@ -44,7 +44,7 @@ namespace AppForSEII2526.API.Controllers
                     .ToListAsync();
                 return Ok(devices);
             }
-            else
+            else // Si modelo y precio nulos devuelvo todos
             {
                 var devices = await _context.Device
                     .Select(d => new DeviceForRentalDTO(
