@@ -63,11 +63,11 @@ namespace AppForSEII2526.API.Models
 
         public Device() { }
 
-        public Device(string brand, Model model, string color, int id, string name, double pricePurchase, double priceRent, QualityType quality, int quantityPurchase, int quantityRent, int year)
+        public Device(string brand, Model model, string color, string name, double pricePurchase, double priceRent, QualityType quality, int quantityPurchase, int quantityRent, int year)
         {
             this.Brand = brand;
             this.Color = color;
-            this.Id = id;
+            //this.Id = id;
             this.Name = name;
             this.priceForPurchace = pricePurchase;
             this.priceForRent = priceRent;

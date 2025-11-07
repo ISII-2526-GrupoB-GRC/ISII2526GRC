@@ -4,7 +4,7 @@
     {
         // Este DTO sirve para mostrar la información de cada dispositivo disponible para alquiler
         //Apartado 2
-        public string Name { get; set; }
+        public string Name { get; set; } // Device name
         public string Model { get; set; }
         public string Brand { get; set; }
         public int Year { get; set; }
@@ -31,6 +31,5 @@
                    Color == dTO.Color &&
                    PriceForRent == dTO.PriceForRent;
         }
-
     }
 }
