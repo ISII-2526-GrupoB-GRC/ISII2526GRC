@@ -49,11 +49,11 @@ namespace AppForSEII2526.API.Models
         public Purchase() { } //constructor vacio
 
 
-        public Purchase(string CustomerUserName, string CustomerUserSurname, string DeliveryAddress, PaymentMethodTypes paymentMethod, DateTime purchaseDate, double totalPrice, int totalQuanty, IList<PurchaseItem> purchasesItems, ApplicationUser user) //constructor con parametros
+        public Purchase(PaymentMethodTypes paymentMethod, DateTime purchaseDate, double totalPrice, int totalQuanty, IList<PurchaseItem> purchasesItems, ApplicationUser user) //constructor con parametros
         {
-            this.CustomerUserName = CustomerUserName;
-            this.CustomerUserSurname = CustomerUserSurname;
-            this.DeliveryAddress = DeliveryAddress;
+            this.CustomerUserName = user.Name;
+            this.CustomerUserSurname = user.Surname;
+            this.DeliveryAddress = user.DeliveryAddress;
             //this.Id = id;
             this.PaymentMethod = paymentMethod;
             this.PurchaseDate = purchaseDate;
