@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
+using Microsoft.CodeAnalysis.Operations;
 
 namespace AppForSEII2526.API.Models
 {
-	public class Device
-	{
+    public class Device
+    {
 
         [Required]
         [StringLength(50, ErrorMessage = "Máximo número de caracteres alcanzado (50)", MinimumLength = 1)]
@@ -53,7 +54,7 @@ namespace AppForSEII2526.API.Models
         [Required]
         public int Year { get; set; }
 
-        
+
         public Model Model { get; set; } // Relacion con Modelo
         public IList<RentDevice> RentedDevices { get; set; } // Relación con RentDevice
 
@@ -78,5 +79,41 @@ namespace AppForSEII2526.API.Models
             this.Year = year;
 
         }
-	}
+        //constructor para purchase
+        public Device(string brand, string color, int id, string name, double pricePurchase, int quantityPurchase, int year, Model modelo) // IList<ReviewItem> reviewItems
+        {
+            this.Brand = brand;
+            this.Color = color;
+            this.Id = id;
+            this.Name = name;
+            this.priceForPurchace = pricePurchase;
+            //this.priceForRent = priceRent;
+            //this.PurchaseItems = purchaseItems;
+            // this.Quality = quality;
+            this.quantityForPurchase = quantityPurchase;
+            //this.quantityForRent = quantityRent;
+            // this.ReviewItems = reviewItems;
+            this.Year = year;
+            this.Model = modelo;
+
+        }
+
+        public Device(string brand, string color, string name, double pricePurchase, int quantityPurchase, int year, Model modelo) // IList<ReviewItem> reviewItems
+        {
+            this.Brand = brand;
+            this.Color = color;
+
+            this.Name = name;
+            this.priceForPurchace = pricePurchase;
+            //this.priceForRent = priceRent;
+            //this.PurchaseItems = purchaseItems;
+            // this.Quality = quality;
+            this.quantityForPurchase = quantityPurchase;
+            //this.quantityForRent = quantityRent;
+            // this.ReviewItems = reviewItems;
+            this.Year = year;
+            this.Model = modelo;
+
+        }
+    }
 }
