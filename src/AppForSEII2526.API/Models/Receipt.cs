@@ -1,10 +1,10 @@
-﻿using static AppForSEII2526.API.Models.PaymentMethod;
+﻿using static AppForSEII2526.API.Models.PaymentMethodTypes;
 
 namespace AppForSEII2526.API.Models
 {
     public class Receipt
     {
-        
+
         [Required]
         public int Id { get; set; }
 
@@ -24,7 +24,8 @@ namespace AppForSEII2526.API.Models
 
         // Constructores
 
-        public Receipt() {
+        public Receipt()
+        {
             ReceiptItems = new List<ReceiptItem>();
         }
         public Receipt(int id, PaymentMethodTypes paymentMethod, DateTime receiptDate, double totalPrice)
@@ -35,7 +36,7 @@ namespace AppForSEII2526.API.Models
             this.TotalPrice = totalPrice;
         }
 
-        
+
         /*public override bool Equals(object obj)
         {
             if (obj is Receipt receipt)
