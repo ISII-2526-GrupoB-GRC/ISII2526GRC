@@ -12,7 +12,7 @@ public class ApplicationUser : IdentityUser {
         this.Name = name;
         this.Surname = surname;
         this.DeliveryAddress = address;
-
+        this.UserName = name;
     }
 
     [Display(Name = "Name")]

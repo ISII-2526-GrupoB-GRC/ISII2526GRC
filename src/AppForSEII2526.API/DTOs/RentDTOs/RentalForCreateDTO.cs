@@ -17,13 +17,17 @@ namespace AppForSEII2526.API.DTOs.RentDTOs
         public DateTime RentalDateFrom { get; set; }
         public IList<RentalItemDTO> RentalItems { get; set; }
 
-        public RentalForCreateDTO(string name, string surname, string deliveryAddress, PaymentMethodTypes paymentMethod, IList<RentalItemDTO> rentalItems)
+        public RentalForCreateDTO() { }
+
+        public RentalForCreateDTO(string name, string surname, string deliveryAddress, PaymentMethodTypes paymentMethod, DateTime rentalDateFrom, DateTime rentalDateTo, IList<RentalItemDTO> rentalItems)
         {
 
             Name = name;
             Surname = surname;
             DeliveryAddress = deliveryAddress;
             PaymentMethod = paymentMethod;
+            RentalDateFrom = rentalDateFrom;
+            RentalDateTo = rentalDateTo;
             RentalItems = rentalItems;
         }
 

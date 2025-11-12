@@ -44,17 +44,6 @@ namespace AppForSEII2526.API.Models
 
         public Rental() { }
 
-        /*public Rental(PaymentMethodTypes paymentMethod, DateTime rentalDate, DateTime rentalDateFrom, DateTime rentalDateTo, double totalPrice, ApplicationUser applicationUser)
-        {
-            //Id = id;
-            PaymentMethod = paymentMethod;
-            RentalDate = rentalDate;
-            RentalDateFrom = rentalDateFrom;
-            RentalDateTo = rentalDateTo;
-            TotalPrice = totalPrice;
-            //RentDevice = rentDevice;
-            ApplicationUser = applicationUser;
-        }*/
         public Rental(string customerName, string customerSurname, string deliveryAddress, DateTime rentalDate, PaymentMethodTypes paymentMethod, DateTime rentalDateFrom, DateTime rentalDateTo, IList<RentDevice> rentalItems, ApplicationUser applicationUser)
         {
             TotalPrice = rentalItems.Sum(ri => ri.Price * (rentalDateTo - rentalDateFrom).Days);

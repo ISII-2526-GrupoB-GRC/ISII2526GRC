@@ -1,4 +1,7 @@
-﻿namespace AppForSEII2526.API.DTOs.RentDTOs
+﻿
+using AppForSEII2526.API.Models;
+
+namespace AppForSEII2526.API.DTOs.RentDTOs
 {
     public class RentalDetailDTO
 
@@ -25,6 +28,17 @@
             RentalDateTo = rentalDateTo;
             RentedDevices = rentedDevices;
         }
-
+        public override bool Equals(object? obj)
+        {
+            return obj is RentalDetailDTO dTO &&
+                   Name == dTO.Name &&
+                   Surname == dTO.Surname &&
+                   DeliveryAddress == dTO.DeliveryAddress &&
+                   RentalDate == dTO.RentalDate &&
+                   TotalPrice == dTO.TotalPrice &&
+                   RentalDateFrom == dTO.RentalDateFrom &&
+                   RentalDateTo == dTO.RentalDateTo &&
+                   RentedDevices.SequenceEqual(dTO.RentedDevices); // Línea cambiada para comparar las listas (Mirar)
+        }
     }
 }

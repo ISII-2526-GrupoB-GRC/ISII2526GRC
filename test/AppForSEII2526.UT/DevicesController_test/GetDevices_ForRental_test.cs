@@ -38,7 +38,7 @@ namespace AppForSEII2526.UT.DevicesController_test
             var rental = new Rental("Ana", "Gonzalez", "Calle Serrano 45, Madrid", DateTime.Now, PaymentMethodTypes.CreditCard,
                 DateTime.Today.AddDays(2), DateTime.Today.AddDays(5), new List<RentDevice>(), user1);
 
-            rental.RentDevices.Add(new RentDevice(devices[0], rental));
+            rental.RentDevices.Add(new RentDevice(1, devices[0], rental));
 
             _context.Add(user1);
             _context.AddRange(models);

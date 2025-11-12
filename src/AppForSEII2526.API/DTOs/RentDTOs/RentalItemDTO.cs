@@ -22,10 +22,10 @@
         public override bool Equals(object? obj)
         {
             return obj is RentalItemDTO dTO &&
+                   Brand == dTO.Brand &&
                    NameModel == dTO.NameModel &&
                    priceForRent == dTO.priceForRent &&
-                   Quantity == dTO.Quantity &&
-                   Brand == dTO.Brand;
+                   Quantity == dTO.Quantity;
         }
     }
 }

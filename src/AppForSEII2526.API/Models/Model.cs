@@ -9,7 +9,6 @@ namespace AppForSEII2526.API.Models
 
     public class Model
     {
-        
         public int Id { get; set; }
 
         [Required]
@@ -19,12 +18,14 @@ namespace AppForSEII2526.API.Models
         public IList<Device> Devices { get; set; } //Relacion con Device
 
         public Model() { } //constructor vacio
+
         public Model(int id, string nameModel, IList<Device> devices) { //constructor con parametros
             this.Id = id;
             this.NameModel = nameModel;
             this.Devices = (IList<Device>)devices;
 
         }
+
         //Para pruebas de GetDevices
         public Model(string nameModel)
         {

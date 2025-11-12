@@ -23,31 +23,13 @@ namespace AppForSEII2526.API.Models
 
 		public RentDevice() { }
 
-		//
-		public RentDevice(double price, int quantity, Device device, Rental rental)
-		{
-			Price = price;
+        public RentDevice(int quantity, Device device, Rental rental)
+        {
 			Quantity = quantity;
-			Device = device;
-			DeviceId = device.Id;
-			Rental = rental;
-			RentalId = rental.Id; // Cambiado
-        }
-        //
-
-        public RentDevice(double price, int quantity, int deviceId, Rental rental)
-        {
-            Price = price;
-            Quantity = quantity;
-            DeviceId = deviceId;
-            Rental = rental;
-            RentalId = rental.Id; // Cambiado
-        }
-
-        public RentDevice(Device device, Rental rental)
-        {
             Device = device;
+			Price = device.priceForRent;
             Rental = rental;
+
         }
 
         public override bool Equals(object? obj)
