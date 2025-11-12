@@ -93,6 +93,61 @@ namespace AppForSEII2526.API.Models
                    EqualityComparer<IList<RentDevice>>.Default.Equals(RentedDevices, device.RentedDevices);
         }
 
+
+
+        public Device(string brand, string color, int id, string name, double pricePurchase, double priceRent, IList<PurchaseItem> purchaseItems, QualityType quality, int quantityPurchase, int quantityRent, int year) // IList<ReviewItem> reviewItems
+        {
+            this.Brand = brand;
+            this.Color = color;
+            this.Id = id;
+            this.Name = name;
+            this.priceForPurchace = pricePurchase;
+            this.priceForRent = priceRent;
+            this.PurchaseItems = purchaseItems;
+            this.Quality = quality;
+            this.quantityForPurchase = quantityPurchase;
+            this.quantityForRent = quantityRent;
+            // this.ReviewItems = reviewItems;
+            this.Year = year;
+
+        }
+        //constructor para purchase
+        public Device(string brand, string color, int id, string name, double pricePurchase, int quantityPurchase, int year, Model modelo) // IList<ReviewItem> reviewItems
+        {
+            this.Brand = brand;
+            this.Color = color;
+            this.Id = id;
+            this.Name = name;
+            this.priceForPurchace = pricePurchase;
+            //this.priceForRent = priceRent;
+            //this.PurchaseItems = purchaseItems;
+            // this.Quality = quality;
+            this.quantityForPurchase = quantityPurchase;
+            //this.quantityForRent = quantityRent;
+            // this.ReviewItems = reviewItems;
+            this.Year = year;
+            this.Model = modelo;
+
+        }
+
+        public Device(string brand, string color, string name, double pricePurchase, int quantityPurchase, int year, Model modelo) // IList<ReviewItem> reviewItems
+        {
+            this.Brand = brand;
+            this.Color = color;
+
+            this.Name = name;
+            this.priceForPurchace = pricePurchase;
+            //this.priceForRent = priceRent;
+            //this.PurchaseItems = purchaseItems;
+            // this.Quality = quality;
+            this.quantityForPurchase = quantityPurchase;
+            //this.quantityForRent = quantityRent;
+            // this.ReviewItems = reviewItems;
+            this.Year = year;
+            this.Model = modelo;
+
+        }
+
         public override int GetHashCode()
         {
             HashCode hash = new HashCode();
