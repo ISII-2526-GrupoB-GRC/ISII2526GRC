@@ -8,17 +8,17 @@ public class ApplicationUser : IdentityUser
 
     public ApplicationUser() { }
 
-    public ApplicationUser(int id, string userName, string name, string surname, string address)
+    public ApplicationUser(int id, string name, string surname, string address)
     {
         this.Id = id;
-        this.userName = userName;
+
         this.Name = name;
         this.Surname = surname;
         //esto aqui no va
 
 
     }
-    public string userName { get; set; }
+
 
     [Display(Name = "Name")]
     [StringLength(80, ErrorMessage = "Máximo número de caracteres alcanzado (80)", MinimumLength = 1)]
