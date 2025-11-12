@@ -6,15 +6,15 @@
         [Required]
         [StringLength(15, ErrorMessage = "El nombre del modelo no puede ser superior a 15 caracteres")]
         public string Model { get; set; }
-        public Repair Repair { get; set; }
+        public Repair Repair { get; set; } //Relacion con Repair
         [Required]
         public int RepairId { get; set; }
-        public Receipt Receipt { get; set; }
+        public Receipt Receipt { get; set; } //Relacion con Receipt
         [Required]
         public int ReceiptId { get; set; }
 
         public ReceiptItem() { }
-        public ReceiptItem(string model, Repair repair, Receipt receipt)
+        public ReceiptItem(string model, Repair? repair, Receipt receipt)
         {
             this.Model = model;
             this.Repair = repair;
@@ -22,6 +22,7 @@
             this.Receipt = receipt;
             this.ReceiptId = receipt.Id;
         }
+
 
         public override bool Equals(object obj)
         {
