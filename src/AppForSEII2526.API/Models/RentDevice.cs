@@ -3,34 +3,49 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AppForSEII2526.API.Models
 {
-	[PrimaryKey(nameof(DeviceId),nameof(RentId))]
-	public class RentDevice
-	{
-		[Required]
-		public int DeviceId { get; set; }
+    [PrimaryKey(nameof(DeviceId), nameof(RentalId))]
+    public class RentDevice
+    {
+        [Required]
+        public int DeviceId { get; set; }
 
-		[Required]
-		public double Price { get; set; }
+        [Required]
+        public double Price { get; set; }
 
-		[Required]
-		public int Quantity { get; set; }
+        [Required]
+        public int Quantity { get; set; }
 
-		[Required]
-		public int RentId { get; set; }
+        [Required]
+        public int RentalId { get; set; }
 
-		public IList<Device> Devices { get; set; } // Relación con Device
-		public IList<Rental> Rentals { get; set; } // Relación con Rental
+        public Device Device { get; set; }
+        public Rental Rental { get; set; }
 
-		// Constructores
+        public RentDevice() { }
 
-		public RentDevice() { }
+        public RentDevice(int quantity, Device device, Rental rental)
+        {
+            Quantity = quantity;
+            Device = device;
+            Price = device.priceForRent;
+            Rental = rental;
 
-		public RentDevice(int deviceID, double price, int quantity, int rentId)
-		{
-			DeviceId = deviceID;
-			Price = price;
-			Quantity = quantity;
-			RentId = rentId;
-		}
-	}
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is RentDevice device &&
+                   DeviceId == device.DeviceId &&
+                   Price == device.Price &&
+                   Quantity == device.Quantity &&
+                   RentalId == device.RentalId &&
+                   EqualityComparer<Device>.Default.Equals(Device, device.Device) &&
+                   EqualityComparer<Rental>.Default.Equals(Rental, device.Rental);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(DeviceId, Price, Quantity, RentalId, Device, Rental);
+        }
+    }
 }
