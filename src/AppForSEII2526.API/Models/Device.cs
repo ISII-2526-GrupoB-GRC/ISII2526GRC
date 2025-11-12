@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
-using Microsoft.CodeAnalysis.Operations;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
 namespace AppForSEII2526.API.Models
 {
@@ -42,14 +42,12 @@ namespace AppForSEII2526.API.Models
         }
 
         [Required]
+        [Range(0, int.MaxValue, ErrorMessage = "Cantidad mínima 0")]
         public int quantityForPurchase { get; set; }  //Puede ser 0 ya que podemos querer solo alquilar
 
         [Required]
+        [Range(0, int.MaxValue, ErrorMessage = "Cantidad mínima 0")]
         public int quantityForRent { get; set; }      //Puede ser 0 ya que podemos querer solo comprar
-
-        // [Required]
-        // public List<ReviewItem> ReviewItems { get; set; }
-
 
         [Required]
         public int Year { get; set; }
@@ -58,62 +56,60 @@ namespace AppForSEII2526.API.Models
         public Model Model { get; set; } // Relacion con Modelo
         public IList<RentDevice> RentedDevices { get; set; } // Relación con RentDevice
 
-
         // Constructores
 
         public Device() { }
 
-        public Device(string brand, string color, int id, string name, double pricePurchase, double priceRent, IList<PurchaseItem> purchaseItems, QualityType quality, int quantityPurchase, int quantityRent, int year) // IList<ReviewItem> reviewItems
+        public Device(string brand, Model model, string color, string name, double pricePurchase, double priceRent, QualityType quality, int quantityPurchase, int quantityRent, int year)
         {
             this.Brand = brand;
             this.Color = color;
-            this.Id = id;
+            //this.Id = id;
             this.Name = name;
             this.priceForPurchace = pricePurchase;
             this.priceForRent = priceRent;
-            this.PurchaseItems = purchaseItems;
             this.Quality = quality;
             this.quantityForPurchase = quantityPurchase;
             this.quantityForRent = quantityRent;
-            // this.ReviewItems = reviewItems;
             this.Year = year;
-
-        }
-        //constructor para purchase
-        public Device(string brand, string color, int id, string name, double pricePurchase, int quantityPurchase, int year, Model modelo) // IList<ReviewItem> reviewItems
-        {
-            this.Brand = brand;
-            this.Color = color;
-            this.Id = id;
-            this.Name = name;
-            this.priceForPurchace = pricePurchase;
-            //this.priceForRent = priceRent;
-            //this.PurchaseItems = purchaseItems;
-            // this.Quality = quality;
-            this.quantityForPurchase = quantityPurchase;
-            //this.quantityForRent = quantityRent;
-            // this.ReviewItems = reviewItems;
-            this.Year = year;
-            this.Model = modelo;
-
+            this.Model = model;
         }
 
-        public Device(string brand, string color, string name, double pricePurchase, int quantityPurchase, int year, Model modelo) // IList<ReviewItem> reviewItems
+        public override bool Equals(object? obj)
         {
-            this.Brand = brand;
-            this.Color = color;
+            return obj is Device device &&
+                   Brand == device.Brand &&
+                   Color == device.Color &&
+                   Id == device.Id &&
+                   Name == device.Name &&
+                   priceForPurchace == device.priceForPurchace &&
+                   priceForRent == device.priceForRent &&
+                   EqualityComparer<IList<PurchaseItem>>.Default.Equals(PurchaseItems, device.PurchaseItems) &&
+                   Quality == device.Quality &&
+                   quantityForPurchase == device.quantityForPurchase &&
+                   quantityForRent == device.quantityForRent &&
+                   Year == device.Year &&
+                   EqualityComparer<Model>.Default.Equals(Model, device.Model) &&
+                   EqualityComparer<IList<RentDevice>>.Default.Equals(RentedDevices, device.RentedDevices);
+        }
 
-            this.Name = name;
-            this.priceForPurchace = pricePurchase;
-            //this.priceForRent = priceRent;
-            //this.PurchaseItems = purchaseItems;
-            // this.Quality = quality;
-            this.quantityForPurchase = quantityPurchase;
-            //this.quantityForRent = quantityRent;
-            // this.ReviewItems = reviewItems;
-            this.Year = year;
-            this.Model = modelo;
-
+        public override int GetHashCode()
+        {
+            HashCode hash = new HashCode();
+            hash.Add(Brand);
+            hash.Add(Color);
+            hash.Add(Id);
+            hash.Add(Name);
+            hash.Add(priceForPurchace);
+            hash.Add(priceForRent);
+            hash.Add(PurchaseItems);
+            hash.Add(Quality);
+            hash.Add(quantityForPurchase);
+            hash.Add(quantityForRent);
+            hash.Add(Year);
+            hash.Add(Model);
+            hash.Add(RentedDevices);
+            return hash.ToHashCode();
         }
     }
 }
