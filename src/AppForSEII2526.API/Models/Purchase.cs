@@ -43,7 +43,7 @@ namespace AppForSEII2526.API.Models
         public Purchase() { } //constructor vacio
 
 
-        public Purchase(string CustomerUserName, string CustomerUserSurname, string DeliveryAddress, PaymentMethodTypes paymentMethod, DateTime purchaseDate, double totalPrice, int totalQuanty, IList<PurchaseItem> purchasesItems, ApplicationUser user) //constructor con parametros
+        public Purchase(string DeliveryAddress, PaymentMethodTypes paymentMethod, DateTime purchaseDate, double totalPrice, int totalQuanty, IList<PurchaseItem> purchasesItems, ApplicationUser user) //constructor con parametros
         {
 
             this.DeliveryAddress = DeliveryAddress;
