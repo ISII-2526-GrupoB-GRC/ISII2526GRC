@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace AppForSEII2526.API.Models
 {
     using System.ComponentModel.DataAnnotations;
-    using static AppForSEII2526.API.Models.PaymentMethod;
+    using static AppForSEII2526.API.Models.PaymentMethodTypes;
 
     public class Rental
     {
@@ -13,7 +13,7 @@ namespace AppForSEII2526.API.Models
         [Required]
         public PaymentMethodTypes PaymentMethod { get; set; }
 
-        
+
 
         [DataType(DataType.Date), Display(Name = "Fecha de alquiler")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
