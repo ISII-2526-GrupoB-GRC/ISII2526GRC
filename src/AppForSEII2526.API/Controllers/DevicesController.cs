@@ -43,6 +43,49 @@ namespace AppForSEII2526.API.Controllers
                 ))
                 .ToListAsync();
             return Ok(devices);
+
+
+
+
+
+
+        }
+
+
+        
+
+        
+
+        [HttpGet]
+        [Route("[action]")]
+        [ProducesResponseType(typeof(IList<DeviceForPurchaseDTO>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult> GetDevicesForPurchase(string? brand, string? colour)
+        {
+
+            if (_context.Device == null)
+            {
+                _logger.LogError("Table Device is null");
+                return NotFound();
+
+
+
+            }
+            var devices = await _context.Device
+                .Where(d => (colour == null || d.Color.Contains(colour)) && (brand == null || d.Brand.Contains(brand)))
+                .Include(d => d.Model)
+                .Select(d => new DeviceForPurchaseDTO(
+                    d.Name,
+                    d.Brand,
+                    d.Model.NameModel,
+                    d.Color,
+                    d.priceForPurchace
+
+
+
+                    ))
+                .ToListAsync();
+
+            return Ok(devices);
         }
     }
 }
