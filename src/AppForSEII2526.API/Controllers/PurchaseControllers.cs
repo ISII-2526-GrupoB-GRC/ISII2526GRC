@@ -68,10 +68,57 @@ namespace AppForSEII2526.API.Controllers
     */
 
 
+        //metodo Get
+        [HttpGet]
+        [Route("[action]")]
+        [ProducesResponseType(typeof(PurchaseDetailDTO), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<ActionResult> Get_Purchase_Detail_DTO(int id)
+        {
+            if (_context.Purchase == null)
+            {
+                _logger.LogError("Table Purchase is null");
+                return NotFound();
+            }
+
+            var purchase = await _context.Purchase
+                .Include(p => p.ApplicationUser)
+                .Include(p => p.PurchaseItems)
+                    .ThenInclude(pi => pi.Device)
+                        .ThenInclude(d => d.Model)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (purchase == null)
+            {
+                return NotFound();
+            }
+
+            var purchaseDetailDTO = new PurchaseDetailDTO(
+                purchase.Id,
+                purchase.ApplicationUser.Name,
+                purchase.ApplicationUser.Surname,
+                purchase.DeliveryAddress,
+                purchase.PurchaseDate,
+                purchase.TotalPrice,
+                purchase.TotalQuanty,
+                purchase.PurchaseItems.Select(pi => new PurchaseItemDTO(
+                    pi.Device.Brand,
+                    pi.Device.Model.NameModel,
+                    pi.Device.Color,
+                    pi.Device.priceForPurchace,
+                    pi.Quantity,
+                    pi.Description ?? string.Empty
+                )).ToList()
+            );
+
+            return Ok(purchaseDetailDTO);
+        }
 
 
 
-       
+
+
+
 
 
 
