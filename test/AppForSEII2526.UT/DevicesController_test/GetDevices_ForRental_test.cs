@@ -33,10 +33,23 @@ namespace AppForSEII2526.UT.DevicesController_test
                 new Device("Lenovo", models[1], "Negro", "Lenovo ThinkCentre M90", 899.50, 22d, QualityType.Medium, 12, 10, 2023),
             };
 
-            ApplicationUser user1 = new ApplicationUser("Ana", "González", "Calle Serrano 45, Madrid");
+            ApplicationUser user1 = new ApplicationUser()
+            {
+                UserName = "Ana",
+                Name = "Ana",
+                Surname = "González",
+            };
 
-            var rental = new Rental("Ana", "Gonzalez", "Calle Serrano 45, Madrid", DateTime.Now, PaymentMethodTypes.CreditCard,
-                DateTime.Today.AddDays(2), DateTime.Today.AddDays(5), new List<RentDevice>(), user1);
+            var rental = new Rental()
+            {
+                ApplicationUser = user1,
+                DeliveryAddress = "Calle Serrano 45, Madrid",
+                RentalDate = DateTime.Now,
+                PaymentMethod = PaymentMethodTypes.CreditCard,
+                RentalDateFrom = DateTime.Today.AddDays(2),
+                RentalDateTo = DateTime.Today.AddDays(5),
+                RentDevices = new List<RentDevice>()
+            };
 
             rental.RentDevices.Add(new RentDevice(1, devices[0], rental));
 
