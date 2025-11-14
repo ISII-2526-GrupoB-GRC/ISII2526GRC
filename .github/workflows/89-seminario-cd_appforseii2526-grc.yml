@@ -6,10 +6,10 @@ name: Build and deploy ASP.Net Core app to Azure Web App - appforseii2526-grc
 on:
   push:
     branches:
-      - 89-seminario-cd
-      # - development
-      # paths:
-      # - 'src/AppForSEII2526.API**'
+      #- 89-seminario-cd
+      - development
+    paths:
+       - 'src/AppForSEII2526.API**'
   workflow_dispatch:
 
 jobs:
@@ -78,6 +78,7 @@ jobs:
           package: .
 
           
+
 
 
 
