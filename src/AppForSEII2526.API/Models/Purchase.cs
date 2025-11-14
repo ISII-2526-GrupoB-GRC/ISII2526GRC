@@ -10,13 +10,7 @@ namespace AppForSEII2526.API.Models
     public class Purchase
     {
 
-        [Required(ErrorMessage = "El nombre de usuario es obligatorio")]
-        [StringLength(10, ErrorMessage = "El nombre de usuario no puede ser mas largo de 1 caracteres")]
-        public string CustomerUserName { get; set; }
 
-        [Required(ErrorMessage = "El apellido/s del cliente es obligatorio/s")]
-        [StringLength(15, ErrorMessage = "El apellido del usuario no puede ser mas largo de 15 caracteres")]
-        public string CustomerUserSurname { get; set; }
 
 
         [Required(ErrorMessage = "La direccion de envio es obligatoria")]
@@ -49,10 +43,9 @@ namespace AppForSEII2526.API.Models
         public Purchase() { } //constructor vacio
 
 
-        public Purchase(string CustomerUserName, string CustomerUserSurname, string DeliveryAddress, PaymentMethodTypes paymentMethod, DateTime purchaseDate, double totalPrice, int totalQuanty, IList<PurchaseItem> purchasesItems, ApplicationUser user) //constructor con parametros
+        public Purchase(string DeliveryAddress, PaymentMethodTypes paymentMethod, DateTime purchaseDate, double totalPrice, int totalQuanty, IList<PurchaseItem> purchasesItems, ApplicationUser user) //constructor con parametros
         {
-            this.CustomerUserName = CustomerUserName;
-            this.CustomerUserSurname = CustomerUserSurname;
+
             this.DeliveryAddress = DeliveryAddress;
             //this.Id = id;
             this.PaymentMethod = paymentMethod;
@@ -66,8 +59,7 @@ namespace AppForSEII2526.API.Models
         public override bool Equals(object? obj)
         {
             return obj is Purchase purchase &&
-                   CustomerUserName == purchase.CustomerUserName &&
-                   CustomerUserSurname == purchase.CustomerUserSurname &&
+
                    DeliveryAddress == purchase.DeliveryAddress &&
                    Id == purchase.Id &&
                    PaymentMethod == purchase.PaymentMethod &&
@@ -76,6 +68,11 @@ namespace AppForSEII2526.API.Models
                    TotalQuanty == purchase.TotalQuanty &&
                    EqualityComparer<IList<PurchaseItem>>.Default.Equals(PurchaseItems, purchase.PurchaseItems) &&
                    EqualityComparer<ApplicationUser>.Default.Equals(ApplicationUser, purchase.ApplicationUser);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(DeliveryAddress, Id, PaymentMethod, PurchaseDate, TotalPrice, TotalQuanty, PurchaseItems, ApplicationUser);
         }
     }
 }
