@@ -142,7 +142,7 @@ namespace AppForSEII2526.API.Controllers
             }
 
 
-            var user = _context.ApplicationUser.FirstOrDefault(u => u.Name == purchaseForCreate.name);
+            var user = _context.ApplicationUser.FirstOrDefault(u => u.UserName == purchaseForCreate.name);
             if (user == null)
             { //
                 ModelState.AddModelError("PurchaseApplicationUser", "Error!. UserName is not registered");
