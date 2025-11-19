@@ -158,17 +158,17 @@ namespace AppForSEII2526.UT.PurchasesController_test
                      "Test description")
 
             };
-            var purchaseDTO = new PurchaseForCreateDTO(purchaseItems, "Test", "User", "123 Test st", PaymentMethodTypes.CreditCard);
+            var purchaseDTO = new PurchaseForCreateDTO(purchaseItems, "testUser", "Test User", "123 Test st", PaymentMethodTypes.CreditCard);
 
             var result = await controller.CreatePurchase(purchaseDTO);
 
             var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result);
             var purchaseDetailDTOActual = Assert.IsType<PurchaseDetailDTO>(createdAtActionResult.Value);
 
-            Assert.Equal(purchaseDTO.name, purchaseDetailDTOActual.name);
+            Assert.Equal("Test", purchaseDetailDTOActual.name);
 
 
-            Assert.Equal(purchaseDTO.surnames, purchaseDetailDTOActual.surname);
+            Assert.Equal("User", purchaseDetailDTOActual.surname);
             Assert.Equal(purchaseDTO.deliveryAddress, purchaseDetailDTOActual.deliveryAddress);
             Assert.Equal(purchaseDTO.purchaseItems, purchaseDetailDTOActual.purchaseItems);
             Assert.Equal(
