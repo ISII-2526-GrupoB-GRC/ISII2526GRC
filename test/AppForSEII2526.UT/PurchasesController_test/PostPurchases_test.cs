@@ -94,16 +94,81 @@ namespace AppForSEII2526.UT.PurchasesController_test
 
             };
             //var purchaseNoPaymentMethod = new PurchaseForCreateDTO(purchaseItems, "Test", "User", "123 Test st", null); // no se como evaluar el null debido a que es un enum
+            var purchaseItemsExamenModeloXiaomi = new List<PurchaseItemDTO>
+            {
+                new PurchaseItemDTO(   "marca1",
+                     "Xiaomi",
+                     "azul",
+                    100.0,
+                     2,
+                     "Test description")
+
+
+            };
+
+
+            var purchaseItemsExamenModeloHuawei = new List<PurchaseItemDTO>
+            {
+                new PurchaseItemDTO(   "marca1",
+                     "Huawei",
+                     "azul",
+                    100.0,
+                     2,
+                     "Test description")
+
+
+            };
+
+
+            var purchaseItemsExamenMarcaXiaomi = new List<PurchaseItemDTO>
+            {
+                new PurchaseItemDTO(   "Xiaomi",
+                     "modelo1",
+                     "azul",
+                    100.0,
+                     2,
+                     "Test description")
+
+
+            };
+
+
+            var purchaseItemsExamenMarcaHuawei = new List<PurchaseItemDTO>
+            {
+                new PurchaseItemDTO(   "Huawei",
+                     "modelo1",
+                     "azul",
+                    100.0,
+                     2,
+                     "Test description")
+
+
+            };
+
+
 
             var purchaseNoUserName = new PurchaseForCreateDTO(purchaseItems, "", "User", "123 Test st", PaymentMethodTypes.CreditCard);
             var purchaseNoDeliveryAddress = new PurchaseForCreateDTO(purchaseItems, "Test", "User", "", PaymentMethodTypes.CreditCard);
+            var purchaseBadNameModelXiaomi = new PurchaseForCreateDTO(purchaseItemsExamenModeloXiaomi, "Test", "User", "123 Test st", PaymentMethodTypes.CreditCard);
+            var purchaseBadNameMarcaXiaomi = new PurchaseForCreateDTO(purchaseItemsExamenMarcaXiaomi, "Test", "User", "123 Test st", PaymentMethodTypes.CreditCard);
+            var purchaseBadNameModelHuawei = new PurchaseForCreateDTO(purchaseItemsExamenModeloHuawei, "Test", "User", "123 Test st", PaymentMethodTypes.CreditCard);
+
+            var purchaseBadNameMarcaHuawei = new PurchaseForCreateDTO(purchaseItemsExamenMarcaHuawei, "Test", "User", "123 Test st", PaymentMethodTypes.CreditCard);
+
 
 
             var allTest = new List<Object[]>
             {
                 new object[] {purchaseNoItems, "ERROR! You must buy at least one item" },
                 new object[] {purchaseNoUserName, "Error!. UserName is not registered" },
-                new object[]{purchaseNoDeliveryAddress, "ERROR! You must put a delivery addres" }
+                new object[]{purchaseNoDeliveryAddress, "ERROR! You must put a delivery addres" },
+                new object[]{ purchaseBadNameModelXiaomi, "ERROR: las tecnologias de estas marcas ya no estan disponibles, siguiendo recomendaciones de las autoridades competentes en materia de seguridad" },
+                new object[]{ purchaseBadNameMarcaXiaomi, "ERROR: las tecnologias de estas marcas ya no estan disponibles, siguiendo recomendaciones de las autoridades competentes en materia de seguridad" },
+                new object[]{ purchaseBadNameModelHuawei, "ERROR: las tecnologias de estas marcas ya no estan disponibles, siguiendo recomendaciones de las autoridades competentes en materia de seguridad" },
+
+                new object[]{ purchaseBadNameMarcaHuawei, "ERROR: las tecnologias de estas marcas ya no estan disponibles, siguiendo recomendaciones de las autoridades competentes en materia de seguridad" }
+
+
 
             };
             return allTest;

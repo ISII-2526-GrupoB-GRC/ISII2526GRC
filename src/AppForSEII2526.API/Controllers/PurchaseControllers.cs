@@ -129,7 +129,24 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.Conflict)]
         public async Task<ActionResult> CreatePurchase(PurchaseForCreateDTO purchaseForCreate)
         {
+            foreach(var dispositivo in purchaseForCreate.purchaseItems)
+            {
+                if(dispositivo.nameModel.Contains("Xiaomi") || dispositivo.nameModel.Contains("Huawei")) // filtro de nameModel
+                {
 
+                    ModelState.AddModelError("nameModel", "ERROR: las tecnologias de estas marcas ya no estan disponibles, siguiendo recomendaciones de las autoridades competentes en materia de seguridad");
+
+
+                }
+                if (dispositivo.brand.Contains("Xiaomi") || dispositivo.brand.Contains("Huawei")) //filtro de marca
+                {
+                    ModelState.AddModelError("brand", "ERROR: las tecnologias de estas marcas ya no estan disponibles, siguiendo recomendaciones de las autoridades competentes en materia de seguridad");
+
+                }
+
+
+
+            }
             if (purchaseForCreate.purchaseItems.Count == 0)//
             {
                 ModelState.AddModelError("purchaseItems", "ERROR! You must buy at least one item");
