@@ -21,7 +21,7 @@ namespace AppForSEII2526.UT.ReceiptsController_test
                 Surname = "User",
                 
             };
-            var DeliveryAddress = "123 Test St";
+            var DeliveryAddress = "Calle 123 Test";
             var scales = new List<Scale>() //Model
             {
                 new Scale() { Name = "Lujo" },
@@ -61,15 +61,28 @@ namespace AppForSEII2526.UT.ReceiptsController_test
         {
             //        public ReceiptForCreateDTO(string username, string usersurname, string userdeliveryaddress, PaymentMethodTypes paymentMethod, IList<ReceiptItemDTO> receiptItems)
 
-            var receiptNoItem = new ReceiptForCreateDTO("testuser", "Test User", "C/ test", PaymentMethodTypes.CreditCard, new List<ReceiptItemDTO>());
+            var receiptNoItem = new ReceiptForCreateDTO("testuser", "Test User", "Calle test", PaymentMethodTypes.CreditCard, new List<ReceiptItemDTO>());
 
             var rentalItems = new List<ReceiptItemDTO>
             {
                 new ReceiptItemDTO("Pantalla", "Lujo", 50.0m, "iPhone X")
             };
 
-            var receiptInvalidUser = new ReceiptForCreateDTO("nonexistentuser", "Test User", "C/ test", PaymentMethodTypes.CreditCard, rentalItems);
-            var RepairNotFound = new ReceiptForCreateDTO("testuser", "Test User", "C/ test", PaymentMethodTypes.CreditCard,
+            var receiptInvalidDeliveryAddress = new ReceiptForCreateDTO("testuser", "Test User", "C/ test", PaymentMethodTypes.CreditCard,
+                new List<ReceiptItemDTO>
+                {
+                    new ReceiptItemDTO("Reparación Inexistente", "Lujo", 100.0m, "iPhone X")
+                });
+
+            var receiptInvalidDeliveryAddress2 = new ReceiptForCreateDTO("testuser", "Test User", null, PaymentMethodTypes.CreditCard,
+                new List<ReceiptItemDTO>
+                {
+                    new ReceiptItemDTO("Reparación Inexistente", "Lujo", 100.0m, "iPhone X")
+                });
+
+            var receiptInvalidUser = new ReceiptForCreateDTO("nonexistentuser", "Test User", "Avenida test", PaymentMethodTypes.CreditCard, rentalItems);
+            
+            var RepairNotFound = new ReceiptForCreateDTO("testuser", "Test User", "Calle test", PaymentMethodTypes.CreditCard,
                 new List<ReceiptItemDTO>
                 {
                     new ReceiptItemDTO("Reparación Inexistente", "Lujo", 100.0m, "iPhone X")
@@ -79,6 +92,8 @@ namespace AppForSEII2526.UT.ReceiptsController_test
             var allTest = new List<object[]>
             {
                 new object[] { receiptNoItem, "At least one receipt item is required." , },
+                new object[] { receiptInvalidDeliveryAddress, "Error en la dirección de envío. Por favor, introduce una dirección válida inluyendo las palabras Calle o Avenida", },
+                new object[] { receiptInvalidDeliveryAddress2, "Error en la dirección de envío. Por favor, introduce una dirección válida inluyendo las palabras Calle o Avenida", },
                 new object[] { receiptInvalidUser, "The specified user does not exist." , },
                 new object[] { RepairNotFound, "The repair 'Reparación Inexistente' does not exist.", },
             };
@@ -125,7 +140,7 @@ namespace AppForSEII2526.UT.ReceiptsController_test
                 new ReceiptItemDTO("Pantalla", "Lujo", 50.0m, "iPhone X"),
                 new ReceiptItemDTO("Batería", "Media", 20.0m, "Samsung S10")
             };
-            var receiptDTO = new ReceiptForCreateDTO("testuser", "Test User", "C/ test", PaymentMethodTypes.CreditCard, rentalItems);
+            var receiptDTO = new ReceiptForCreateDTO("testuser", "Test User", "Calle test", PaymentMethodTypes.CreditCard, rentalItems);
             //Act
             var result = await controller.CreateReceipt(receiptDTO);
             //Assert

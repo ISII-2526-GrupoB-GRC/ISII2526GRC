@@ -14,7 +14,6 @@ namespace AppForSEII2526.API.DTOs.ReceiptDTOs
 
         [DataType(System.ComponentModel.DataAnnotations.DataType.MultilineText)]
         [Display(Name = "Dirección de envío")]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Introduce la dirección de envío")]
         public string userdeliveryaddress { get; set; }
 
         [Required]
@@ -36,7 +35,7 @@ namespace AppForSEII2526.API.DTOs.ReceiptDTOs
             //this.model = model;
             this.username = username ?? throw new ArgumentNullException(nameof(username));
             this.usersurname = usersurname ?? throw new ArgumentNullException(nameof(usersurname));
-            this.userdeliveryaddress = userdeliveryaddress ?? throw new ArgumentNullException(nameof(userdeliveryaddress));
+            this.userdeliveryaddress = userdeliveryaddress;
             this.paymentMethod = paymentMethod;
             this.receiptItems = receiptItems ?? throw new ArgumentNullException(nameof(receiptItems));
         }
