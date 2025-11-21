@@ -68,7 +68,7 @@ namespace AppForSEII2526.API.Controllers
                 ModelState.AddModelError("ReceiptItems", "At least one receipt item is required.");
             }
 
-            if (receiptForCreateDTO.userdeliveryaddress != null && !(receiptForCreateDTO.userdeliveryaddress.Contains("Calle") || receiptForCreateDTO.userdeliveryaddress.Contains("Avenida"))) {
+            if (receiptForCreateDTO.userdeliveryaddress == null || !(receiptForCreateDTO.userdeliveryaddress.Contains("Calle") || receiptForCreateDTO.userdeliveryaddress.Contains("Avenida"))) {
                 ModelState.AddModelError("UserDeliveryAddres", "Error en la dirección de envío. Por favor, introduce una dirección válida inluyendo las palabras Calle o Avenida");
             }
 

@@ -74,6 +74,11 @@ namespace AppForSEII2526.UT.ReceiptsController_test
                     new ReceiptItemDTO("Reparación Inexistente", "Lujo", 100.0m, "iPhone X")
                 });
 
+            var receiptInvalidDeliveryAddress2 = new ReceiptForCreateDTO("testuser", "Test User", null, PaymentMethodTypes.CreditCard,
+                new List<ReceiptItemDTO>
+                {
+                    new ReceiptItemDTO("Reparación Inexistente", "Lujo", 100.0m, "iPhone X")
+                });
 
             var receiptInvalidUser = new ReceiptForCreateDTO("nonexistentuser", "Test User", "Avenida test", PaymentMethodTypes.CreditCard, rentalItems);
             
@@ -88,6 +93,7 @@ namespace AppForSEII2526.UT.ReceiptsController_test
             {
                 new object[] { receiptNoItem, "At least one receipt item is required." , },
                 new object[] { receiptInvalidDeliveryAddress, "Error en la dirección de envío. Por favor, introduce una dirección válida inluyendo las palabras Calle o Avenida", },
+                new object[] { receiptInvalidDeliveryAddress2, "Error en la dirección de envío. Por favor, introduce una dirección válida inluyendo las palabras Calle o Avenida", },
                 new object[] { receiptInvalidUser, "The specified user does not exist." , },
                 new object[] { RepairNotFound, "The repair 'Reparación Inexistente' does not exist.", },
             };
