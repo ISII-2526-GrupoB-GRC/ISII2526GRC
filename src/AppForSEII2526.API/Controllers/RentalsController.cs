@@ -91,13 +91,12 @@ namespace AppForSEII2526.API.Controllers
 
             if (rentalForCreate.Surname == null) ModelState.AddModelError("Surname", "El campo Apellido es obligatorio");
 
-            //Modificación del examen:
+            // Modificación:
             if (rentalForCreate.DeliveryAddress == null) ModelState.AddModelError("DeliveryAddress", "El campo Dirección es obligatorio");
-            else if
-                (!rentalForCreate.DeliveryAddress.Contains("Calle") || !rentalForCreate.DeliveryAddress.Contains("Carretera")){
-                ModelState.AddModelError("DeliveryAddress", "Error en la direción de envío. Por favor introduce una dirección válida incluyendo las palabras clave Calle o Carretera");
-            }
-            //
+            else if (!(rentalForCreate.DeliveryAddress.Contains("Calle") || rentalForCreate.DeliveryAddress.Contains("Carretera"))) 
+                ModelState.AddModelError("DeliveryAddress", "Error en la dirección. Debe contener 'Calle' o 'Carretera'");
+            // Mala lógica: else if(!rentalForCreate.DeliveryAddress.Contains("Calle") || !rentalForCreate.DeliveryAddress.Contains("Carretera"))
+
             if (rentalForCreate.RentalDateFrom <= DateTime.Today)
                 ModelState.AddModelError("RentalDateFrom", "Error! La fecha de alquiler debe comenzar más tarde de hoy");
 
