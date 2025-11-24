@@ -7,6 +7,8 @@ on:
   push:
     branches:
       - development
+    paths:
+       - 'src/AppForSEII2526.API**'
   workflow_dispatch:
 
 jobs:
@@ -14,7 +16,9 @@ jobs:
     runs-on: windows-latest
     permissions:
       contents: read #This is required for actions/checkout
-
+    env:
+       API: ./src/AppForSEII2526.API/AppForSEII2526.API.csproj
+       UT: ./test/AppForSEII2526.UT/AppForSEII2526.UT.csproj
     steps:
       - uses: actions/checkout@v4
 
@@ -22,12 +26,21 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
-
+      - name: Restore dependencies
+        run: |
+          dotnet restore ${{ env.API }}
+          dotnet restore ${{ env.UT }}
+          
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: |
+          dotnet build ${{ env.API }} --configuration Release --no-restore
+          dotnet build ${{ env.UT }} --configuration Release --no-restore
+
+      - name: Run unit test with report
+        run: dotnet test ${{ env.UT }} --configuration Release --no-build --logger "trx;LogFileName=TestResults.trx"
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        run: dotnet publish ${{ env.API }} -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -51,9 +64,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_930947C888D1424AA635B10146FFDE38 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_E2FB75B38CE54CB0A124AEBB952EE792 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_27239ECE5D124C6495762D7FFF167C46 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_1E0FC69EB52342A8B806F30C9610FDC3 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_0F4767FCB0C742E4B848562ECA31F479 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_71FA51399A84472396A2FAC53BA626AB }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -62,4 +75,4 @@ jobs:
           app-name: 'appforseii2526-grc'
           slot-name: 'Production'
           package: .
-          
+      
