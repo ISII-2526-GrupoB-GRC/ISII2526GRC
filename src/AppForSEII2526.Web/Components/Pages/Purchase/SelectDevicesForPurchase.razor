@@ -1,0 +1,79 @@
+﻿@using AppForSEII2526.API.DTOs.DeviceDTOs
+@using AppForSEII2526.Web.API
+@inject AppForDevicesAPIClient aPIClient
+@inject ILogger<SelectDevicesForPurchase> logger
+
+<h3>SelectDevicesForPurchase</h3>
+
+@page "/purchase/selectdevicesforrental"
+<h3>Select Devices For Purchase</h3>
+<div class="container-fluid">
+    <div class="row"hidden="@hideErrors">
+        <p>here i will show the errors</p>
+    </div>
+    <div class="row">
+        <div class=" col-8">
+            <div class="row">
+                <p>here i will show the filters</p>
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Brand</span>
+                        <input type="text" id="inputBrand" @bind=nameBrand class="form-control" placeholder="Brand" aria-label="Brand" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+                
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Colour</span>
+                        <input type="text" id="inputColour" @bind=colour class="form-control" placeholder="Colour" aria-label="Colour" aria-describedby="basic-addon1"></input>
+                    </div>
+                </div>
+
+
+            
+
+
+                <div class="col">
+                    <button type="button" class="btn btn-primary" @onclick=@SearchDevices id="searchDevices">Search devices</button>
+                </div>
+            </div>
+            <div class=" row">
+                <p>here i will show the list of devices</p>
+                @if(devices == null)
+                {
+                    <p>Loading devices...</p>
+                }
+                else
+                {
+                    <p>number of devices @devices.Count</p>
+                }
+            </div>
+        </div>
+        <div class="col-2">
+            <p>here i will show the purchase device</p>
+        </div>
+    </div>
+
+</div>
+
+@code {
+    private ICollection<DeviceForPurchaseDTO> devices;
+    private bool hideErrors{get{ return errors.Length == 0; }}
+    private string errors = "";
+    private string colour { get; set; }
+    private string nameBrand { get; set; }
+
+
+    public async Task SearchDevices()
+    {
+        try
+        {
+            devices = await aPIClient.GetDevicesForPurchaseAsync(nameBrand, colour);
+        }
+        catch (ApiException ex) //da error porque no tengo la directiva using del api
+        {
+            logger.LogError("Error while searching devices for purchase: {Message}", ex.Message);
+            errors = "An error occurred while searching for devices. Please try again later.";
+        }
+    }
+}
