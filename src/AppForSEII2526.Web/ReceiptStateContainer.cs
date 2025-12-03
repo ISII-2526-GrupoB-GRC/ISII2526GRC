@@ -4,7 +4,7 @@ using AppForSEII2526.Web.API;
 
 namespace AppForSEII2526.Web
 {
-    public class RepairStateContainer
+    public class ReceiptStateContainer
     {
         public ReceiptForCreateDTO Receipt { get; private set; } = new ReceiptForCreateDTO() {
             //receiptItems = new List<ReceiptItemForCreateDTO>();    No hace falta porque ya lo hace el constructor por defecto
