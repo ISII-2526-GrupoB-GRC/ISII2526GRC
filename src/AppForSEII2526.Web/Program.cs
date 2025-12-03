@@ -45,7 +45,9 @@ builder.Services.AddScoped<RentalStateContainer>();
 
 
 
-builder.Services.AddScoped<PurchaseStateContainer>();
+builder.Services.AddScoped<PurchaseStateContainer>(); //creo el state container para las compras
+
+
 var app = builder.Build();
 
 
