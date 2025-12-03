@@ -43,6 +43,9 @@ builder.Services.AddScoped<ReceiptStateContainer>();
 
 builder.Services.AddScoped<RentalStateContainer>();
 
+
+
+builder.Services.AddScoped<PurchaseStateContainer>();
 var app = builder.Build();
 
 
@@ -50,7 +53,6 @@ var app = builder.Build();
 
 
 
-builder.Services.AddScoped<PurchaseStateContainer>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
