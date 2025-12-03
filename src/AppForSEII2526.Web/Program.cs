@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using AppForSEII2526.Web.Components;
 using AppForSEII2526.Web.Components.Account;
 using AppForSEII2526.Web.Data;
+using AppForSEII2526.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +37,13 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
 var app = builder.Build();
+
+
+
+
+
+
+builder.Services.AddScoped<PurchaseStateContainer>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
