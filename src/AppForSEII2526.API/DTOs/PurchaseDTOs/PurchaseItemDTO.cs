@@ -10,6 +10,8 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
         public int quantity { get; set; }
         public string description { get; set; }
 
+        public PurchaseItemDTO() { }
+
         public PurchaseItemDTO(string brand, string namemodel, string colour, double price, int quantity, string description)
         {
             this.brand = brand;
