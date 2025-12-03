@@ -36,6 +36,9 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
+builder.Services.AddScoped<ReceiptStateContainer>();
+
+
 
 
 builder.Services.AddScoped<RentalStateContainer>();
