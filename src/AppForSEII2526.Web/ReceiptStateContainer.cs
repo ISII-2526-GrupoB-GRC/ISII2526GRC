@@ -1,0 +1,55 @@
+﻿using AppForSEII2526.API.DTOs.ReceiptDTOs;
+using AppForSEII2526.API.Models;
+using AppForSEII2526.Web.API;
+
+namespace AppForSEII2526.Web
+{
+    public class ReceiptStateContainer
+    {
+        public ReceiptForCreateDTO Receipt { get; private set; } = new ReceiptForCreateDTO() {
+            //receiptItems = new List<ReceiptItemForCreateDTO>();    No hace falta porque ya lo hace el constructor por defecto
+        };
+
+        public event Action? OnChange;
+        
+        private void NotifyStateChanged() => OnChange?.Invoke();
+
+        public decimal TotalCost()
+        {
+            decimal total = 0;
+            foreach (var item in Receipt.receiptItems)
+            {
+                total += item.Cost;
+            }
+            return total;
+        }
+
+        public void AddReceiptItem(ReceiptItemDTO item) {
+            //Antes de añadir un item comprobamos si ya está añadido
+            if (!Receipt.receiptItems.Any(ri => ri.Name == item.Name))
+            {
+                Receipt.receiptItems.Add(new ReceiptItemDTO() {
+                    Name = item.Name,
+                    Scale = item.Scale,
+                    Cost = item.Cost,
+                    Model = item.Model
+                });
+                NotifyStateChanged();
+            }
+        }
+
+        public void RemoveReceiptItem(ReceiptItemDTO item) { 
+            Receipt.receiptItems.Remove(item);
+        }
+
+        public void ClearReceipt() {
+            Receipt.receiptItems.Clear();
+        }
+
+        public void ReceiptProcessed() { 
+            Receipt = new ReceiptForCreateDTO() {
+                //receiptItems = new List<ReceiptItemForCreateDTO>();    No hace falta porque ya lo hace el constructor por defecto
+            };
+        }
+    }
+}
