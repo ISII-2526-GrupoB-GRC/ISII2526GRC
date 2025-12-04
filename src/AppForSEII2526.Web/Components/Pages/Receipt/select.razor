@@ -1,8 +1,9 @@
 ﻿@page "/repair/selectRepair"
 
 @using AppForSEII2526.Web.API
-@inject AppForMoviesAPIClient apiclient
+@inject AppForSEII2526APIClient apiclient
 @inject ILogger<select> Logger
+@inject NavigationManager navigation
 
 <h3>Select Repairs</h3>
 <div class="container-fluid">
@@ -13,11 +14,33 @@
     <div class="row">
         <div class="col-8">
             <div class="row">
-                <p> here i will show the filters</p>
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Name</span>
+                        <input type="text" id="inputName" @bind=repairName class="form-control" placeholder="Name" aria-label="Name" aria-describedby="basic-addon1" />
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Scale</span>
+                        <input type="text" id="inputScale" @bind=repairScale class="form-control" placeholder="Scale" aria-label="Scale" aria-describedby="basic-addon1" />
+                    </div>
+                </div>
+
+                <div class="col">
+                    <button type="button" class="btn btn-primary" @onclick=@SearchRepairs id="searchRepairs">Search repairs</button>
+                </div>
             </div>
             
             <div class="row">
-                <p> here i will show the list of repairs</p>
+                @if (repairs == null)
+                {
+                    <p>Loading repairs...</p>
+                }
+                else
+                {
+                    <p>Number of Repairs: @repairs.Count</p>    
+                }
             </div>
 
         </div>
@@ -28,5 +51,30 @@
     </div>
 </div>
 @code {
+    private ICollection<RepairDTO>? repairs;
+    private bool hideErrors { get { return errors.Length == 0; } }
+    private string errors = "";
+    private string repairName { get; set; }
+    private string repairScale { get; set; }
 
+    public async void SearchRepairs()
+    {
+        try
+        {
+            repairs = await apiclient.GetRepairsAsync(repairName, repairScale);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError("Error fetching repairs: {Message}", ex.Message);
+            errors = "Error fetching repairs. ";
+        }
+
+        StateHasChanged();
+    }
+
+    protected override Task OnInitializedAsync()
+    {   
+        SearchRepairs();
+        return base.OnInitializedAsync();
+    }
 }
