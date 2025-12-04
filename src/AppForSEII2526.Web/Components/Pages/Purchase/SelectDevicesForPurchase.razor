@@ -1,6 +1,6 @@
-﻿@using AppForSEII2526.API.DTOs.DeviceDTOs
+﻿
 @using AppForSEII2526.Web.API
-@inject AppForDevicesAPIClient aPIClient
+@inject AppForSEII2526APIClient aPIClient
 @inject ILogger<SelectDevicesForPurchase> logger
 
 <h3>SelectDevicesForPurchase</h3>
@@ -29,7 +29,7 @@
                     </div>
                 </div>
 
-
+                
             
 
 
@@ -68,12 +68,19 @@
     {
         try
         {
-            devices = await aPIClient.GetDevicesForPurchaseAsync(nameBrand, colour);
+            devices = await aPIClient.GetDevicesForPurchaseAsync(nameBrand, colour); //no se porque da error
         }
         catch (ApiException ex) //da error porque no tengo la directiva using del api
         {
             logger.LogError("Error while searching devices for purchase: {Message}", ex.Message);
             errors = "An error occurred while searching for devices. Please try again later.";
         }
+        StateHasChanged();
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        SearchDevices();
+        return base.OnInitializedAsync();
     }
 }
