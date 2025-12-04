@@ -88,7 +88,7 @@ namespace AppForSEII2526.UT.PurchasesController_test
             var controller = new PurchaseController(_context, logger);
 
 
-            var result = await controller.Get_Purchase_Detail_DTO(0);
+            var result = await controller.GetPurchaseDetailDTO(0);
 
             Assert.IsType<NotFoundResult>(result);
         }
@@ -109,7 +109,7 @@ namespace AppForSEII2526.UT.PurchasesController_test
                 new List<PurchaseItemDTO>());
             expectedPurchase.purchaseItems.Add(new PurchaseItemDTO("marca1", "modelo1", "azul", 12, 1, ""));
 
-            var result = await controller.Get_Purchase_Detail_DTO(1);
+            var result = await controller.GetPurchaseDetailDTO(1);
 
 
             var okResult = Assert.IsType<OkObjectResult>(result);
