@@ -1,0 +1,62 @@
+﻿@page "/rental/selectRental"
+
+@using AppForSEII2526.Web.API
+@inject AppForSEII2526 APIClient apiclient
+@inject ILogger<SelectDevicesForRental> Logger
+
+<h3>Select Devices For Rental</h3>
+<div class="container-fluid">
+    <div class="row">
+    <div class="row" hidden="@hideErrors">
+        <p>errors will be shown here</p>
+    </div>
+    <div class="row">
+        <div class="col-8">
+            <div class="row">
+                <p>filters will be shown here</p>
+                <div class="col">
+                    <button type="button" class="btn btn-primary" @onclick=@SearchDevices id="searchDevices">Search devices</button>
+                </div>
+            </div>
+            <div class="row">
+                <p>rentals will be shown here</p>
+                    @if (devices == null)
+                    {
+                        <p>Loading devices...</p>
+                    }
+                    else
+                    {
+                        <p>number of devices @devices.Count</p>
+
+                    }
+                </div>
+            </div>
+        <div class="col-2">
+            <p>renting cart will be shown here</p>
+        </div>
+
+    </div>
+
+</div>
+
+@code {
+    private ICollection<DeviceForRentalDTO> devices;
+    private bool hideErrors = { get { return errors.length = 0; } }
+    private string errors = "";
+    private string deviceBrand { get; set; }
+    private string deviceModel { get; set; }
+
+    public async void SearchDevices() {
+        try {
+            devices = await apiclient.GetDevicesForRentalAsync(deviceBrand, deviceModel, null, null);
+
+        }
+        catch (Exception ex) {
+            Logger.LogError($"{DateTime.Now} ErrorEventArgs: {ex}");
+            errors = "Error mientras se conectaba al sistema";
+
+        }
+        StateHasChanged();
+
+    }
+}
