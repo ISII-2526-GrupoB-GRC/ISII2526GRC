@@ -8,8 +8,8 @@
 
 <h3>Select Repairs</h3>
 <div class="container-fluid">
-    <div class="row" hidden="@hideErrors">
-        <p> here i will show the errors</p>
+    <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
+        <p id="ErrorsShown">Errors: @errors</p>
     </div>
     
     <div class="row">
@@ -44,16 +44,46 @@
                         <table class="table table-condensed table-hover" id="TableofRepairs">
                             <thead>
                                 <tr>
-                                    <th></th>
+                                    <th>Name</th>
+                                    <th>Scale</th>
+                                    <th>Cost</th>
+                                    <th>Description</th>
                                 </tr>
                             </thead>
+                            <tbody>
+                                @foreach (var repair in repairs)
+                                {
+                                    <tr>
+                                        <td>@repair.Name</td>
+                                        <td>@repair.ScaleName</td>
+                                        <td>@repair.Cost.ToString("C")</td>
+                                        <td>@repair.Description</td>
+                                        <td>
+                                            <button class="btn btn-outline-secondary" id="repair_@repair.Name" @onclick="() => AddRepairToReceipt(repair, modelo)">Add to Receipt</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
                         </table>
                     </div>
                 }
             </div>
 
         </div>
-        <div class="col-2">
+        <div class="col-2" hidden ="@hiddenReceiptCart">
+            <div class="row">
+                <h3>Receipt Cart</h3>
+            </div>
+            @foreach (ReceiptItemDTO item in receipt.ReceiptItems)
+            {
+                <div class="row">
+                    <button type="button" class="btn btn-light" id="removeRepair_@item.Name" @onclick="() => RemoveRepairFromReceipt(item)">X</button>
+                </div>    
+
+            }
+            <div class="row">
+                <button type="button" class="btn btn-primary" id="RepairButton" @onclick=@RequestRepair>Request Repair</button>
+            </div>
             <p>here i will show the renting cart</p>
         </div>
 
@@ -65,6 +95,7 @@
     private string errors = "";
     private string repairName { get; set; }
     private string repairScale { get; set; }
+    private string modelo = "";
 
     public async void SearchRepairs()
     {
@@ -89,16 +120,20 @@
 
     private ReceiptForCreateDTO receipt => receiptStateContainer.Receipt;
 
-    private bool hiddenReceiptCart = true;
+    private bool hiddenReceiptCart { get { return receipt.ReceiptItems.Count == 0; } }
 
-    private void AddRepairToReceipt(RepairDTO receipt)
+    private void AddRepairToReceipt(RepairDTO receipt, string Model)
     {
-        receiptStateContainer.AddReceiptItem(receipt);
+        receiptStateContainer.AddReceiptItem(receipt, Model);
     }
 
     private void RemoveRepairFromReceipt(ReceiptItemDTO receipt)
     {
         receiptStateContainer.RemoveReceiptItem(receipt);
 
+    }
+    private void RequestRepair()
+    {
+        navigation.NavigateTo("/repair/requestRepair");
     }
 }
