@@ -2,6 +2,8 @@
 @using AppForSEII2526.Web.API
 @inject AppForSEII2526APIClient aPIClient
 @inject ILogger<SelectDevicesForPurchase> logger
+@inject PurchaseStateContainer purchaseState
+@inject NavigationManager navigation
 
 <h3>SelectDevicesForPurchase</h3>
 
@@ -46,17 +48,74 @@
                 else
                 {
                     <p>number of devices @devices.Count</p>
+                    <div class="mh-100 table-responsive">
+                        <table class="table table-condensed table-hover" id="TableOfMovies">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Brand</th>
+                                    <th>Model</th>
+                                    <th>Colour</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Description (optional)</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(var device in devices)
+                                {
+                                    <tr id="DeviceData _@device.Name">
+                                        <td>@device.Name</td>
+                                        <td>@device.Brand</td>
+                                        <td>@device.NameModel</td>
+                                        <td>@device.Colour</td>
+                                        <td>@device.Price</td>
+
+                                        
+
+                                        <td>
+                                            <button class="btn-outline-secondary" id="deviceToPurchase_@device" @onclick="@(()=> AddDevice(device))">Add</button> @*aqui falta la cantidad y descripcion*@
+                                        </td>@*chatgpt sugiere diccionario, preguntar en clase*@
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
                 }
             </div>
         </div>
         <div class="col-2">
             <p>here i will show the purchase device</p>
+            <div class="col-2" hidden="@hidePurchasingCart">
+                <div class="row">
+                    <h3>Shopping Cart</h3>
+                </div>
+                @foreach(PurchaseItemDTO item in purchase.PurchaseItems)
+                {
+                    <div class="row">
+                        <button type="button" class="btn btn-light" id="removeDevice_@item.NameModel" @onclick="@(()=> RemovePurchaseDevice(item))">x @item.NameModel - @item.Price></button>
+                    </div>
+                }
+                <div class="row">
+                    <button type="button" class="btn btn-primary" id="purchaseDeviceButton" @onclick="@PurchaseDevice">Purchase Devices</button>
+                </div>
+
+            </div>
         </div>
     </div>
 
 </div>
 
 @code {
+    private bool hidePurchasingCart
+    {
+        get
+        {
+            return purchase.PurchaseItems.Count == 0;
+        }
+    }
     private ICollection<DeviceForPurchaseDTO> devices;
     private bool hideErrors{get{ return errors.Length == 0; }}
     private string errors = "";
@@ -83,4 +142,32 @@
         SearchDevices();
         return base.OnInitializedAsync();
     }
+
+    private PurchaseForCreateDTO purchase => purchaseState.Purchase;
+   // private int Quantity { get; set; } = purchaseState. //dudas como meto la cantidad
+    //private string Description { get; set; } = //dudas como pongo description
+
+    private bool hiddenPurchasingDevice = true;
+
+
+    private void AddDevice(DeviceForPurchaseDTO device, int Quantity, string Description)
+    {
+        purchaseState.AddDeviceToPurchase(device, Quantity,Description); //no se porque da error
+    }
+
+    private void RemovePurchaseDevice(PurchaseItemDTO device)
+    {
+        purchaseState.RemovePurchaseItemToPurchase(device); //no se porque da error
+    }
+
+    private void PurchaseDevice()
+    {
+        navigation.NavigateTo("/purchase/createpurchase");
+    }
+
+
+
+
+
+
 }

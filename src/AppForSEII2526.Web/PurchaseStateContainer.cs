@@ -1,7 +1,7 @@
-﻿using AppForSEII2526.API.DTOs.DeviceDTOs;
-using AppForSEII2526.API.DTOs.PurchaseDTOs;
-using AppForSEII2526.API.DTOs.RentDTOs;
-using AppForSEII2526.API.Models;
+﻿//using AppForSEII2526.API.DTOs.DeviceDTOs;
+//using AppForSEII2526.API.DTOs.PurchaseDTOs;
+//using AppForSEII2526.API.DTOs.RentDTOs;
+//using AppForSEII2526.API.Models;
 using AppForSEII2526.Web.API;
 
 
@@ -16,7 +16,7 @@ namespace AppForSEII2526.Web
         {
 
 
-            purchaseItems = new List<PurchaseItemDTO>()
+            PurchaseItems = new List<PurchaseItemDTO>()
 
 
         };
@@ -36,7 +36,7 @@ namespace AppForSEII2526.Web
                 
 
 
-                return Convert.ToDecimal(Purchase.purchaseItems.Sum(pi => pi.price * pi.quantity));
+                return Convert.ToDecimal(Purchase.PurchaseItems.Sum(pi => pi.Price * pi.Quantity));
 
 
             }
@@ -59,22 +59,22 @@ namespace AppForSEII2526.Web
             //before adding a device we checked whether it has been already added
 
 
-            if (!Purchase.purchaseItems.Any(pi => pi.nameModel == device.nameModel))
+            if (!Purchase.PurchaseItems.Any(pi => pi.NameModel == device.NameModel))
 
 
                 //we add it if it is not in the list
 
 
-                Purchase.purchaseItems.Add(new PurchaseItemDTO()
+                Purchase.PurchaseItems.Add(new PurchaseItemDTO()
                 {
 
 
-                    nameModel = device.nameModel,
-                    brand = device.Brand,
-                    colour = device.colour,
-                    price = device.price,
-                    quantity = Quantity, //dudas aqui supuestamente solo puedo insertar unos
-                    description = Description
+                    NameModel = device.NameModel,
+                    Brand = device.Brand,
+                    Colour = device.Colour,
+                    Price = device.Price,
+                    Quantity = Quantity, //dudas aqui supuestamente solo puedo insertar unos
+                    Description = Description
                                         
 
 
@@ -96,7 +96,7 @@ namespace AppForSEII2526.Web
         {
 
 
-            Purchase.purchaseItems.Remove(item);
+            Purchase.PurchaseItems.Remove(item);
 
 
 
@@ -111,7 +111,7 @@ namespace AppForSEII2526.Web
         {
 
 
-            Purchase.purchaseItems.Clear();
+            Purchase.PurchaseItems.Clear();
 
 
 
@@ -122,7 +122,7 @@ namespace AppForSEII2526.Web
         //we have already finished the process of purchasing, thus, we create a new Purchase 
 
 
-        public void RentalProcessed()
+        public void PurchaseProcessed()
         {
 
 
@@ -133,7 +133,7 @@ namespace AppForSEII2526.Web
             {
 
 
-                purchaseItems = new List<PurchaseItemDTO>()
+                PurchaseItems = new List<PurchaseItemDTO>()
 
 
             };
