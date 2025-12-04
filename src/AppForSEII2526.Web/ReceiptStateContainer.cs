@@ -23,7 +23,7 @@ namespace AppForSEII2526.Web
             return total;
         }
 
-        public void AddReceiptItem(RepairDTO item)
+        public void AddReceiptItem(RepairDTO item, string Model)
         {
             //Antes de añadir un item comprobamos si ya está añadido
             if (!Receipt.ReceiptItems.Any(ri => ri.Name == item.Name))
@@ -33,7 +33,7 @@ namespace AppForSEII2526.Web
                     Name = item.Name,
                     Scale = item.ScaleName,
                     Cost = item.Cost,
-                    Model = item.Description //Preguntar a Aurora sí esto es correcto
+                    Model = Model
                 });
                 NotifyStateChanged();
             }
