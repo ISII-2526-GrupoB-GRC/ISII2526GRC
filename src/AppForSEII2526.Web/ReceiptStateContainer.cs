@@ -1,22 +1,21 @@
-﻿//using AppForSEII2526.API.DTOs.ReceiptDTOs;
-//using AppForSEII2526.API.Models;
-using AppForSEII2526.Web.API;
+﻿using AppForSEII2526.Web.API;
 
 namespace AppForSEII2526.Web
 {
     public class ReceiptStateContainer
     {
-        public ReceiptForCreateDTO Receipt { get; private set; } = new ReceiptForCreateDTO() {
+        public ReceiptForCreateDTO Receipt { get; private set; } = new ReceiptForCreateDTO()
+        {
             //receiptItems = new List<ReceiptItemForCreateDTO>();    No hace falta porque ya lo hace el constructor por defecto
         };
 
         public event Action? OnChange;
-        
+
         private void NotifyStateChanged() => OnChange?.Invoke();
 
-        public decimal TotalCost()
+        public double TotalCost()
         {
-            decimal total = 0;
+            double total = 0;
             foreach (var item in Receipt.ReceiptItems)
             {
                 total = total + item.Cost;
@@ -24,30 +23,36 @@ namespace AppForSEII2526.Web
             return total;
         }
 
-        public void AddReceiptItem(ReceiptItemDTO item) {
+        public void AddReceiptItem(RepairDTO item, string Model)
+        {
             //Antes de añadir un item comprobamos si ya está añadido
             if (!Receipt.ReceiptItems.Any(ri => ri.Name == item.Name))
             {
-                Receipt.ReceiptItems.Add(new ReceiptItemDTO() {
+                Receipt.ReceiptItems.Add(new ReceiptItemDTO()
+                {
                     Name = item.Name,
-                    Scale = item.Scale,
+                    Scale = item.ScaleName,
                     Cost = item.Cost,
-                    Model = item.Model
+                    Model = Model
                 });
                 NotifyStateChanged();
             }
         }
 
-        public void RemoveReceiptItem(ReceiptItemDTO item) { 
+        public void RemoveReceiptItem(ReceiptItemDTO item)
+        {
             Receipt.ReceiptItems.Remove(item);
         }
 
-        public void ClearReceipt() {
+        public void ClearReceipt()
+        {
             Receipt.ReceiptItems.Clear();
         }
 
-        public void ReceiptProcessed() { 
-            Receipt = new ReceiptForCreateDTO() {
+        public void ReceiptProcessed()
+        {
+            Receipt = new ReceiptForCreateDTO()
+            {
                 //receiptItems = new List<ReceiptItemForCreateDTO>();    No hace falta porque ya lo hace el constructor por defecto
             };
         }
