@@ -4,6 +4,7 @@
 @inject AppForSEII2526APIClient apiclient
 @inject ILogger<select> Logger
 @inject NavigationManager navigation
+@inject ReceiptStateContainer receiptStateContainer
 
 <h3>Select Repairs</h3>
 <div class="container-fluid">
@@ -39,7 +40,15 @@
                 }
                 else
                 {
-                    <p>Number of Repairs: @repairs.Count</p>    
+                    <div class="mh-100 table-responsive">
+                        <table class="table table-condensed table-hover" id="TableofRepairs">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 }
             </div>
 
@@ -76,5 +85,20 @@
     {   
         SearchRepairs();
         return base.OnInitializedAsync();
+    }
+
+    private ReceiptForCreateDTO receipt => receiptStateContainer.Receipt;
+
+    private bool hiddenReceiptCart = true;
+
+    private void AddRepairToReceipt(RepairDTO receipt)
+    {
+        receiptStateContainer.AddReceiptItem(receipt);
+    }
+
+    private void RemoveRepairFromReceipt(ReceiptItemDTO receipt)
+    {
+        receiptStateContainer.RemoveReceiptItem(receipt);
+
     }
 }
