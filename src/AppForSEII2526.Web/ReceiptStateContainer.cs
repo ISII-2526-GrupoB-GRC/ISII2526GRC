@@ -6,7 +6,7 @@ namespace AppForSEII2526.Web
     {
         public ReceiptForCreateDTO Receipt { get; private set; } = new ReceiptForCreateDTO()
         {
-            //receiptItems = new List<ReceiptItemForCreateDTO>();    No hace falta porque ya lo hace el constructor por defecto
+            ReceiptItems = new List<ReceiptItemDTO>()  
         };
 
         public event Action? OnChange;
@@ -23,7 +23,7 @@ namespace AppForSEII2526.Web
             return total;
         }
 
-        public void AddReceiptItem(RepairDTO item, string Model)
+        public void AddReceiptItem(RepairDTO item)
         {
             //Antes de añadir un item comprobamos si ya está añadido
             if (!Receipt.ReceiptItems.Any(ri => ri.Name == item.Name))
@@ -32,8 +32,7 @@ namespace AppForSEII2526.Web
                 {
                     Name = item.Name,
                     Scale = item.ScaleName,
-                    Cost = item.Cost,
-                    Model = Model
+                    Cost = item.Cost
                 });
                 NotifyStateChanged();
             }
@@ -53,7 +52,7 @@ namespace AppForSEII2526.Web
         {
             Receipt = new ReceiptForCreateDTO()
             {
-                //receiptItems = new List<ReceiptItemForCreateDTO>();    No hace falta porque ya lo hace el constructor por defecto
+                ReceiptItems = new List<ReceiptItemDTO>()    
             };
         }
     }

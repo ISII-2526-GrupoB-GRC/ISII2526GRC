@@ -1,8 +1,8 @@
-﻿@page "/repair/selectRepair"
+﻿@page "/repair/SelectRepair"
 
 @using AppForSEII2526.Web.API
 @inject AppForSEII2526APIClient apiclient
-@inject ILogger<select> Logger
+@inject ILogger<Select> Logger
 @inject NavigationManager navigation
 @inject ReceiptStateContainer receiptStateContainer
 
@@ -59,7 +59,7 @@
                                         <td>@repair.Cost.ToString("C")</td>
                                         <td>@repair.Description</td>
                                         <td>
-                                            <button class="btn btn-outline-secondary" id="repair_@repair.Name" @onclick="() => AddRepairToReceipt(repair, modelo)">Add to Receipt</button>
+                                            <button class="btn btn-outline-secondary" id="repair_@repair.Name" @onclick="() => AddRepairToReceipt(repair)">Add to Receipt</button>
                                         </td>
                                     </tr>
                                 }
@@ -77,14 +77,14 @@
             @foreach (ReceiptItemDTO item in receipt.ReceiptItems)
             {
                 <div class="row">
-                    <button type="button" class="btn btn-light" id="removeRepair_@item.Name" @onclick="() => RemoveRepairFromReceipt(item)">X</button>
+                    <button type="button" class="btn btn-light" id="removeRepair_@item.Name" @onclick="() => RemoveRepairFromReceipt(item)">x @item.Name - @item.Scale - @item.Cost</button>
                 </div>    
 
             }
             <div class="row">
                 <button type="button" class="btn btn-primary" id="RepairButton" @onclick=@RequestRepair>Request Repair</button>
             </div>
-            <p>here i will show the renting cart</p>
+            
         </div>
 
     </div>
@@ -122,9 +122,9 @@
 
     private bool hiddenReceiptCart { get { return receipt.ReceiptItems.Count == 0; } }
 
-    private void AddRepairToReceipt(RepairDTO receipt, string Model)
+    private void AddRepairToReceipt(RepairDTO receipt)
     {
-        receiptStateContainer.AddReceiptItem(receipt, Model);
+        receiptStateContainer.AddReceiptItem(receipt);
     }
 
     private void RemoveRepairFromReceipt(ReceiptItemDTO receipt)

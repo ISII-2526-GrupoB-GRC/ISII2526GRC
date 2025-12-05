@@ -125,12 +125,12 @@
         }
       }
     },
-    "/api/Purchase/Get_Purchase_Detail_DTO": {
+    "/api/Purchase/GetPurchaseDetailDTO": {
       "get": {
         "tags": [
           "Purchase"
         ],
-        "operationId": "Get_Purchase_Detail_DTO",
+        "operationId": "GetPurchaseDetailDTO",
         "parameters": [
           {
             "name": "id",
