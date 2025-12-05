@@ -18,7 +18,7 @@ namespace AppForSEII2526.Web
             double total = 0;
             foreach (var item in Receipt.ReceiptItems)
             {
-                total += item.Cost;
+                total = total + item.Cost;
             }
             return total;
         }
