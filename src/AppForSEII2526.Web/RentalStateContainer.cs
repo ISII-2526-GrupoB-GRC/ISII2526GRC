@@ -1,5 +1,4 @@
-﻿// using AppForSEII2526.Web.API;
-using AppForSEII2526.API.DTOs.RentDTOs; // Using más prreciso para encontrar los DTOs de Rental
+﻿using AppForSEII2526.Web.API;
 
 namespace AppForSEII2526.Web
 {
@@ -15,7 +14,7 @@ namespace AppForSEII2526.Web
             get
             {
                 int numberOfDays = (Rental.RentalDateTo - Rental.RentalDateFrom).Days;
-                return Rental.RentalItems.Sum(item => item.priceForRent * numberOfDays * item.Quantity); // Devolvemos la suma (de cada item) su precio de alquiler * número de días * cantidad a alquila
+                return Rental.RentalItems.Sum(item => item.PriceForRent * numberOfDays * item.Quantity); // Devolvemos la suma (de cada item) su precio de alquiler * número de días * cantidad a alquila
             }
         }
 
@@ -24,17 +23,17 @@ namespace AppForSEII2526.Web
 
 
         // Método para añadir un dispositivo al alquiler.
-        public void AddDeviceToRental(RentalItemDTO device) // Un device es un RentalItem y viceversa.
+        public void AddDeviceToRental(DeviceForRentalDTO device) // Un device es un RentalItem y viceversa.
         {
             // Primero comprobamos si el device no está en la lista de RentalItems, para añadirlo si no está.
-            if (!Rental.RentalItems.Any(d => d.Brand == device.Brand && d.NameModel == device.NameModel)) // Cada dispositivo definido por Marca y Modelo
+            if (!Rental.RentalItems.Any(d => d.Brand == device.Brand && d.NameModel == device.Model)) // Cada dispositivo definido por Marca y Modelo
             {
                 Rental.RentalItems.Add(new RentalItemDTO()
                 {
                     Brand = device.Brand,
-                    NameModel = device.NameModel,
-                    priceForRent = device.priceForRent,
-                    Quantity = device.Quantity
+                    NameModel = device.Model,
+                    PriceForRent = device.PriceForRent,
+                    Quantity = 1
                 });
             }
         }
