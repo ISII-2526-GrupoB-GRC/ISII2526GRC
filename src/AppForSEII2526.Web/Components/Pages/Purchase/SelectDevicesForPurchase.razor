@@ -7,7 +7,7 @@
 
 <h3>SelectDevicesForPurchase</h3>
 
-@page "/purchase/selectdevicesforrental"
+@page "/purchase/selectdevicesforpurchase"
 <h3>Select Devices For Purchase</h3>
 <div class="container-fluid">
     <div class="row"hidden="@hideErrors">
@@ -150,9 +150,9 @@
     private bool hiddenPurchasingDevice = true;
 
 
-    private void AddDevice(DeviceForPurchaseDTO device, int Quantity, string Description)
+    private void AddDevice(DeviceForPurchaseDTO device)
     {
-        purchaseState.AddDeviceToPurchase(device, Quantity,Description); //no se porque da error
+        purchaseState.AddDeviceToPurchase(device); //no se porque da error
     }
 
     private void RemovePurchaseDevice(PurchaseItemDTO device)

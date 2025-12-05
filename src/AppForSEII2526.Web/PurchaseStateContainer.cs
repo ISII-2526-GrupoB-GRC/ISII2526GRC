@@ -49,7 +49,7 @@ namespace AppForSEII2526.Web
         private void NotifyStateChanged() => OnChange?.Invoke();
 
 
-        public void AddDeviceToPurchase(DeviceForPurchaseDTO device, int Quantity, string? Description)
+        public void AddDeviceToPurchase(DeviceForPurchaseDTO device)
         {
 
 
@@ -70,8 +70,8 @@ namespace AppForSEII2526.Web
                     Brand = device.Brand,
                     Colour = device.Colour,
                     Price = device.Price,
-                    Quantity = Quantity, //dudas aqui supuestamente solo puedo insertar unos
-                    Description = Description
+                    Quantity = 1, //dudas aqui supuestamente solo puedo insertar unos
+                    Description = ""
                                         
 
 
