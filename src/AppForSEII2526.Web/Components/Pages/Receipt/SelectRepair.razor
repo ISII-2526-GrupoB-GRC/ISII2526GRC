@@ -2,7 +2,7 @@
 
 @using AppForSEII2526.Web.API
 @inject AppForSEII2526APIClient apiclient
-@inject ILogger<Select> Logger
+@inject ILogger<SelectRepair> Logger
 @inject NavigationManager navigation
 @inject ReceiptStateContainer receiptStateContainer
 
@@ -11,7 +11,7 @@
     <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
         <p id="ErrorsShown">Errors: @errors</p>
     </div>
-    
+
     <div class="row">
         <div class="col-8">
             <div class="row">
@@ -32,7 +32,7 @@
                     <button type="button" class="btn btn-primary" @onclick=@SearchRepairs id="searchRepairs">Search repairs</button>
                 </div>
             </div>
-            
+
             <div class="row">
                 @if (repairs == null)
                 {
@@ -70,7 +70,7 @@
             </div>
 
         </div>
-        <div class="col-2" hidden ="@hiddenReceiptCart">
+        <div class="col-2" hidden="@hiddenReceiptCart">
             <div class="row">
                 <h3>Receipt Cart</h3>
             </div>
@@ -78,13 +78,13 @@
             {
                 <div class="row">
                     <button type="button" class="btn btn-light" id="removeRepair_@item.Name" @onclick="() => RemoveRepairFromReceipt(item)">x @item.Name - @item.Scale - @item.Cost</button>
-                </div>    
+                </div>
 
             }
             <div class="row">
                 <button type="button" class="btn btn-primary" id="RepairButton" @onclick=@RequestRepair>Request Repair</button>
             </div>
-            
+
         </div>
 
     </div>
@@ -113,7 +113,7 @@
     }
 
     protected override Task OnInitializedAsync()
-    {   
+    {
         SearchRepairs();
         return base.OnInitializedAsync();
     }
