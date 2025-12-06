@@ -40,4 +40,8 @@
     <ProjectReference Include="..\AppForSEII2526.API\AppForSEII2526.API.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Components\Pages\Receipt\" />
+  </ItemGroup>
+
 </Project>
