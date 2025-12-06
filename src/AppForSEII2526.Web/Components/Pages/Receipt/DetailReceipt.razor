@@ -1,0 +1,102 @@
+﻿@page "/receipt/detailreceipt"
+
+@using AppForSEII2526.Web.API
+@using Microsoft.AspNetCore.Authorization
+@inject AppForSEII2526APIClient apiclient
+
+<h3>DetailReceipt</h3>
+
+@attribute [Authorize]
+
+@if (receipt == null)
+{
+    <p>@error</p>
+}
+else
+{
+    <table class="table table-borderless table-sm">
+        <tr>
+            <th>Name and Surname</th>
+            <td id="NameSurname">@receipt.Surname</td>
+        </tr>
+        <tr>
+            <th>Delivery Address</th>
+            <td id="Address">@receipt.Address</td>
+        </tr>
+        <tr>
+            <th>Receipt Date</th>
+            <td id="PaymentMethod">@receipt.Date</td>
+        </tr>
+    </table>    
+    <h4>Repairs requested: </h4>
+    <table class="table" id="RepairsRequested">
+        <thread>
+             <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Scale</th>
+                <th scope="col">Cost</th>
+                <th scope="col">Model</th>
+             </tr>
+        </thread>
+        <tbody>
+            @foreach (var repair in receipt.Receiptitems)
+            {
+                <tr>
+                    <td>@repair.Name</td>
+                    <td>@repair.Scale</td>
+                    <td>@repair.Cost</td>
+                    <td>@repair.Model</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            @*colspan is used to state that TWO columns are collapsed*@
+            <th scope="row" colspan="2" class="text-end">Total Cost</th>
+            <td id="TotalPrice">@receipt.TotalPrice €</td>
+        </tfoot>
+    </table>
+}
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public int ReceiptId { get; set; }
+    private ReceiptDetailDTO receipt;
+    private string error = "";
+
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        //we check the user is authenticated
+        string userName = "";
+        if (authenticationState is not null)
+        {
+            var authState = await authenticationState;
+            var user = authState?.User;
+
+            //we retrieve the id of the user logged in
+            if (user is not null)
+            {
+                if (user.Identity is not null && user.Identity.IsAuthenticated && user.IsInRole("User"))
+                {
+                    userName = user.Identity.Name;
+                }
+            }
+        }
+        try
+        {
+            receipt = await apiclient.GetReceiptAsync(ReceiptId);
+        }
+        catch (ApiException ex)
+        {
+            receipt = null;
+        }
+
+        if ((receipt == null) || (receipt.Username != userName))
+        {
+            error = $"Error! You are not authorized to see this rental or there is not a rental with id={ReceiptId}";
+        }
+    }
+}
