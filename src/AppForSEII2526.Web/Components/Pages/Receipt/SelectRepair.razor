@@ -1,0 +1,139 @@
+﻿@page "/repair/SelectRepair"
+
+@using AppForSEII2526.Web.API
+@inject AppForSEII2526APIClient apiclient
+@inject ILogger<SelectRepair> Logger
+@inject NavigationManager navigation
+@inject ReceiptStateContainer receiptStateContainer
+
+<h3>Select Repairs</h3>
+<div class="container-fluid">
+    <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
+        <p id="ErrorsShown">Errors: @errors</p>
+    </div>
+
+    <div class="row">
+        <div class="col-8">
+            <div class="row">
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Name</span>
+                        <input type="text" id="inputName" @bind=repairName class="form-control" placeholder="Name" aria-label="Name" aria-describedby="basic-addon1" />
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Scale</span>
+                        <input type="text" id="inputScale" @bind=repairScale class="form-control" placeholder="Scale" aria-label="Scale" aria-describedby="basic-addon1" />
+                    </div>
+                </div>
+
+                <div class="col">
+                    <button type="button" class="btn btn-primary" @onclick=@SearchRepairs id="searchRepairs">Search repairs</button>
+                </div>
+            </div>
+
+            <div class="row">
+                @if (repairs == null)
+                {
+                    <p>Loading repairs...</p>
+                }
+                else
+                {
+                    <div class="mh-100 table-responsive">
+                        <table class="table table-condensed table-hover" id="TableofRepairs">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Scale</th>
+                                    <th>Cost</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var repair in repairs)
+                                {
+                                    <tr>
+                                        <td>@repair.Name</td>
+                                        <td>@repair.ScaleName</td>
+                                        <td>@repair.Cost.ToString("C")</td>
+                                        <td>@repair.Description</td>
+                                        <td>
+                                            <button class="btn btn-outline-secondary" id="repair_@repair.Name" @onclick="() => AddRepairToReceipt(repair)">Add to Receipt</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+
+        </div>
+        <div class="col-2" hidden="@hiddenReceiptCart">
+            <div class="row">
+                <h3>Receipt Cart</h3>
+            </div>
+            @foreach (ReceiptItemDTO item in receipt.ReceiptItems)
+            {
+                <div class="row">
+                    <button type="button" class="btn btn-light" id="removeRepair_@item.Name" @onclick="() => RemoveRepairFromReceipt(item)">x @item.Name - @item.Scale - @item.Cost</button>
+                </div>
+
+            }
+            <div class="row">
+                <button type="button" class="btn btn-primary" id="RepairButton" @onclick=@RequestRepair>Request Repair</button>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+@code {
+    private ICollection<RepairDTO>? repairs;
+    private bool hideErrors { get { return errors.Length == 0; } }
+    private string errors = "";
+    private string repairName { get; set; }
+    private string repairScale { get; set; }
+    private string modelo = "";
+
+    public async void SearchRepairs()
+    {
+        try
+        {
+            repairs = await apiclient.GetRepairsAsync(repairName, repairScale);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError("Error fetching repairs: {Message}", ex.Message);
+            errors = "Error fetching repairs. ";
+        }
+
+        StateHasChanged();
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        SearchRepairs();
+        return base.OnInitializedAsync();
+    }
+
+    private ReceiptForCreateDTO receipt => receiptStateContainer.Receipt;
+
+    private bool hiddenReceiptCart { get { return receipt.ReceiptItems.Count == 0; } }
+
+    private void AddRepairToReceipt(RepairDTO receipt)
+    {
+        receiptStateContainer.AddReceiptItem(receipt);
+    }
+
+    private void RemoveRepairFromReceipt(ReceiptItemDTO receipt)
+    {
+        receiptStateContainer.RemoveReceiptItem(receipt);
+
+    }
+    private void RequestRepair()
+    {
+        navigation.NavigateTo("/repair/requestRepair");
+    }
+}
