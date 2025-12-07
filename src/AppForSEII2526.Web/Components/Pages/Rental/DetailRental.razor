@@ -13,7 +13,7 @@
     <p>@error</p>
 } else
 {
-    <table class="teble table-borderless table-sm">
+    <table class="table table-borderless table-sm">
         <tr>
             <th>Name and Surname</th>
             <td id="NameSurname">@rental.Name @rental.Surname</td>
@@ -42,10 +42,10 @@
     <table class="table" id="RentedDevices">
         <thread>
             <tr>
-                <th>scope="col">Brand</th>
-                <th>scope="col">Model</th>
-                <th>scope="col">Price for Rent</th>
-                <th>scope="col">Quantity</th>
+                <th scope="col">Brand</th>
+                <th scope="col">Model</th>
+                <th scope="col">Price for Rent</th>
+                <th scope="col">Quantity</th>
             </tr>
         </thread>
         <tbody>
@@ -61,7 +61,7 @@
         </tbody>
         <tfoot>
             @*colspan se usa para expandir dos columnas colapsadas*@
-            <th>scope="row" colspan="2" class"text-end">Total Price</th>
+            <th scope="row" colspan="2" class"text-end">Total Price</th>
             <td id="TotalPrice">@rental.TotalPrice €</td>
         </tfoot>
 
@@ -90,7 +90,7 @@
             // Recperamos el id del usuario autenticado
             if (user is not null)
             {
-                if(user.Identity is not null && user.Identity.IsAuthenticated)
+                if(user.Identity is not null && user.Identity.IsAuthenticated && user.IsInRole("User"))
                 {
                     userName = user.Identity.Name;
                 }
