@@ -1,13 +1,13 @@
 ﻿@page "/rental/selectRental"
 
-@using Microsoft.AspNetCore.Authorization
+@*@using Microsoft.AspNetCore.Authorization*@
 @using AppForSEII2526.Web.API
 @inject AppForSEII2526APIClient apiclient
 @inject ILogger<SelectDevicesForRental> logger
 @inject RentalStateContainer rentalState
 @inject NavigationManager navigation
 
-@attribute [Authorize]
+@*@attribute [Authorize]*@
 <h3>Select Devices For Rental</h3>
 <div class="container-fluid">
     <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
@@ -26,7 +26,7 @@
                 <div class="col">  @*Filtro de Precio*@
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="basic-addon1">RentPrice</span>
-                        <input type="text" id="inputRentPrice" @bind="devicePriceForRent" class="form-control" placeholder="RentPrice" aria-label="RentPrice" aria-describedby="basic-addon1">
+                        <input type="number" id="inputRentPrice" @bind="devicePriceForRent" class="form-control" placeholder="RentPrice" aria-label="RentPrice" aria-describedby="basic-addon1">
                     </div>
                 </div>
                 @*
@@ -113,7 +113,7 @@
     private bool hideErrors { get { return errors.Length == 0; } }
     private string errors = "";
     private string deviceModel { get; set; } = "";
-    private double devicePriceForRent { get; set; } = 0.0;
+    private double? devicePriceForRent { get; set; }
 
 
     private RentalForCreateDTO rental => rentalState.Rental;
