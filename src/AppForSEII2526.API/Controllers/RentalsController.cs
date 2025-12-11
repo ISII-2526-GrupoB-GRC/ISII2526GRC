@@ -49,6 +49,7 @@ namespace AppForSEII2526.API.Controllers
                     .ThenInclude(d => d.Device)
                         .ThenInclude(m => m.Model)
                 .Select(r => new RentalDetailDTO(
+                    r.Id,                           // Añadir el ID aquí
                     r.ApplicationUser.Name,
                     r.ApplicationUser.Surname,
                     r.DeliveryAddress,
@@ -186,7 +187,17 @@ namespace AppForSEII2526.API.Controllers
 
             }
 
-            var rentalDetail = new RentalDetailDTO(rental.ApplicationUser.Name, rental.ApplicationUser.Surname, rental.DeliveryAddress, rental.RentalDate, rental.TotalPrice, rental.RentalDateFrom, rental.RentalDateTo, rentalForCreate.RentalItems);
+            var rentalDetail = new RentalDetailDTO(
+                rental.Id,                      // Añadir el ID aquí
+                rental.ApplicationUser.Name, 
+                rental.ApplicationUser.Surname, 
+                rental.DeliveryAddress, 
+                rental.RentalDate, 
+                rental.TotalPrice, 
+                rental.RentalDateFrom, 
+                rental.RentalDateTo, 
+                rentalForCreate.RentalItems
+            );
 
             return CreatedAtAction("GetRentalDetail", new { id = rental.Id }, rentalDetail);
 

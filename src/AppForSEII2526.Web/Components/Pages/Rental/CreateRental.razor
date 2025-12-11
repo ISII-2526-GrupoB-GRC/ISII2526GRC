@@ -1,0 +1,259 @@
+﻿@page "/rentals/createrental"
+
+@inject NavigationManager navigation
+@using AppForSEII2526.Web.Components.Shared
+@using AppForSEII2526.Web.API
+@*@using Microsoft.AspNetCore.Authorization*@
+@inject AppForSEII2526APIClient apiclient
+@inject ILogger<CreateRental> logger
+@inject RentalStateContainer rentalState
+
+@*@attribute [Authorize]*@
+
+<h3>Create Rental</h3>
+
+@*"rental es el objeto que será editado gracias al form"*@
+<EditForm Model="rental" OnValidSubmit="OpenDialog">
+    <div class="row">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <ValidationSummary class="row alert alert-danger"/>
+    </div>
+    <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
+        <p id="ErrorsShown">Errors: @messageError</p>
+    </div>
+    
+    <h4>Selected Devices</h4>
+    <div class="mh-100 table-responsive mb-3">
+        <table class="table table-condensed table-hover" id="TableOfRentalItems">
+            <thead>
+                <tr>
+                    <th>Brand</th>
+                    <th>Model</th>
+                    <th>Price For Rent</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in rental.RentalItems)
+                {
+                    <tr id="DeviceData_@item.Brand">
+                        <td>@item.Brand</td>
+                        <td>@item.NameModel</td>
+                        <td>@item.PriceForRent €</td>
+                        <td>
+                            <input type="number" 
+                                   min="1" 
+                                   @bind="item.Quantity" 
+                                   @bind:event="oninput"
+                                   @onchange="UpdateTotalPrice"
+                                   class="form-control" 
+                                   style="width: 100px;" 
+                                   id="quantity_@item.Brand" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="rental.Name" class="form-control" id="Name" />
+                <label for="Name">Name</label>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="rental.Surname" class="form-control" id="Surname" />
+                <label for="Surname">Surname</label>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="rental.DeliveryAddress" class="form-control" id="DeliveryAddress" />
+                <label for="DeliveryAddress">Delivery Address</label>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row g-2">
+        <div class="col-md">
+            <div class="form-floating">
+                @*a dropdown for selecting the payment method*@
+                <InputSelect class="form-select" @bind-Value="@rental.PaymentMethod" id="PaymentMethod">
+                    <option value="@PaymentMethodTypes.CreditCard" default> CreditCard</option>
+                    <option value="@PaymentMethodTypes.PayPal"> PayPal</option>
+                    <option value="@PaymentMethodTypes.Cash"> Cash</option>
+                </InputSelect>
+                <label for="PaymentMethod">Payment Method</label>
+            </div>
+        </div>
+        
+        <div class="col-md">
+            <div class="form-floating">
+                @*Este botón servirá para preguntar al usuario si quiere proceder con el alquiler de los dispositivos*@
+                <button class="btn btn-primary" type="submit" id="Submit" disabled="@rentalButtonDisabled">
+                    Alquilar mis dispositivos
+                </button>
+            </div>
+        </div>
+    </div>
+    <h4>Rental detail</h4>
+    @*Detalle del alquler*@
+    <p><b>Name:</b> @rental.Name</p>
+    <p><b>Surname:</b> @rental.Surname</p>
+    <p><b>Delivery Address:</b> @rental.DeliveryAddress</p>
+    <p><b>Renting Date:</b> @DateTime.Today.ToString("dd/MM/yyyy")</p>
+    <p>
+        <b>Total price:</b> @TotalPrice €
+        <button class="btn btn-outline-primary" type="submit" @onclick="ModifyRentalItems" id="ModifyDevices">
+            Modify devices
+        </button>
+    </p>
+    <p><b>Date from:</b> @rental.RentalDateFrom.ToString("dd/MM/yyyy") <b>to:</b> @rental.RentalDateTo.ToString("dd/MM/yyyy")</p>
+
+    <div class="mh-100 table-responsive">
+        <table class="table table-condensed table-hover" id="TableOfRentalItems">
+            <thead>
+                <tr>
+                    <th>Brand</th>
+                    <th>Model</th>
+                    <th>Price For Rent</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in rental.RentalItems)
+                {
+                    <tr id="DeviceData_@item.Brand">
+                        <td>@item.Brand</td>
+                        <td>@item.NameModel</td>
+                        <td>@item.PriceForRent €</td>
+                        <td>@item.Quantity</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</EditForm>
+
+@*Un diálogo popup para comprobar si el usuario quiere proceder con el alquiler*@
+@if (DialogIsOpen)
+{
+    <Dialog Caption="Rental Devices"
+            Message="¿Quieres proceder con el alquiler de los dispositivos seleccionados?"
+            OnClose="@OnDialogClose"
+            Type="Dialog.Category.SaveNot">
+    </Dialog>
+}
+
+@code {
+    private string messageError = "";
+    private bool hideErrors { get { return messageError.Length == 0; } }
+    //rentalbutton will be disabled if there are not devices in the renting cart
+    private bool rentalButtonDisabled { get { return (rental.RentalItems == null || rental.RentalItems.Count == 0); } }
+    private bool DialogIsOpen;
+    
+    private decimal TotalPrice
+    {
+        get
+        {
+            int days = (rental.RentalDateTo - rental.RentalDateFrom).Days;
+            double price = rental.RentalItems.Sum(ri => ri.PriceForRent * days * ri.Quantity);
+            return Convert.ToDecimal(price);
+        }
+    }
+    
+    private void UpdateTotalPrice()
+    {
+        // Forzar actualización de la UI cuando cambia la cantidad
+        StateHasChanged();
+    }
+    
+    private void ModifyRentalItems()
+    {
+        navigation.NavigateTo("/rental/selectRental");
+    }
+    
+    private RentalForCreateDTO rental => rentalState.Rental;
+
+    private void OpenDialog()
+    {
+        // Validar cantidades antes de abrir el diálogo
+        foreach (var item in rental.RentalItems)
+        {
+            if (item.Quantity < 1)
+            {
+                messageError = "La cantidad debe ser al menos 1 para todos los dispositivos";
+                return;
+            }
+        }
+        
+        messageError = "";
+        DialogIsOpen = true;
+    }
+    
+    private async Task OnDialogClose(bool isOk)
+    {
+        DialogIsOpen = false;
+        if (isOk)
+        {
+            //Procesar los datos del usuario si son válidos
+            if (rental.RentalItems.Count > 0)
+            {
+                try
+                {
+                    var rented = await apiclient.CreateRentalAsync(rental);
+                    rentalState.RentalProcessed();
+                    navigation.NavigateTo($"/rental/DetailRental/?RentalId={rented}"); // AAquí falta ponerle: rented.Id, sinno da fallo
+                }
+                catch (ApiException<ValidationProblemDetails> apiexceptionvalidation)
+                {
+                    if (apiexceptionvalidation.Result.Errors.Values != null)
+                    {
+                        messageError = "";
+                        foreach (var errors in apiexceptionvalidation.Result.Errors.Values)
+                            //https://learn.microsoft.com/en-us/dotnet/api/system.string.join?view=net-7.0
+                            messageError = string.Join("(*) ", messageError, string.Join(" (*) ", errors));
+                    }
+                }
+                catch (ApiException apiexception) {
+                    //we need to inform user that there was some other error while processing the request
+                    messageError = "Error while processing your request, please try again later!";
+
+                }
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (authenticationState is not null)
+        {
+            var authState = await authenticationState;
+            var user = authState?.User;
+
+            if (user is not null) {
+                if (user.Identity is not null && user.Identity.IsAuthenticated) {
+                    rental.Name = user.Identity.Name;
+                }
+            }
+            rental.Name = rental.Name == null ? "" : rental.Name;
+            rental.Surname = rental.Surname == null ? "" : rental.Surname;
+            rental.DeliveryAddress = rental.DeliveryAddress == null ? "" : rental.DeliveryAddress;
+            
+            if (rental.RentalDateFrom == default)
+                rental.RentalDateFrom = DateTime.Today.AddDays(1);
+
+            if (rental.RentalDateTo == default)
+                rental.RentalDateTo = DateTime.Today.AddDays(2);
+        }
+    }
+
+
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
+
+}

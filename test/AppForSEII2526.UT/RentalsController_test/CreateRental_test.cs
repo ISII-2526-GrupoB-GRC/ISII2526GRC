@@ -138,7 +138,7 @@ namespace AppForSEII2526.UT.RentalsController_test
             double totalPrice = 45d * 2 * numDays;
 
             //the id is 2 because there is another rental in the database
-            RentalDetailDTO expectedrentalDetailDTO = new RentalDetailDTO("Pedro", "Martín", "Calle Guerrero 3, Madrid", today, totalPrice, from, to, new List<RentalItemDTO>());
+            RentalDetailDTO expectedrentalDetailDTO = new RentalDetailDTO(2, "Pedro", "Martín", "Calle Guerrero 3, Madrid", today, totalPrice, from, to, new List<RentalItemDTO>());
             expectedrentalDetailDTO.RentedDevices.Add(new RentalItemDTO("Dell", "Portátil", 45d, 2));
 
             // Act
@@ -176,7 +176,7 @@ namespace AppForSEII2526.UT.RentalsController_test
             double totalPrice = 45d * 2 * numDays;
 
             //the id is 2 because there is another rental in the database
-            RentalDetailDTO expectedrentalDetailDTO = new RentalDetailDTO("Pedro", "Martín", "Carretera Guerrero 3, Madrid", today, totalPrice, from, to, new List<RentalItemDTO>());
+            RentalDetailDTO expectedrentalDetailDTO = new RentalDetailDTO(2, "Pedro", "Martín", "Carretera Guerrero 3, Madrid", today, totalPrice, from, to, new List<RentalItemDTO>());
             expectedrentalDetailDTO.RentedDevices.Add(new RentalItemDTO("Dell", "Portátil", 45d, 2));
 
             // Act
