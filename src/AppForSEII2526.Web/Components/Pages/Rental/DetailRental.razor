@@ -1,12 +1,12 @@
 ﻿@page "/rental/DetailRental"
 
 @using AppForSEII2526.Web.API
-@using Microsoft.AspNetCore.Authorization
+@*@using Microsoft.AspNetCore.Authorization*@
 @inject AppForSEII2526APIClient apiclient
 
-<h3>DetailRental</h3>
+<h3>Rental Detail</h3>
 
-@attribute [Authorize]
+@*@attribute [Authorize]*@
 
 @if (rental == null)
 {
@@ -40,14 +40,14 @@
         <h4>Rented Devices</h4>
 
     <table class="table" id="RentedDevices">
-        <thread>
+        <thead>
             <tr>
                 <th scope="col">Brand</th>
                 <th scope="col">Model</th>
                 <th scope="col">Price for Rent</th>
                 <th scope="col">Quantity</th>
             </tr>
-        </thread>
+        </thead>
         <tbody>
             @foreach (RentalItemDTO item in rental.RentedDevices)
             {
