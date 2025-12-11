@@ -45,6 +45,7 @@ namespace AppForSEII2526.API.Models
             ApplicationUser = applicationUser;
             this.TotalPrice = receiptItems.Sum(ri => ri.Repair.Cost);
             this.deliveryAddres = deliveryAddres;
+            ReceiptDate = receiptDate;
         }
 
         public override bool Equals(object obj)
