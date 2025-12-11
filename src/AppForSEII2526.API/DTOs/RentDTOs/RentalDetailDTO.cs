@@ -4,10 +4,10 @@ using AppForSEII2526.API.Models;
 namespace AppForSEII2526.API.DTOs.RentDTOs
 {
     public class RentalDetailDTO
-
     {
         // Este DTO sirve para mostrar la información detallada de un alquiler
         //Apartado 7
+        public int Id { get; set; }                     // ID del alquiler
         public string Name { get; set; }                // Obtiene de ApplicationUser
         public string Surname { get; set; }             // Obtiene de ApplicationUser
         public string DeliveryAddress { get; set; }
@@ -17,8 +17,9 @@ namespace AppForSEII2526.API.DTOs.RentDTOs
         public DateTime RentalDateTo { get; set; }      //Obtiene de Rental
         public IList<RentalItemDTO> RentedDevices { get; set; } //Obtiene de RentDevice
 
-        public RentalDetailDTO(string name, string surname, string deliveryAddress, DateTime rentalDate, double totalPrice, DateTime rentalDateFrom, DateTime rentalDateTo, IList<RentalItemDTO> rentedDevices)
+        public RentalDetailDTO(int id, string name, string surname, string deliveryAddress, DateTime rentalDate, double totalPrice, DateTime rentalDateFrom, DateTime rentalDateTo, IList<RentalItemDTO> rentedDevices)
         {
+            Id = id;
             Name = name;
             Surname = surname;
             DeliveryAddress = deliveryAddress;
@@ -31,6 +32,7 @@ namespace AppForSEII2526.API.DTOs.RentDTOs
         public override bool Equals(object? obj)
         {
             return obj is RentalDetailDTO dTO &&
+                   Id == dTO.Id &&
                    Name == dTO.Name &&
                    Surname == dTO.Surname &&
                    DeliveryAddress == dTO.DeliveryAddress &&
@@ -38,7 +40,7 @@ namespace AppForSEII2526.API.DTOs.RentDTOs
                    TotalPrice == dTO.TotalPrice &&
                    RentalDateFrom == dTO.RentalDateFrom &&
                    RentalDateTo == dTO.RentalDateTo &&
-                   RentedDevices.SequenceEqual(dTO.RentedDevices); // Línea cambiada para comparar las listas (Mirar)
+                   RentedDevices.SequenceEqual(dTO.RentedDevices);
         }
     }
 }

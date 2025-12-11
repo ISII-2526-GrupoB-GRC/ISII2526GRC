@@ -89,6 +89,7 @@ namespace AppForSEII2526.UT.RentalsController_test
             var controller = new RentalsController(_context, logger);
 
             var expectedRental = new RentalDetailDTO(
+                0,
                 "Ana",
                 "González",
                 "Calle Serrano 45, Madrid",
