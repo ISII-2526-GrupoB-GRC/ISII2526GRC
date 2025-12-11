@@ -23,7 +23,6 @@
         <p id="ErrorsShown">Errors: @messageError</p>
     </div>
     
-    <h4>Selected Devices</h4>
     <div class="mh-100 table-responsive mb-3">
         <table class="table table-condensed table-hover" id="TableOfRentalItems">
             <thead>
@@ -100,43 +99,12 @@
             </div>
         </div>
     </div>
-    <h4>Rental detail</h4>
-    @*Detalle del alquler*@
-    <p><b>Name:</b> @rental.Name</p>
-    <p><b>Surname:</b> @rental.Surname</p>
-    <p><b>Delivery Address:</b> @rental.DeliveryAddress</p>
-    <p><b>Renting Date:</b> @DateTime.Today.ToString("dd/MM/yyyy")</p>
     <p>
         <b>Total price:</b> @TotalPrice €
         <button class="btn btn-outline-primary" type="submit" @onclick="ModifyRentalItems" id="ModifyDevices">
             Modify devices
         </button>
     </p>
-    <p><b>Date from:</b> @rental.RentalDateFrom.ToString("dd/MM/yyyy") <b>to:</b> @rental.RentalDateTo.ToString("dd/MM/yyyy")</p>
-
-    <div class="mh-100 table-responsive">
-        <table class="table table-condensed table-hover" id="TableOfRentalItems">
-            <thead>
-                <tr>
-                    <th>Brand</th>
-                    <th>Model</th>
-                    <th>Price For Rent</th>
-                    <th>Quantity</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in rental.RentalItems)
-                {
-                    <tr id="DeviceData_@item.Brand">
-                        <td>@item.Brand</td>
-                        <td>@item.NameModel</td>
-                        <td>@item.PriceForRent €</td>
-                        <td>@item.Quantity</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
 </EditForm>
 
 @*Un diálogo popup para comprobar si el usuario quiere proceder con el alquiler*@
@@ -207,7 +175,7 @@
                 {
                     var rented = await apiclient.CreateRentalAsync(rental);
                     rentalState.RentalProcessed();
-                    navigation.NavigateTo($"/rental/DetailRental/?RentalId={rented}"); // AAquí falta ponerle: rented.Id, sinno da fallo
+                    navigation.NavigateTo($"/rental/DetailRental/?RentalId={rented.Id}");
                 }
                 catch (ApiException<ValidationProblemDetails> apiexceptionvalidation)
                 {
