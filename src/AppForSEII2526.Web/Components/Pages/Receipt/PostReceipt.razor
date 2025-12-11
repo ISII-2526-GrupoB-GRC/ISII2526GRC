@@ -1,0 +1,179 @@
+﻿@page "/receipt/requestRepair"
+
+@inject NavigationManager navigation
+@using AppForSEII2526.Web.API
+@using AppForSEII2526.Web.Components.Shared
+@using Microsoft.AspNetCore.Authorization
+@inject AppForSEII2526APIClient apiclient
+@inject ILogger<PostReceipt> logger
+@inject ReceiptStateContainer receiptState
+
+@* @attribute [Authorize]  -> De momento lo comento para probar hasta que fufe*@
+
+<h3>PostReceipt</h3>
+@* receipt is the object that will be edited thanks to the form*@
+<EditForm Model="receipt" OnValidSubmit="OpenDialog">
+    <div class="row">
+        <DataAnnotationsValidator />
+        <ValidationSummary class="row alert alert-danger"/>
+    </div>
+    <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
+        <p id="ErrorsShown">Errors: @messageError</p>
+    </div>
+    <div class="row g-3">
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="receipt.Username" class="form-control" id="Name"/>
+                <label for="Name">Name</label>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="receipt.Usersurname" class="form-control" id="Surname"/>
+                <label for="Surname">Surname</label>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="receipt.Userdeliveryaddress" class="form-control" id="Address"/>
+                <label for="Address">Address</label>
+            </div>
+        </div>
+    </div>
+    <div class="row g-2">
+        <div class="col-md">
+            <div class="form-floating">
+                @*a dropdown for selecting the payment method*@
+                <InputSelect class="form-select" @bind-Value="receipt.PaymentMethod" id="PaymentMethod">
+                    <option value="@PaymentMethodTypes.CreditCard" default>Credit Card</option>
+                    <option value="@PaymentMethodTypes.PayPal">PayPal</option>
+                    <option value="@PaymentMethodTypes.Cash">Cash</option>
+                </InputSelect>
+                <label for="PaymentMethod">PaymentMethod</label>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-floating">
+                @*this button will be used to ask the user if he want to proceed to make the receipt*@
+                <button class="btn btn-primary" type="submit" id="Submit">
+                    Submit Receipt
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <h4>Receipt Detail</h4>
+    <p>
+        <b>Total Cost: </b> @TotalCost €
+        <button class="btn btn-outline-primary" type="submit" @onclick="ModifyReceiptItems" id="ModifyReceipt">Modify Receipt</button>
+    </p>
+    
+    <div class="mh-100 table-responsive">
+        <table class="table table-condensed table-hover" id="TableOfReceiptItems">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Scale</th>
+                    <th>Cost</th>
+                    <th>Model</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in receipt.ReceiptItems)
+                {
+                    <tr id="RepairData_@item.Name">
+                        <td>@item.Name</td>
+                        <td>@item.Scale</td>
+                        <td>@item.Cost</td>
+                        <td><InputText @bind-Value="item.Model" class="form-control" id="@($"model_{item.Name}")"/></td>
+                    </tr>    
+                }
+            </tbody>
+        </table>
+    </div>
+</EditForm>
+@if (DialogIsOpen)
+{
+    <Dialog Caption="Receipt Items" Message ="Do you want to proceed with the repair?" OnClose="@OnDialogClose" Type=Dialog.Category.SaveNot></Dialog>    
+}
+
+@code {
+    private ReceiptForCreateDTO receipt => receiptState.Receipt;
+    private bool DialogIsOpen = false;
+    private string messageError = "";
+    private bool hideErrors { get { return messageError.Length == 0; } }
+    private decimal TotalCost
+    {
+        get {
+            double price = receipt.ReceiptItems.Sum(item => item.Cost);
+            return Convert.ToDecimal(price);
+        }    
+    }
+    private void ModifyReceiptItems()
+    {
+        navigation.NavigateTo("/repair/SelectRepair");
+    }
+
+    private void OpenDialog()
+    {
+        DialogIsOpen = true;
+    }
+
+    private async Task OnDialogClose(bool isOk)
+    {
+        DialogIsOpen = false;
+        if (isOk)
+        {
+            if (receipt.ReceiptItems.Count > 0)
+            {
+                try
+                {
+                    var receipted = await apiclient.CreateReceiptAsync(receipt);
+                    receiptState.ReceiptProcessed();
+                    navigation.NavigateTo($"/receipt/detailreceipt/?ReceiptID={receipted.Id}");
+                }
+                catch (ApiException<ValidationProblemDetails> apiexceptionvalidation)
+                {
+                    if (apiexceptionvalidation.Result.Errors.Values != null)
+                    {
+                        messageError = "";
+                        foreach (var errors in apiexceptionvalidation.Result.Errors.Values)
+                            //https://learn.microsoft.com/en-us/dotnet/api/system.string.join?view=net-7.0
+                            messageError = string.Join("(*) ", messageError, string.Join(" (*) ", errors));
+                    }
+                }
+                catch (ApiException apiexception)
+                {
+                    //we need to inform user that there was some other error while processing the request
+                    messageError = "Error while processing your request, please try again later!";
+
+                }
+            }
+        }
+    }
+    protected override async Task OnInitializedAsync()
+    {
+
+        if (authenticationState is not null)
+        {
+            var authState = await authenticationState;
+            var user = authState?.User;
+
+            if (user is not null)
+            {
+                if (user.Identity is not null && user.Identity.IsAuthenticated)
+                {
+                    receipt.Username = user.Identity.Name;
+                }
+            }
+            receipt.Username = receipt.Username == null ? "" : receipt.Username;
+            receipt.Usersurname = receipt.Usersurname == null ? "" : receipt.Usersurname;
+            receipt.Userdeliveryaddress = receipt.Userdeliveryaddress == null ? "" : receipt.Userdeliveryaddress;
+
+        }
+    }
+
+
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
+}
