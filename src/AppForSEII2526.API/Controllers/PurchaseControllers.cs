@@ -129,7 +129,8 @@ namespace AppForSEII2526.API.Controllers
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.Conflict)]
         public async Task<ActionResult> CreatePurchase(PurchaseForCreateDTO purchaseForCreate)
         {
-            foreach(var dispositivo in purchaseForCreate.purchaseItems)
+            
+            foreach (var dispositivo in purchaseForCreate.purchaseItems)
             {
                 if(dispositivo.nameModel.Contains("Xiaomi") || dispositivo.nameModel.Contains("Huawei")) // filtro de nameModel
                 {
@@ -268,7 +269,7 @@ namespace AppForSEII2526.API.Controllers
 
                 );
 
-            return CreatedAtAction("Get_Purchase_Detail_DTO", new { id = purchase.Id }, purchaseDetail);
+            return CreatedAtAction("GetPurchaseDetailDTO", new { id = purchase.Id }, purchaseDetail);
 
         }
     }
