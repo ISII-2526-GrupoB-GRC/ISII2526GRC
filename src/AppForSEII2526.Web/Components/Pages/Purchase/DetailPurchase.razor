@@ -1,7 +1,7 @@
 ﻿
 @page "/purchase/detailpurchase"
 
-<h3>DetailPurchase</h3>
+
 
 @using AppForSEII2526.Web.API
 @using Microsoft.AspNetCore.Authorization
@@ -31,12 +31,12 @@ else
 
     <tr>
         <th>Purchase Date</th>
-        <td id="PurchaseDate">@purchase.PurchaseDate</td>
+        <td id="PurchaseDate">@purchase.PurchaseDate.ToString("dd/MM/yyyy")</td>
     </tr>
 
     <tr>
         <th>Total Price</th>
-        <td id="TotalPrice">@purchase.TotalPrice</td>
+        <td id="TotalPrice">@purchase.TotalPrice.ToString("F2")</td>
     </tr>
 
     <tr>
@@ -82,7 +82,7 @@ else
         @*colspan is used to state that TWO columns are collapsed*@
 
         <th scope="row" colspan="2" class="text-end">Total Price</th>
-        <td id="TotalPrice">@purchase.TotalPrice</td>
+        <td id="TotalPrice">@purchase.TotalPrice.ToString("F2")</td>
 
 
     </tfoot>
