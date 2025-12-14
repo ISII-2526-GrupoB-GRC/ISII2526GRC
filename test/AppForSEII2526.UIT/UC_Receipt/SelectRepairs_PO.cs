@@ -11,6 +11,7 @@ namespace AppForSEII2526.UIT.UC_Receipt
         By inputName = By.Id("inputName");
         By inputScale = By.Id("inputScale");
         By buttonSearchRepairs = By.Id("searchRepairs");
+        By RepairButton = By.Id("RepairButton");
         By tableOfRepairsBy = By.Id("TableofRepairs");
         public SelectRepairs_PO(IWebDriver driver, ITestOutputHelper output) : base(driver, output) { }
         public void SearchMovies(string name, string scale) {
@@ -27,6 +28,27 @@ namespace AppForSEII2526.UIT.UC_Receipt
         public bool CheckListOfRepairs(List<String[]> expectedRepairs) 
         {
             return CheckBodyTable(expectedRepairs, tableOfRepairsBy);
+        }
+        public void AddRepairToReceipt(string repairName) 
+        {
+            WaitForBeingClickable(By.Id("repair_"+repairName));
+            _driver.FindElement(By.Id("repair_" + repairName)).Click();
+        }
+        public void RemoveRepairFromReceipt(string repairName) 
+        {
+            WaitForBeingClickable(By.Id("removeRepair_"+repairName));
+            _driver.FindElement(By.Id("removeRepair_" + repairName)).Click();
+        }
+        public void DoReceipt() 
+        {
+            WaitForBeingClickable(RepairButton);
+            _driver.FindElement(RepairButton).Click();
+        }
+        public bool ReceiptNotAvaible() { 
+            return _driver.FindElement(RepairButton).Displayed == false;
+        }
+        public bool CheckMessageErrorNotAviableRepairs(string expectedMessage) { 
+            return _driver.PageSource.Contains(expectedMessage);
         }
     }
 }

@@ -54,8 +54,8 @@ namespace AppForSEII2526.UIT.UC_Receipt
 
         [Theory]
         [InlineData(repairName1, username, name, surname, deliveryAddress, paymentMethod1, modelo)]
-        [InlineData(repairName1, username, name, surname, deliveryAddress, paymentMethod1, modelo)]
-        [InlineData(repairName1, username, name, surname, deliveryAddress, paymentMethod1, modelo)]
+        [InlineData(repairName1, username, name, surname, deliveryAddress, paymentMethod2, modelo)]
+        [InlineData(repairName1, username, name, surname, deliveryAddress, paymentMethod3, modelo)]
         [Trait("Level Testing", "Funcional Testing")]
         public void IC1_CU1_2_3_BasicFlow(string repair, string username, string name , string surname, string deliveryaddress, string paymentmethod, string model) {
             InitialStepsForReceiptUC();
@@ -86,6 +86,20 @@ namespace AppForSEII2526.UIT.UC_Receipt
             //Assert
             Assert.True(selectRepairs_PO.CheckListOfRepairs(expectedRepairs));
         }
-     
+
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC1_AF2_UC1_8_ReceiptNotAvailable() 
+        {
+            //Arrange
+            InitialStepsForReceiptUC();
+            
+            //Act
+            selectRepairs_PO.AddRepairToReceipt(repairName1);
+            selectRepairs_PO.RemoveRepairFromReceipt(repairName1);
+
+            //Assert
+            Assert.True(selectRepairs_PO.ReceiptNotAvaible());
+        }
     }
 }
