@@ -32,6 +32,7 @@ namespace AppForSEII2526.UIT.CU_PurchaseDevices
 
         private void InitialStepsForPurchasingDevices()
         {
+            Initial_step_opening_the_web_page();
             //Precondition_perform_login(); //esta linea tiene que permanecer comentada hasta que se arregle el bug del login
             //we wait for the option of the menu to be visible
             selectDevicesForPurchase_PO.WaitForBeingVisible(By.Id("CreatePurchase"));
@@ -42,19 +43,20 @@ namespace AppForSEII2526.UIT.CU_PurchaseDevices
 
         
         [Theory]
-        [InlineData(deviceName1,deviceBrand1,deviceModel1, deviceColour1, devicePrice1,"App","")]
-        [InlineData(deviceName1, deviceBrand1, deviceModel1, deviceColour1, devicePrice1, "", "Neg")]
+        [InlineData(deviceName1,deviceBrand1,deviceModel1, deviceColour1, devicePrice1,"Apple","")]
+        [InlineData(deviceName1, deviceBrand1, deviceModel1, deviceColour1, devicePrice1, "", "Negro")]
         [Trait("LevelTesting","Funcional Testing")]
         public void UC_AF2_filtering(string deviceName,string deviceBrand, string deviceModel, string deviceColour,string devicePrice,
             string filterBrand, string filterColour)
         {
-            //InitialStepsForPurchasingDevices();
+            InitialStepsForPurchasingDevices();
             var expectedDevices = new List<string[]> { new string[] { deviceName, deviceBrand, deviceModel, deviceColour, devicePrice }, };
 
             //Action
+            Thread.Sleep(4000);
             selectDevicesForPurchase_PO.searchDevice(filterBrand, filterColour);
 
-
+            Thread.Sleep(4000); //Esperamos 2 segundos a que cargue la tabla filtrada
             //Assert
             Assert.True(selectDevicesForPurchase_PO.CheckListOfDevices(expectedDevices));
 
@@ -65,9 +67,11 @@ namespace AppForSEII2526.UIT.CU_PurchaseDevices
         [Trait("LevelTesting", "Funcional Testing")]
         public void UC_AF3()
         {
-            //InitialStepsForPurchasingDevices();
+            InitialStepsForPurchasingDevices();
             selectDevicesForPurchase_PO.AddMovieToPurchasingCart(deviceModel1);
+            Thread.Sleep(3000);
             selectDevicesForPurchase_PO.RemoveFromRentingCart(deviceModel1);
+            Thread.Sleep(3000);
 
             Assert.True(selectDevicesForPurchase_PO.PurchasingNotAvailable());
 

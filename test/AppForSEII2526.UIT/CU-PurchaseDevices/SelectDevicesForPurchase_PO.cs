@@ -23,15 +23,17 @@ namespace AppForSEII2526.UIT.CU_PurchaseDevices
 
         }
 
-        public void searchDevice(string Brand,string colour)
+        public void searchDevice(string brand, string colour)
         {
             WaitForBeingClickable(inputBrandFilter);
-            _driver.FindElement(inputBrandFilter).SendKeys(Brand);
-            if (colour == "") colour = "All";
-            SelectElement selectElement = new SelectElement(_driver.FindElement(inputColourFilter));
-            selectElement.SelectByText(colour);
-            _driver.FindElement(buttonSearchDevices).Click();
+            _driver.FindElement(inputBrandFilter).SendKeys(brand);
 
+
+            //En el proyecto de la asignatura se hizo Elena un controlador para los géneros disponibles que se podría aplicar aquí con las escalas disponibles. Preguntar sí es necesario y sí en caso de no tenerlo baja nota
+            WaitForBeingClickable(inputColourFilter);
+            _driver.FindElement(inputColourFilter).SendKeys(colour);
+
+            _driver.FindElement(buttonSearchDevices).Click();
         }
 
 
