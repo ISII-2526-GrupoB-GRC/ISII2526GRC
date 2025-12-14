@@ -1,4 +1,5 @@
 ﻿using AppForMovies.UIT.Shared;
+using OpenQA.Selenium.DevTools.V141.DOM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,16 @@ namespace AppForSEII2526.UIT.UC_Receipt
         private const string description2 = "Reparación del puerto de carga USB-C";
 
         private const string AddToReceipt = "Add to Receipt";
+
+        private const string name = "Rodrigo";
+        private const string username = "rdiaz";
+        private const string surname = "Díaz Quintanar";
+        private const string deliveryAddress = "Calle Prueba";
+        private const string paymentMethod1 = "Credit Card";
+        private const string paymentMethod2 = "PayPal";
+        private const string paymentMethod3 = "Cash";
+        private const string modelo = "Pixel 8a";
+
         public UC_Receipts_UIT(ITestOutputHelper output) : base(output)
         {
             selectRepairs_PO = new SelectRepairs_PO(_driver, _output);
@@ -40,6 +51,21 @@ namespace AppForSEII2526.UIT.UC_Receipt
             selectRepairs_PO.WaitForBeingVisible(By.Id("CreateReceipt"));
             _driver.FindElement(By.Id("CreateReceipt")).Click();
         }
+
+        [Theory]
+        [InlineData(repairName1, username, name, surname, deliveryAddress, paymentMethod1, modelo)]
+        [InlineData(repairName1, username, name, surname, deliveryAddress, paymentMethod1, modelo)]
+        [InlineData(repairName1, username, name, surname, deliveryAddress, paymentMethod1, modelo)]
+        [Trait("Level Testing", "Funcional Testing")]
+        public void IC1_CU1_2_3_BasicFlow(string repair, string username, string name , string surname, string deliveryaddress, string paymentmethod, string model) {
+            InitialStepsForReceiptUC();
+
+            var expectedReceiptItems = new List<string[]> { 
+                new string[]{ repairName1, repairScale1, cost1, modelo},
+            };
+
+
+        }
         [Theory]
         [InlineData(repairName1, repairScale1, cost1, description1,AddToReceipt,"Cambio pan", "")]
         [InlineData(repairName2, repairScale2,cost2, description2, AddToReceipt, "", "Bá")]
@@ -48,9 +74,9 @@ namespace AppForSEII2526.UIT.UC_Receipt
         {
             //Arrange
             InitialStepsForReceiptUC();
-            var expectedRepairs = new List<String[]>
+            var expectedRepairs = new List<string[]>
             {
-                new String[] { repairName, repairScale,  RepairCost, RepairDescription, AddToReceipt},
+                new string[] { repairName, repairScale,  RepairCost, RepairDescription, AddToReceipt},
                 //new String[] { RepairId2.ToString(), repairName2, repairScale2}
             };
             //Act
