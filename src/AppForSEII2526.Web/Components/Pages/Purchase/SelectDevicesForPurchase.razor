@@ -5,7 +5,7 @@
 @inject PurchaseStateContainer purchaseState
 @inject NavigationManager navigation
 
-<h3>SelectDevicesForPurchase</h3>
+
 
 @page "/purchase/selectdevicesforpurchase"
 <h3>Select Devices For Purchase</h3>
@@ -16,7 +16,7 @@
     <div class="row">
         <div class=" col-8">
             <div class="row">
-                <p>here i will show the filters</p>
+                
                 <div class="col">
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="basic-addon1">Brand</span>
@@ -40,7 +40,7 @@
                 </div>
             </div>
             <div class=" row">
-                <p>here i will show the list of devices</p>
+                
                 @if(devices == null)
                 {
                     <p>Loading devices...</p>
@@ -75,7 +75,7 @@
                                         
 
                                         <td>
-                                            <button class="btn-outline-secondary" id="deviceToPurchase_@device" @onclick="@(()=> AddDevice(device))">Add</button> @*aqui falta la cantidad y descripcion*@
+                                            <button class="btn-outline-secondary" id="deviceToPurchase_@device.NameModel" @onclick="@(()=> AddDevice(device))">Add</button> @*aqui falta la cantidad y descripcion*@
                                         </td>@*chatgpt sugiere diccionario, preguntar en clase*@
                                     </tr>
                                 }
@@ -87,7 +87,7 @@
             </div>
         </div>
         <div class="col-2">
-            <p>here i will show the purchase device</p>
+            
             <div class="col-2" hidden="@hidePurchasingCart">
                 <div class="row">
                     <h3>Shopping Cart</h3>
