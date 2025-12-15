@@ -19,7 +19,14 @@
                 <div class="col">  @*Filtro de Modelo*@
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="basic-addon1">Model</span>
-                        <input type="text" id="inputModel" @bind="deviceModel" class="form-control" placeholder="Model" aria-label="Model" aria-describedby="basic-addon1">
+                        @*<input type="text" id="inputModel" @bind="deviceModel" class="form-control" placeholder="Model" aria-label="Model" aria-describedby="basic-addon1">*@
+                        <select class="form-select" aria-label="Default select" @bind="deviceModelSelected" id="selectModel">
+                            <option value="All" selected>All</option>
+                            @foreach (string modelName in modelsNames)
+                            {
+                                <option value="@modelName" id="modelNameSelected_@modelName">@modelName</option>
+                            }
+                        </select>
                     </div>
                 </div>
 
@@ -41,6 +48,7 @@
                     <span class="input-group-text">To</span>
                     <InputDate id="toDate" @bind-Value="@To" />
 
+
                 </div>
                 *@
                 <div class="col">
@@ -52,6 +60,10 @@
                 @if (devices == null)
                 {
                     <p>No devices available.</p>
+                }
+                else if (devices.Count == 0)
+                {
+                    <p>No devices found with the selected filters.</p>
                 }
                 else
                 {
@@ -108,13 +120,15 @@
 
 @code {
 
+    private string deviceModelSelected { get; set; }
+    private ICollection<string> modelsNames = new List<string>();
+
     private bool hideRentingCart { get { return rental.RentalItems.Count == 0; } }
     private ICollection<DeviceForRentalDTO>? devices;
     private bool hideErrors { get { return errors.Length == 0; } }
     private string errors = "";
-    private string deviceModel { get; set; } = "";
     private double? devicePriceForRent { get; set; }
-
+    private string deviceModel { get; set; }
 
     private RentalForCreateDTO rental => rentalState.Rental;
 
@@ -131,8 +145,9 @@
         if (rental.RentalItems.Count == 0) hiddenRentingCart = true;
     }
 
-    public async void SearchDevices() {
-
+    public async Task SearchDevices() 
+    {
+        deviceModel = deviceModelSelected == "All" ? null : deviceModelSelected;
         try
         {
             devices = await apiclient.GetDevicesForRentalAsync(deviceModel, devicePriceForRent);
@@ -146,10 +161,19 @@
         StateHasChanged();
     }
 
-    protected override Task OnInitializedAsync() 
+    protected override async Task OnInitializedAsync() 
     {
+        try
+        {
+            modelsNames = await apiclient.GetModelsForRentalAsync(null);
+        }
+        catch (ApiException ex)
+        {
+            if (modelsNames == null) modelsNames = new List<string>() { "All", };
+            logger.LogError($"{DateTime.Now} Error! Hubo un error mientras se conectaba con el servicio GetModelsAsync");
+        }
+        
         SearchDevices();
-        return base.OnInitializedAsync();
     }
 
     private void RentDevices()
