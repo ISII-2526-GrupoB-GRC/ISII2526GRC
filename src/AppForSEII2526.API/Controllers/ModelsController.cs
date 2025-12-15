@@ -2,18 +2,20 @@
 
 namespace AppForSEII2526.API.Controllers
 {
-    public class ModelsController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ModelsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private ILogger _logger;
+        private readonly ILogger<ModelsController> _logger;
 
-        private ModelsController(ApplicationDbContext context, ILogger logger)
+        public ModelsController(ApplicationDbContext context, ILogger<ModelsController> logger)
         {
             _context = context;
             _logger = logger;
         }
 
-        // Get: api/Devices/GetDevicesForRental
+        // Get: api/Models/GetModelsForRental
         [HttpGet]
         [Route("[action]")]
         [ProducesResponseType(typeof(IList<string>), (int)HttpStatusCode.OK)]
