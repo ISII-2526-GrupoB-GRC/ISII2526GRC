@@ -5,6 +5,7 @@
         public string Name { get; set; }
         public string Scale { get; set; }
         public decimal Cost { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Introduce el modelo del dispositivo a reparar")]
         public string Model { get; set; }
         public ReceiptItemDTO() { }
         public ReceiptItemDTO(string Name, string Scale, decimal Cost, string Model)

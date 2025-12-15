@@ -14,6 +14,7 @@ namespace AppForSEII2526.API.DTOs.ReceiptDTOs
 
         [DataType(System.ComponentModel.DataAnnotations.DataType.MultilineText)]
         [Display(Name = "Dirección de envío")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Introduce tu direccion de envio")]
         public string userdeliveryaddress { get; set; }
 
         [Required]
