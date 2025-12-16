@@ -1,29 +1,71 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AppForSEII2526.API.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace AppForSEII2526.API.Data
 {
     public static class DbSeeder
     {
-        public static async Task SeedAsync(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public static void Initialize(ApplicationDbContext context, IServiceProvider serviceProvider, ILogger logger)
         {
-            // Verificar si ya existen datos
-            if (context.Scale.Any())
+            // Definimos los roles, igual que en el ejemplo de referencia
+            List<string> rolesNames = new List<string> { "Administrator", "Employee", "Customer" };
+
+            // 1. Sembrar Roles
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            try
             {
-                return; // La base de datos ya ha sido poblada
+                SeedRoles(roleManager, rolesNames);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An error occurred seeding the roles in the Database.");
             }
 
-            // 1. Poblar Scales (3 escalas)
-            var scales = new List<Scale>
+            // 2. Sembrar Usuarios (tus 3 usuarios como administradores)
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            try
             {
-                new Scale { Name = "Lujo" },
-                new Scale { Name = "Media" },
-                new Scale { Name = "Básica" }
-            };
-            await context.Scale.AddRangeAsync(scales);
-            await context.SaveChangesAsync();
+                SeedUsers(userManager, rolesNames);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An error occurred seeding the Users in the Database.");
+            }
 
-            // 2. Poblar Usuarios (3 usuarios)
-            var users = new List<(ApplicationUser User, string Password)>
+            // 3. Sembrar Datos del Negocio (Scales, Models, Devices, Repairs, etc.)
+            try
+            {
+                SeedBusinessData(context, userManager);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An error occurred seeding the Business Data in the Database.");
+            }
+        }
+
+        public static void SeedRoles(RoleManager<IdentityRole> roleManager, List<string> roles)
+        {
+            foreach (string roleName in roles)
+            {
+                if (!roleManager.RoleExistsAsync(roleName).Result)
+                {
+                    IdentityRole role = new IdentityRole
+                    {
+                        Name = roleName,
+                        NormalizedName = roleName.ToUpper()
+                    };
+                    IdentityResult roleResult = roleManager.CreateAsync(role).Result;
+                }
+            }
+        }
+
+        public static void SeedUsers(UserManager<ApplicationUser> userManager, List<string> roles)
+        {
+            // Lista de usuarios a crear según tu repositorio original
+            var usersToSeed = new List<(ApplicationUser User, string Password)>
             {
                 (new ApplicationUser
                 {
@@ -59,420 +101,223 @@ namespace AppForSEII2526.API.Data
                 }, "Password123!")
             };
 
-            foreach (var (user, password) in users)
+            foreach (var (userTemplate, password) in usersToSeed)
             {
-                await userManager.CreateAsync(user, password);
+                // Comprobamos si el usuario existe por nombre de usuario
+                if (userManager.FindByNameAsync(userTemplate.UserName).Result == null)
+                {
+                    var result = userManager.CreateAsync(userTemplate, "Password123!");
+                    result.Wait();
+
+                    if (result.IsCompletedSuccessfully)
+                    {
+                        // Asignar rol de Administrador (índice 0 en la lista de roles)
+                        userManager.AddToRoleAsync(userTemplate, roles[0]).Wait();
+                    }
+                }
             }
-            await context.SaveChangesAsync();
+        }
 
-            // 3. Poblar Modelos (5 modelos)
-            var models = new List<Model>
+        public static void SeedBusinessData(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        {
+            // --- 1. Scales ---
+            if (!context.Scale.Any())
             {
-                new Model { NameModel = "iPhone 14 Pro" },
-                new Model { NameModel = "Samsung Galaxy S23" },
-                new Model { NameModel = "Google Pixel 8" },
-                new Model { NameModel = "Xiaomi 13 Pro" },
-                new Model { NameModel = "OnePlus 11" }
-            };
-            await context.Modelo.AddRangeAsync(models);
-            await context.SaveChangesAsync();
+                var scales = new List<Scale>
+                {
+                    new Scale { Name = "Lujo" },
+                    new Scale { Name = "Media" },
+                    new Scale { Name = "Básica" }
+                };
+                context.Scale.AddRange(scales);
+                context.SaveChanges();
+            }
 
-            // 4. Poblar Dispositivos (5 dispositivos)
-            var devices = new List<Device>
+            // --- 2. Models (Modelos) ---
+            if (!context.Modelo.Any())
             {
-                new Device
+                var models = new List<Model>
                 {
-                    Brand = "Apple",
-                    Color = "Negro",
-                    Name = "iPhone 14 Pro Max",
-                    priceForPurchace = 1199.99,
-                    priceForRent = 50.00,
-                    Quality = Device.QualityType.High,
-                    quantityForPurchase = 15,
-                    quantityForRent = 8,
-                    Year = 2023,
-                    Model = models[0]
-                },
-                new Device
-                {
-                    Brand = "Samsung",
-                    Color = "Blanco",
-                    Name = "Galaxy S23 Ultra",
-                    priceForPurchace = 1099.99,
-                    priceForRent = 45.00,
-                    Quality = Device.QualityType.High,
-                    quantityForPurchase = 20,
-                    quantityForRent = 10,
-                    Year = 2023,
-                    Model = models[1]
-                },
-                new Device
-                {
-                    Brand = "Google",
-                    Color = "Azul",
-                    Name = "Pixel 8 Pro",
-                    priceForPurchace = 899.99,
-                    priceForRent = 40.00,
-                    Quality = Device.QualityType.Medium,
-                    quantityForPurchase = 12,
-                    quantityForRent = 6,
-                    Year = 2023,
-                    Model = models[2]
-                },
-                new Device
-                {
-                    Brand = "Xiaomi",
-                    Color = "Verde",
-                    Name = "Xiaomi 13 Pro 5G",
-                    priceForPurchace = 799.99,
-                    priceForRent = 35.00,
-                    Quality = Device.QualityType.Medium,
-                    quantityForPurchase = 18,
-                    quantityForRent = 9,
-                    Year = 2023,
-                    Model = models[3]
-                },
-                new Device
-                {
-                    Brand = "OnePlus",
-                    Color = "Gris",
-                    Name = "OnePlus 11 5G",
-                    priceForPurchace = 699.99,
-                    priceForRent = 30.00,
-                    Quality = Device.QualityType.Medium,
-                    quantityForPurchase = 10,
-                    quantityForRent = 5,
-                    Year = 2023,
-                    Model = models[4]
-                }
-            };
-            await context.Device.AddRangeAsync(devices);
-            await context.SaveChangesAsync();
+                    new Model { NameModel = "iPhone 14 Pro" },
+                    new Model { NameModel = "Samsung Galaxy S23" },
+                    new Model { NameModel = "Google Pixel 8" },
+                    new Model { NameModel = "Xiaomi 13 Pro" },
+                    new Model { NameModel = "OnePlus 11" }
+                };
+                context.Modelo.AddRange(models);
+                context.SaveChanges();
+            }
 
-            // 5. Poblar Reparaciones (5 reparaciones)
-            var repairs = new List<Repair>
+            // --- 3. Devices (Dispositivos) ---
+            if (!context.Device.Any())
             {
-                new Repair
-                {
-                    Name = "Cambio pantalla",
-                    Description = "Sustitución completa de pantalla OLED",
-                    Cost = 150.00m,
-                    Scale = scales[0]
-                },
-                new Repair
-                {
-                    Name = "Cambio batería",
-                    Description = "Reemplazo de batería original",
-                    Cost = 80.00m,
-                    Scale = scales[1]
-                },
-                new Repair
-                {
-                    Name = "Reparación puerto carga",
-                    Description = "Reparación del puerto de carga USB-C",
-                    Cost = 45.00m,
-                    Scale = scales[2]
-                },
-                new Repair
-                {
-                    Name = "Cambio cámara",
-                    Description = "Sustitución de cámara trasera",
-                    Cost = 120.00m,
-                    Scale = scales[0]
-                },
-                new Repair
-                {
-                    Name = "Limpieza por agua",
-                    Description = "Limpieza interna por daños líquidos",
-                    Cost = 60.00m,
-                    Scale = scales[1]
-                }
-            };
-            await context.Repair.AddRangeAsync(repairs);
-            await context.SaveChangesAsync();
+                // Recuperamos los modelos para asignarlos
+                var models = context.Modelo.ToList();
+                // Aseguramos el orden o buscamos por nombre para mantener consistencia con los datos originales
+                var miPhone = models.First(m => m.NameModel == "iPhone 14 Pro");
+                var mSamsung = models.First(m => m.NameModel == "Samsung Galaxy S23");
+                var mPixel = models.First(m => m.NameModel == "Google Pixel 8");
+                var mXiaomi = models.First(m => m.NameModel == "Xiaomi 13 Pro");
+                var mOnePlus = models.First(m => m.NameModel == "OnePlus 11");
 
-            // 6. Poblar Compras (5 compras)
-            var usersList = await context.ApplicationUser.ToListAsync();
-            var purchases = new List<Purchase>
-            {
-                new Purchase
+                var devices = new List<Device>
                 {
-                    DeliveryAddress = "Calle Mayor 123, Madrid",
-                    PaymentMethod = PaymentMethodTypes.CreditCard,
-                    PurchaseDate = DateTime.SpecifyKind(new DateTime(2024, 1, 15), DateTimeKind.Unspecified),
-                    TotalPrice = 1199.99,
-                    TotalQuanty = 1,
-                    ApplicationUser = usersList[0]
-                },
-                new Purchase
-                {
-                    DeliveryAddress = "Avenida Libertad 45, Barcelona",
-                    PaymentMethod = PaymentMethodTypes.PayPal,
-                    PurchaseDate = DateTime.SpecifyKind(new DateTime(2024, 2, 20), DateTimeKind.Unspecified),
-                    TotalPrice = 2199.98,
-                    TotalQuanty = 2,
-                    ApplicationUser = usersList[1]
-                },
-                new Purchase
-                {
-                    DeliveryAddress = "Plaza España 67, Valencia",
-                    PaymentMethod = PaymentMethodTypes.Cash,
-                    PurchaseDate = DateTime.SpecifyKind(new DateTime(2024, 3, 10), DateTimeKind.Unspecified),
-                    TotalPrice = 899.99,
-                    TotalQuanty = 1,
-                    ApplicationUser = usersList[2]
-                },
-                new Purchase
-                {
-                    DeliveryAddress = "Calle Real 89, Sevilla",
-                    PaymentMethod = PaymentMethodTypes.CreditCard,
-                    PurchaseDate = DateTime.SpecifyKind(new DateTime(2024, 4, 5), DateTimeKind.Unspecified),
-                    TotalPrice = 1599.98,
-                    TotalQuanty = 2,
-                    ApplicationUser = usersList[0]
-                },
-                new Purchase
-                {
-                    DeliveryAddress = "Avenida Andalucía 234, Málaga",
-                    PaymentMethod = PaymentMethodTypes.PayPal,
-                    PurchaseDate = DateTime.SpecifyKind(new DateTime(2024, 5, 12), DateTimeKind.Unspecified),
-                    TotalPrice = 699.99,
-                    TotalQuanty = 1,
-                    ApplicationUser = usersList[1]
-                }
-            };
-            await context.Purchase.AddRangeAsync(purchases);
-            await context.SaveChangesAsync();
+                    new Device
+                    {
+                        Brand = "Apple", Color = "Negro", Name = "iPhone 14 Pro Max",
+                        priceForPurchace = 1199.99, priceForRent = 50.00, Quality = Device.QualityType.High,
+                        quantityForPurchase = 15, quantityForRent = 8, Year = 2023, Model = miPhone
+                    },
+                    new Device
+                    {
+                        Brand = "Samsung", Color = "Blanco", Name = "Galaxy S23 Ultra",
+                        priceForPurchace = 1099.99, priceForRent = 45.00, Quality = Device.QualityType.High,
+                        quantityForPurchase = 20, quantityForRent = 10, Year = 2023, Model = mSamsung
+                    },
+                    new Device
+                    {
+                        Brand = "Google", Color = "Azul", Name = "Pixel 8 Pro",
+                        priceForPurchace = 899.99, priceForRent = 40.00, Quality = Device.QualityType.Medium,
+                        quantityForPurchase = 12, quantityForRent = 6, Year = 2023, Model = mPixel
+                    },
+                    new Device
+                    {
+                        Brand = "Xiaomi", Color = "Verde", Name = "Xiaomi 13 Pro 5G",
+                        priceForPurchace = 799.99, priceForRent = 35.00, Quality = Device.QualityType.Medium,
+                        quantityForPurchase = 18, quantityForRent = 9, Year = 2023, Model = mXiaomi
+                    },
+                    new Device
+                    {
+                        Brand = "OnePlus", Color = "Gris", Name = "OnePlus 11 5G",
+                        priceForPurchace = 699.99, priceForRent = 30.00, Quality = Device.QualityType.Medium,
+                        quantityForPurchase = 10, quantityForRent = 5, Year = 2023, Model = mOnePlus
+                    }
+                };
+                context.Device.AddRange(devices);
+                context.SaveChanges();
+            }
 
-            // 7. Poblar PurchaseItems (5 items)
-            var purchaseItems = new List<PurchaseItem>
+            // --- 4. Repairs (Reparaciones) ---
+            if (!context.Repair.Any())
             {
-                new PurchaseItem
-                {
-                    Device = devices[0],
-                    Purchase = purchases[0],
-                    Description = "iPhone 14 Pro Max Negro",
-                    Price = 1199.99,
-                    Quantity = 1
-                },
-                new PurchaseItem
-                {
-                    Device = devices[1],
-                    Purchase = purchases[1],
-                    Description = "Galaxy S23 Ultra Blanco",
-                    Price = 1099.99,
-                    Quantity = 2
-                },
-                new PurchaseItem
-                {
-                    Device = devices[2],
-                    Purchase = purchases[2],
-                    Description = "Pixel 8 Pro Azul",
-                    Price = 899.99,
-                    Quantity = 1
-                },
-                new PurchaseItem
-                {
-                    Device = devices[3],
-                    Purchase = purchases[3],
-                    Description = "Xiaomi 13 Pro Verde",
-                    Price = 799.99,
-                    Quantity = 2
-                },
-                new PurchaseItem
-                {
-                    Device = devices[4],
-                    Purchase = purchases[4],
-                    Description = "OnePlus 11 Gris",
-                    Price = 699.99,
-                    Quantity = 1
-                }
-            };
-            await context.PurchaseItem.AddRangeAsync(purchaseItems);
-            await context.SaveChangesAsync();
+                var scales = context.Scale.ToList();
+                var sLujo = scales.First(s => s.Name == "Lujo");
+                var sMedia = scales.First(s => s.Name == "Media");
+                var sBasica = scales.First(s => s.Name == "Básica");
 
-            // 8. Poblar Alquileres (5 alquileres)
-            var rentals = new List<Rental>
-            {
-                new Rental
+                var repairs = new List<Repair>
                 {
-                    PaymentMethod = PaymentMethodTypes.CreditCard,
-                    RentalDate = DateTime.SpecifyKind(new DateTime(2024, 1, 10), DateTimeKind.Unspecified),
-                    RentalDateFrom = DateTime.SpecifyKind(new DateTime(2024, 1, 15), DateTimeKind.Unspecified),
-                    RentalDateTo = DateTime.SpecifyKind(new DateTime(2024, 1, 22), DateTimeKind.Unspecified),
-                    TotalPrice = 350.00,
-                    ApplicationUser = usersList[0],
-                    DeliveryAddress = "Calle Mayor 123, Madrid"
-                },
-                new Rental
-                {
-                    PaymentMethod = PaymentMethodTypes.PayPal,
-                    RentalDate = DateTime.SpecifyKind(new DateTime(2024, 2, 5), DateTimeKind.Unspecified),
-                    RentalDateFrom = DateTime.SpecifyKind(new DateTime(2024, 2, 10), DateTimeKind.Unspecified),
-                    RentalDateTo = DateTime.SpecifyKind(new DateTime(2024, 2, 24), DateTimeKind.Unspecified),
-                    TotalPrice = 630.00,
-                    ApplicationUser = usersList[1],
-                    DeliveryAddress = "Avenida Libertad 45, Barcelona"
-                },
-                new Rental
-                {
-                    PaymentMethod = PaymentMethodTypes.Cash,
-                    RentalDate = DateTime.SpecifyKind(new DateTime(2024, 3, 1), DateTimeKind.Unspecified),
-                    RentalDateFrom = DateTime.SpecifyKind(new DateTime(2024, 3, 5), DateTimeKind.Unspecified),
-                    RentalDateTo = DateTime.SpecifyKind(new DateTime(2024, 3, 12), DateTimeKind.Unspecified),
-                    TotalPrice = 280.00,
-                    ApplicationUser = usersList[2],
-                    DeliveryAddress = "Plaza España 67, Valencia"
-                },
-                new Rental
-                {
-                    PaymentMethod = PaymentMethodTypes.CreditCard,
-                    RentalDate = DateTime.SpecifyKind(new DateTime(2024, 4, 12), DateTimeKind.Unspecified),
-                    RentalDateFrom = DateTime.SpecifyKind(new DateTime(2024, 4, 15), DateTimeKind.Unspecified),
-                    RentalDateTo = DateTime.SpecifyKind(new DateTime(2024, 4, 29), DateTimeKind.Unspecified),
-                    TotalPrice = 490.00,
-                    ApplicationUser = usersList[0],
-                    DeliveryAddress = "Calle Real 89, Sevilla"
-                },
-                new Rental
-                {
-                    PaymentMethod = PaymentMethodTypes.PayPal,
-                    RentalDate = DateTime.SpecifyKind(new DateTime(2024, 5, 20), DateTimeKind.Unspecified),
-                    RentalDateFrom = DateTime.SpecifyKind(new DateTime(2024, 5, 25), DateTimeKind.Unspecified),
-                    RentalDateTo = DateTime.SpecifyKind(new DateTime(2024, 6, 1), DateTimeKind.Unspecified),
-                    TotalPrice = 210.00,
-                    ApplicationUser = usersList[1],
-                    DeliveryAddress = "Avenida Andalucía 234, Málaga"
-                }
-            };
-            await context.Rental.AddRangeAsync(rentals);
-            await context.SaveChangesAsync();
+                    new Repair { Name = "Cambio pantalla", Description = "Sustitución completa de pantalla OLED", Cost = 150.00m, Scale = sLujo },
+                    new Repair { Name = "Cambio batería", Description = "Reemplazo de batería original", Cost = 80.00m, Scale = sMedia },
+                    new Repair { Name = "Reparación puerto carga", Description = "Reparación del puerto de carga USB-C", Cost = 45.00m, Scale = sBasica },
+                    new Repair { Name = "Cambio cámara", Description = "Sustitución de cámara trasera", Cost = 120.00m, Scale = sLujo },
+                    new Repair { Name = "Limpieza por agua", Description = "Limpieza interna por daños líquidos", Cost = 60.00m, Scale = sMedia }
+                };
+                context.Repair.AddRange(repairs);
+                context.SaveChanges();
+            }
 
-            // 9. Poblar RentDevices (5 dispositivos alquilados)
-            var rentDevices = new List<RentDevice>
-            {
-                new RentDevice
-                {
-                    Device = devices[0],
-                    Rental = rentals[0],
-                    Price = 50.00,
-                    Quantity = 1
-                },
-                new RentDevice
-                {
-                    Device = devices[1],
-                    Rental = rentals[1],
-                    Price = 45.00,
-                    Quantity = 2
-                },
-                new RentDevice
-                {
-                    Device = devices[2],
-                    Rental = rentals[2],
-                    Price = 40.00,
-                    Quantity = 1
-                },
-                new RentDevice
-                {
-                    Device = devices[3],
-                    Rental = rentals[3],
-                    Price = 35.00,
-                    Quantity = 2
-                },
-                new RentDevice
-                {
-                    Device = devices[4],
-                    Rental = rentals[4],
-                    Price = 30.00,
-                    Quantity = 1
-                }
-            };
-            await context.RentDevice.AddRangeAsync(rentDevices);
-            await context.SaveChangesAsync();
+            // Recuperamos datos necesarios para operaciones transaccionales
+            var users = context.ApplicationUser.ToList();
+            var userJm = users.FirstOrDefault(u => u.UserName == "jmromero");
+            var userRd = users.FirstOrDefault(u => u.UserName == "rdiaz");
+            var userGr = users.FirstOrDefault(u => u.UserName == "grosillo");
 
-            // 10. Poblar Recibos (5 recibos)
-            var receipts = new List<Receipt>
-            {
-                new Receipt
-                {
-                    PaymentMethod = PaymentMethodTypes.CreditCard,
-                    ReceiptDate = DateTime.SpecifyKind(new DateTime(2024, 1, 18), DateTimeKind.Unspecified),
-                    TotalPrice = 150.00m,
-                    deliveryAddres = "Calle Mayor 123, Madrid",
-                    ApplicationUser = usersList[0]
-                },
-                new Receipt
-                {
-                    PaymentMethod = PaymentMethodTypes.PayPal,
-                    ReceiptDate = DateTime.SpecifyKind(new DateTime(2024, 2, 22), DateTimeKind.Unspecified),
-                    TotalPrice = 80.00m,
-                    deliveryAddres = "Avenida Libertad 45, Barcelona",
-                    ApplicationUser = usersList[1]
-                },
-                new Receipt
-                {
-                    PaymentMethod = PaymentMethodTypes.Cash,
-                    ReceiptDate = DateTime.SpecifyKind(new DateTime(2024, 3, 15), DateTimeKind.Unspecified),
-                    TotalPrice = 45.00m,
-                    deliveryAddres = "Plaza España 67, Valencia",
-                    ApplicationUser = usersList[2]
-                },
-                new Receipt
-                {
-                    PaymentMethod = PaymentMethodTypes.CreditCard,
-                    ReceiptDate = DateTime.SpecifyKind(new DateTime(2024, 4, 8), DateTimeKind.Unspecified),
-                    TotalPrice = 120.00m,
-                    deliveryAddres = "Calle Real 89, Sevilla",
-                    ApplicationUser = usersList[0]
-                },
-                new Receipt
-                {
-                    PaymentMethod = PaymentMethodTypes.PayPal,
-                    ReceiptDate = DateTime.SpecifyKind(new DateTime(2024, 5, 14), DateTimeKind.Unspecified),
-                    TotalPrice = 60.00m,
-                    deliveryAddres = "Avenida Andalucía 234, Málaga",
-                    ApplicationUser = usersList[1]
-                }
-            };
-            await context.Receipt.AddRangeAsync(receipts);
-            await context.SaveChangesAsync();
+            // Si los usuarios no se han creado correctamente arriba por alguna razón, abortamos la carga de datos dependientes
+            if (userJm == null || userRd == null || userGr == null) return;
 
-            // 11. Poblar ReceiptItems (5 items de recibo)
-            var receiptItems = new List<ReceiptItem>
+            var devicesDb = context.Device.ToList();
+            // Mapeo por nombre para facilitar
+            var dIphone = devicesDb.First(d => d.Name == "iPhone 14 Pro Max");
+            var dGalaxy = devicesDb.First(d => d.Name == "Galaxy S23 Ultra");
+            var dPixel = devicesDb.First(d => d.Name == "Pixel 8 Pro");
+            var dXiaomi = devicesDb.First(d => d.Name == "Xiaomi 13 Pro 5G");
+            var dOnePlus = devicesDb.First(d => d.Name == "OnePlus 11 5G");
+
+            // --- 5. Purchases y PurchaseItems ---
+            if (!context.Purchase.Any())
             {
-                new ReceiptItem
+                var purchases = new List<Purchase>
                 {
-                    Repair = repairs[0],
-                    Receipt = receipts[0],
-                    Model = "iPhone 14 Pro"
-                },
-                new ReceiptItem
+                    new Purchase { DeliveryAddress = "Calle Mayor 123, Madrid", PaymentMethod = PaymentMethodTypes.CreditCard, PurchaseDate = new DateTime(2024, 1, 15), TotalPrice = 1199.99, TotalQuanty = 1, ApplicationUser = userJm },
+                    new Purchase { DeliveryAddress = "Avenida Libertad 45, Barcelona", PaymentMethod = PaymentMethodTypes.PayPal, PurchaseDate = new DateTime(2024, 2, 20), TotalPrice = 2199.98, TotalQuanty = 2, ApplicationUser = userRd },
+                    new Purchase { DeliveryAddress = "Plaza España 67, Valencia", PaymentMethod = PaymentMethodTypes.Cash, PurchaseDate = new DateTime(2024, 3, 10), TotalPrice = 899.99, TotalQuanty = 1, ApplicationUser = userGr },
+                    new Purchase { DeliveryAddress = "Calle Real 89, Sevilla", PaymentMethod = PaymentMethodTypes.CreditCard, PurchaseDate = new DateTime(2024, 4, 5), TotalPrice = 1599.98, TotalQuanty = 2, ApplicationUser = userJm },
+                    new Purchase { DeliveryAddress = "Avenida Andalucía 234, Málaga", PaymentMethod = PaymentMethodTypes.PayPal, PurchaseDate = new DateTime(2024, 5, 12), TotalPrice = 699.99, TotalQuanty = 1, ApplicationUser = userRd }
+                };
+                context.Purchase.AddRange(purchases);
+                context.SaveChanges(); // Guardamos para generar IDs
+
+                var purchaseItems = new List<PurchaseItem>
                 {
-                    Repair = repairs[1],
-                    Receipt = receipts[1],
-                    Model = "Galaxy S23"
-                },
-                new ReceiptItem
+                    new PurchaseItem { Device = dIphone, Purchase = purchases[0], Description = "iPhone 14 Pro Max Negro", Price = 1199.99, Quantity = 1 },
+                    new PurchaseItem { Device = dGalaxy, Purchase = purchases[1], Description = "Galaxy S23 Ultra Blanco", Price = 1099.99, Quantity = 2 },
+                    new PurchaseItem { Device = dPixel, Purchase = purchases[2], Description = "Pixel 8 Pro Azul", Price = 899.99, Quantity = 1 },
+                    new PurchaseItem { Device = dXiaomi, Purchase = purchases[3], Description = "Xiaomi 13 Pro Verde", Price = 799.99, Quantity = 2 },
+                    new PurchaseItem { Device = dOnePlus, Purchase = purchases[4], Description = "OnePlus 11 Gris", Price = 699.99, Quantity = 1 }
+                };
+                context.PurchaseItem.AddRange(purchaseItems);
+                context.SaveChanges();
+            }
+
+            // --- 6. Rentals y RentDevices ---
+            if (!context.Rental.Any())
+            {
+                var rentals = new List<Rental>
                 {
-                    Repair = repairs[2],
-                    Receipt = receipts[2],
-                    Model = "Pixel 8"
-                },
-                new ReceiptItem
+                    new Rental { PaymentMethod = PaymentMethodTypes.CreditCard, RentalDate = new DateTime(2024, 1, 10), RentalDateFrom = new DateTime(2024, 1, 15), RentalDateTo = new DateTime(2024, 1, 22), TotalPrice = 350.00, ApplicationUser = userJm, DeliveryAddress = "Calle Mayor 123, Madrid" },
+                    new Rental { PaymentMethod = PaymentMethodTypes.PayPal, RentalDate = new DateTime(2024, 2, 5), RentalDateFrom = new DateTime(2024, 2, 10), RentalDateTo = new DateTime(2024, 2, 24), TotalPrice = 630.00, ApplicationUser = userRd, DeliveryAddress = "Avenida Libertad 45, Barcelona" },
+                    new Rental { PaymentMethod = PaymentMethodTypes.Cash, RentalDate = new DateTime(2024, 3, 1), RentalDateFrom = new DateTime(2024, 3, 5), RentalDateTo = new DateTime(2024, 3, 12), TotalPrice = 280.00, ApplicationUser = userGr, DeliveryAddress = "Plaza España 67, Valencia" },
+                    new Rental { PaymentMethod = PaymentMethodTypes.CreditCard, RentalDate = new DateTime(2024, 4, 12), RentalDateFrom = new DateTime(2024, 4, 15), RentalDateTo = new DateTime(2024, 4, 29), TotalPrice = 490.00, ApplicationUser = userJm, DeliveryAddress = "Calle Real 89, Sevilla" },
+                    new Rental { PaymentMethod = PaymentMethodTypes.PayPal, RentalDate = new DateTime(2024, 5, 20), RentalDateFrom = new DateTime(2024, 5, 25), RentalDateTo = new DateTime(2024, 6, 1), TotalPrice = 210.00, ApplicationUser = userRd, DeliveryAddress = "Avenida Andalucía 234, Málaga" }
+                };
+                context.Rental.AddRange(rentals);
+                context.SaveChanges();
+
+                var rentDevices = new List<RentDevice>
                 {
-                    Repair = repairs[3],
-                    Receipt = receipts[3],
-                    Model = "Xiaomi 13 Pro"
-                },
-                new ReceiptItem
+                    new RentDevice { Device = dIphone, Rental = rentals[0], Price = 50.00, Quantity = 1 },
+                    new RentDevice { Device = dGalaxy, Rental = rentals[1], Price = 45.00, Quantity = 2 },
+                    new RentDevice { Device = dPixel, Rental = rentals[2], Price = 40.00, Quantity = 1 },
+                    new RentDevice { Device = dXiaomi, Rental = rentals[3], Price = 35.00, Quantity = 2 },
+                    new RentDevice { Device = dOnePlus, Rental = rentals[4], Price = 30.00, Quantity = 1 }
+                };
+                context.RentDevice.AddRange(rentDevices);
+                context.SaveChanges();
+            }
+
+            // --- 7. Receipts y ReceiptItems ---
+            if (!context.Receipt.Any())
+            {
+                var repairsDb = context.Repair.ToList();
+                var rPantalla = repairsDb.First(r => r.Name == "Cambio pantalla");
+                var rBateria = repairsDb.First(r => r.Name == "Cambio batería");
+                var rPuerto = repairsDb.First(r => r.Name == "Reparación puerto carga");
+                var rCamara = repairsDb.First(r => r.Name == "Cambio cámara");
+                var rLimpieza = repairsDb.First(r => r.Name == "Limpieza por agua");
+
+                var receipts = new List<Receipt>
                 {
-                    Repair = repairs[4],
-                    Receipt = receipts[4],
-                    Model = "OnePlus 11"
-                }
-            };
-            await context.ReceiptItem.AddRangeAsync(receiptItems);
-            await context.SaveChangesAsync();
+                    new Receipt { PaymentMethod = PaymentMethodTypes.CreditCard, ReceiptDate = new DateTime(2024, 1, 18), TotalPrice = 150.00m, deliveryAddres = "Calle Mayor 123, Madrid", ApplicationUser = userJm },
+                    new Receipt { PaymentMethod = PaymentMethodTypes.PayPal, ReceiptDate = new DateTime(2024, 2, 22), TotalPrice = 80.00m, deliveryAddres = "Avenida Libertad 45, Barcelona", ApplicationUser = userRd },
+                    new Receipt { PaymentMethod = PaymentMethodTypes.Cash, ReceiptDate = new DateTime(2024, 3, 15), TotalPrice = 45.00m, deliveryAddres = "Plaza España 67, Valencia", ApplicationUser = userGr },
+                    new Receipt { PaymentMethod = PaymentMethodTypes.CreditCard, ReceiptDate = new DateTime(2024, 4, 8), TotalPrice = 120.00m, deliveryAddres = "Calle Real 89, Sevilla", ApplicationUser = userJm },
+                    new Receipt { PaymentMethod = PaymentMethodTypes.PayPal, ReceiptDate = new DateTime(2024, 5, 14), TotalPrice = 60.00m, deliveryAddres = "Avenida Andalucía 234, Málaga", ApplicationUser = userRd }
+                };
+                context.Receipt.AddRange(receipts);
+                context.SaveChanges();
+
+                var receiptItems = new List<ReceiptItem>
+                {
+                    new ReceiptItem { Repair = rPantalla, Receipt = receipts[0], Model = "iPhone 14 Pro" },
+                    new ReceiptItem { Repair = rBateria, Receipt = receipts[1], Model = "Galaxy S23" },
+                    new ReceiptItem { Repair = rPuerto, Receipt = receipts[2], Model = "Pixel 8" },
+                    new ReceiptItem { Repair = rCamara, Receipt = receipts[3], Model = "Xiaomi 13 Pro" },
+                    new ReceiptItem { Repair = rLimpieza, Receipt = receipts[4], Model = "OnePlus 11" }
+                };
+                context.ReceiptItem.AddRange(receiptItems);
+                context.SaveChanges();
+            }
         }
     }
 }
