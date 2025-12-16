@@ -908,6 +908,7 @@
       "ReceiptForCreateDTO": {
         "required": [
           "paymentMethod",
+          "userdeliveryaddress",
           "username",
           "usersurname"
         ],
@@ -923,9 +924,9 @@
             "type": "string"
           },
           "userdeliveryaddress": {
+            "minLength": 1,
             "type": "string",
-            "format": "multiline",
-            "nullable": true
+            "format": "multiline"
           },
           "paymentMethod": {
             "$ref": "#/components/schemas/PaymentMethodTypes"
@@ -941,6 +942,9 @@
         "additionalProperties": false
       },
       "ReceiptItemDTO": {
+        "required": [
+          "model"
+        ],
         "type": "object",
         "properties": {
           "name": {
@@ -956,8 +960,8 @@
             "format": "double"
           },
           "model": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           }
         },
         "additionalProperties": false

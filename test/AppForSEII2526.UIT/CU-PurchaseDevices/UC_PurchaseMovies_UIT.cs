@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using AppForMovies.UIT.Shared;
+using AppForSEII2526.UIT.Shared;
 using AppForSEII2526.UIT.Shared;
 
 namespace AppForSEII2526.UIT.CU_PurchaseDevices

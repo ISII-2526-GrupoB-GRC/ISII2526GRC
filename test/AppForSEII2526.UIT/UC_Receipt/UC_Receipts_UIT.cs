@@ -12,11 +12,14 @@ namespace AppForSEII2526.UIT.UC_Receipt
     {
         private SelectRepairs_PO selectRepairs_PO;
         private PostRepairs_PO postRepairs_PO;
+        private DetailsRepairs_PO detailsRepairs_PO;
 
         private const int RepairId1 = 1;
         private const string repairName1 = "Cambio pantalla";
         private const string repairScale1 = "Lujo";
         private const string cost1 = "150,00 €";
+        private const string cost1NoDecimals = "150 €";
+        private const string cost1Number = "150";
         private const string description1 = "Sustitución completa de pantalla OLED";
 
 
@@ -41,6 +44,7 @@ namespace AppForSEII2526.UIT.UC_Receipt
         {
             selectRepairs_PO = new SelectRepairs_PO(_driver, _output);
             postRepairs_PO = new PostRepairs_PO(_driver, output);
+            detailsRepairs_PO = new DetailsRepairs_PO(_driver, output);
         }
         /* Como no va aún el login lo dejo comentado 
         private void Precondition_perform_login() {
@@ -65,9 +69,20 @@ namespace AppForSEII2526.UIT.UC_Receipt
             InitialStepsForReceiptUC();
 
             var expectedReceiptItems = new List<string[]> {
-                new string[]{ repairName1, repairScale1, cost1, modelo},
+                new string[]{ repairName1, repairScale1, cost1Number, modelo},
             };
 
+            //Act
+            selectRepairs_PO.AddRepairToReceipt(repair);
+            selectRepairs_PO.DoReceipt();
+
+            postRepairs_PO.FillInReceiptInfo(username, (name + " " + surname), deliveryaddress, paymentmethod);
+            postRepairs_PO.FillInModelInfo(model, repair);
+            postRepairs_PO.PressSubmitReceipt();
+            postRepairs_PO.PressOkModalDialog();
+            //Assert
+            Assert.True(detailsRepairs_PO.CheckReceiptDetail(name+" "+surname,deliveryaddress, DateTime.Now, cost1NoDecimals), "Receipt details are not correct");
+            Assert.True(detailsRepairs_PO.CheckListOfDetailsRepairs(expectedReceiptItems), "Receipt items are not correct");
 
         }
         [Fact]
@@ -144,10 +159,10 @@ namespace AppForSEII2526.UIT.UC_Receipt
             Assert.True(selectRepairs_PO.ReceiptNotAvaible());
         }
         [Theory]
-        [InlineData("", surname, deliveryAddress, paymentMethod2, modelo, "The Username field is required.")]
+        [InlineData("", (name + " " + surname), deliveryAddress, paymentMethod2, modelo, "The Username field is required.")]
         [InlineData(username, "", deliveryAddress, paymentMethod2, modelo, "The Usersurname field is required.")]
-        [InlineData(username, surname, "", paymentMethod2, modelo, "Error en la dirección de envío. Por favor, introduce una dirección válida inluyendo las palabras Calle o Avenida")]
-        [InlineData(username, surname, deliveryAddress, paymentMethod2, "", "The Model field is required.")]
+        [InlineData(username, (name + " " + surname), "", paymentMethod2, modelo, "The Userdeliveryaddress field is required.")]
+        [InlineData(username, (name + " " + surname), deliveryAddress, paymentMethod2, "", "The Model field is required.")]
         [Trait("LevelTesting", "Funcional Testing")]
         public void UC4_AF4_UC9_10_11_12_ValidationErrors(string name, string surname, string deliveryaddress, string paymentmethod, string model, string expectedError)
         {
@@ -161,6 +176,34 @@ namespace AppForSEII2526.UIT.UC_Receipt
             postRepairs_PO.PressSubmitReceipt();
             //Assert
             Assert.True(postRepairs_PO.CheckValidationError(expectedError));
+        }
+
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC4_AF5_UC13_ModifyReceipt() 
+        {
+            InitialStepsForReceiptUC();
+            var expectedReceiptItems = new List<string[]>
+            {
+                new string[] { repairName1, repairScale1, cost1Number},
+            };
+
+            //Act
+            selectRepairs_PO.AddRepairToReceipt(repairName1);
+            selectRepairs_PO.AddRepairToReceipt(repairName2);
+            selectRepairs_PO.DoReceipt();
+
+            postRepairs_PO.FillInModelInfo(modelo, repairName1);
+            postRepairs_PO.FillInModelInfo(modelo, repairName2);
+            postRepairs_PO.FillInReceiptInfo(username, (name + " " + surname), deliveryAddress, paymentMethod2);
+            
+            postRepairs_PO.PressModifyReceipt();
+            selectRepairs_PO.RemoveRepairFromReceipt(repairName2);
+            selectRepairs_PO.DoReceipt();
+
+            //Assert
+            Assert.True(postRepairs_PO.CheckListOfReceiptItems(expectedReceiptItems, modelo, repairName1));
+
         }
     }
 }

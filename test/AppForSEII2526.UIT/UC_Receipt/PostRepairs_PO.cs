@@ -43,9 +43,6 @@ namespace AppForSEII2526.UIT.UC_Receipt
 
         public void PressSubmitReceipt() { 
             _driver.FindElement(By.Id("Submit")).Click();
-            Thread.Sleep(1000);
-
-            _driver.FindElement(By.Id("Button_DialogOK")).Click();
         }
         
         public void PressModifyReceipt()
@@ -54,7 +51,11 @@ namespace AppForSEII2526.UIT.UC_Receipt
         }
 
         public bool CheckListOfReceiptItems(List<string[]> expectedReceiptItems, string model, string name) {
-            return CheckBodyTable(expectedReceiptItems, By.Id("TableOfReceiptItems")) && _driver.FindElement(By.Id("model_" + name)).GetAttribute("value") == model;
+            var result = true;
+            result = result && CheckBodyTable(expectedReceiptItems, By.Id("TableOfReceiptItems"));
+            result = result && _driver.FindElement(By.Id("model_" + name)).GetAttribute("value") == model;
+
+            return result;
         }
 
         public bool CheckValidationError(string expectedError) {
