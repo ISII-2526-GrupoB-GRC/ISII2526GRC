@@ -65,11 +65,12 @@ namespace AppForSEII2526.API.Data
         public static void SeedUsers(UserManager<ApplicationUser> userManager, List<string> roles)
         {
             // Lista de usuarios a crear según tu repositorio original
+            // CAMBIO: UserName ahora coincide con el Email
             var usersToSeed = new List<(ApplicationUser User, string Password)>
             {
                 (new ApplicationUser
                 {
-                    UserName = "jmromero",
+                    UserName = "jmromero@example.com", // Cambiado de "jmromero"
                     Name = "José María",
                     Surname = "Romero Tendero",
                     Email = "jmromero@example.com",
@@ -80,7 +81,7 @@ namespace AppForSEII2526.API.Data
 
                 (new ApplicationUser
                 {
-                    UserName = "rdiaz",
+                    UserName = "rdiaz@example.com", // Cambiado de "rdiaz"
                     Name = "Rodrigo",
                     Surname = "Díaz Quintanar",
                     Email = "rdiaz@example.com",
@@ -91,7 +92,7 @@ namespace AppForSEII2526.API.Data
 
                 (new ApplicationUser
                 {
-                    UserName = "grosillo",
+                    UserName = "grosillo@example.com", // Cambiado de "grosillo"
                     Name = "Guillermo",
                     Surname = "Rosillo Serrano",
                     Email = "grosillo@example.com",
@@ -103,10 +104,10 @@ namespace AppForSEII2526.API.Data
 
             foreach (var (userTemplate, password) in usersToSeed)
             {
-                // Comprobamos si el usuario existe por nombre de usuario
+                // Comprobamos si el usuario existe por nombre de usuario (ahora es el email)
                 if (userManager.FindByNameAsync(userTemplate.UserName).Result == null)
                 {
-                    var result = userManager.CreateAsync(userTemplate, "Password123!");
+                    var result = userManager.CreateAsync(userTemplate, password);
                     result.Wait();
 
                     if (result.IsCompletedSuccessfully)
@@ -219,9 +220,11 @@ namespace AppForSEII2526.API.Data
 
             // Recuperamos datos necesarios para operaciones transaccionales
             var users = context.ApplicationUser.ToList();
-            var userJm = users.FirstOrDefault(u => u.UserName == "jmromero");
-            var userRd = users.FirstOrDefault(u => u.UserName == "rdiaz");
-            var userGr = users.FirstOrDefault(u => u.UserName == "grosillo");
+
+            // CAMBIO: Buscamos por el UserName actualizado (que ahora es el email)
+            var userJm = users.FirstOrDefault(u => u.UserName == "jmromero@example.com");
+            var userRd = users.FirstOrDefault(u => u.UserName == "rdiaz@example.com");
+            var userGr = users.FirstOrDefault(u => u.UserName == "grosillo@example.com");
 
             // Si los usuarios no se han creado correctamente arriba por alguna razón, abortamos la carga de datos dependientes
             if (userJm == null || userRd == null || userGr == null) return;
