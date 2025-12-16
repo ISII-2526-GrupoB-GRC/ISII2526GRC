@@ -116,6 +116,17 @@
 
     private void OpenDialog()
     {
+        bool hayErrores = receipt.ReceiptItems.Any(item => string.IsNullOrWhiteSpace(item.Model));
+
+        if (hayErrores)
+        {
+            // 3. Si hay error, configuramos el mensaje para que salga ARRIBA
+            messageError = "The Model field is required.";
+
+            // Importante: Hacemos return para que NO se abra el diálogo
+            return;
+        }
+
         DialogIsOpen = true;
     }
 
