@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using AppForMovies.UIT.Shared;
+using AppForSEII2526.UIT.Shared;
 using AppForSEII2526.UIT.Shared;
 using OpenQA.Selenium.DevTools.V141.Storage;
 
@@ -33,7 +33,7 @@ namespace AppForSEII2526.UIT.CU_PurchaseDevices
 
         private const string name = "José María";
         private const string surnames = "Romero Tendero";
-        private const string userEmail = "jmromero";
+        private const string userEmail = "jmromero@example.com";
         private const string deliveryAddress = "Calle Falsa 123, Springfield";
         private const string quantity1 = "1";
         private const string quantity2 = "1";
@@ -50,7 +50,7 @@ namespace AppForSEII2526.UIT.CU_PurchaseDevices
         }
         private void Precondition_perform_login()
         {
-            Perform_login("jmromero@example.com", "Password1234");
+            Perform_login("jmromero@example.com", "Password123!");
         }
 
         private void InitialStepsForPurchasingDevices()
@@ -127,8 +127,8 @@ namespace AppForSEII2526.UIT.CU_PurchaseDevices
         }
 
         [Theory]
-        [InlineData(deviceModel1,"",surnames,deliveryAddress,paymentMethod1,quantity1, "Error!. UserName is not registered")]
-        [InlineData(deviceModel1, userEmail, surnames, "", paymentMethod1, quantity1, "ERROR! You must put a delivery addres")]
+        [InlineData(deviceModel1,"",surnames,deliveryAddress,paymentMethod1,quantity1, "Errors: (*) Error!. UserName is not registered>")]
+        [InlineData(deviceModel1, userEmail, surnames, "", paymentMethod1, quantity1, "You must put a delivery addres")]
         public void UC_AF4_9_10_11(string model, string name, string surnames, string deliveryAddres, string paymentMethod, string quantity, string expectedError)
         {
             InitialStepsForPurchasingDevices();
