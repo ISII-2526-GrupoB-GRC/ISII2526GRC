@@ -46,15 +46,15 @@ namespace AppForSEII2526.UIT.UC_Receipt
             postRepairs_PO = new PostRepairs_PO(_driver, output);
             detailsRepairs_PO = new DetailsRepairs_PO(_driver, output);
         }
-        /* Como no va aún el login lo dejo comentado 
+         
         private void Precondition_perform_login() {
             Perform_login("rdiaz@example.com", "Password123!");
         }
-        */
+        
         private void InitialStepsForReceiptUC()
         {
             Initial_step_opening_the_web_page();
-            //Precondition_perform_login();
+            Precondition_perform_login();
             selectRepairs_PO.WaitForBeingVisible(By.Id("CreateReceipt"));
             _driver.FindElement(By.Id("CreateReceipt")).Click();
         }
@@ -86,7 +86,7 @@ namespace AppForSEII2526.UIT.UC_Receipt
 
         }
         [Fact]
-        [Trait("Level Testing", "Funcional Testing")]//Preguntar como probar esto
+        [Trait("Level Testing", "Funcional Testing")]
         public void UC4_AF0_UC4_RepairsNotAvailable()
         {
             //Arrange
