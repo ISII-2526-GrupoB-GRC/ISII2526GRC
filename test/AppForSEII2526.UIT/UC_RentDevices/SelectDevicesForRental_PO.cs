@@ -12,21 +12,30 @@ namespace AppForSEII2526.UIT.UC_RentDevices
         By inputModel = By.Id("selectModel");
         By inputRentPrice = By.Id("inputRentPrice");
         By buttonSearchDevices = By.Id("searchDevices");
-        By tableOfDevicesBy = By.Id("TableOfdevices");
+        By tableOfDevicesBy = By.Id("TableOfDevices");
         By errorShownBy = By.Id("ErrorShown");
         By buttonRentDevice = By.Id("rentDeviceButton");
 
         public SelectDevicesForRental_PO(IWebDriver driver, ITestOutputHelper output) : base(driver, output) { }
 
-        public void SearchDevices(string model, double priceForRent)
+        public void SearchDevices(string model, string priceForRent)
         {
             // Esperar a que el campo de modelo esté visible y luego ingresar el modelo
             WaitForBeingClickable(inputRentPrice);
-            _driver.FindElement(inputRentPrice).SendKeys(priceForRent.ToString());
-            if (model == "") model = "All";
-            SelectElement selectElement = new SelectElement(_driver.FindElement(inputModel));
-            selectElement.SelectByText(model);
+            _driver.FindElement(inputRentPrice).Clear();
+            _driver.FindElement(inputRentPrice).SendKeys(priceForRent);
 
+            SelectElement selectElement = new SelectElement(_driver.FindElement(inputModel));
+
+            if (string.IsNullOrEmpty(model))
+            {
+                selectElement.SelectByText("All"); // <-- SOLUCIÓN
+            }
+            else
+            {
+                selectElement.SelectByText(model);
+            }
+            // Si 'model' es "" o null, esta parte se salta, dejando el filtro de modelo sin aplicar (o con su valor por defecto, que es lo esperado).
             _driver.FindElement(buttonSearchDevices).Click();
 
         }
@@ -61,6 +70,11 @@ namespace AppForSEII2526.UIT.UC_RentDevices
             return _driver.FindElement(buttonRentDevice).Displayed == false;
         }
 
+        public void RentDevices()
+        {
+            WaitForBeingClickable(buttonRentDevice);
+            _driver.FindElement(buttonRentDevice).Click();
+        }
 
     }
 }

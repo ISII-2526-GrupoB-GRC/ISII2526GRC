@@ -31,20 +31,25 @@ namespace AppForSEII2526.UIT.UC_RentDevices
             _driver.FindElement(By.Id("quantity_" + model)).SendKeys(quantity.ToString());
         }
 
-        private void FillRentalInfo(string name, string surname, string deliveryAddres, string paymentMethod)
+        public void FillRentalInfo(string surname, string deliveryAddress, string paymentMethod)
         {
-            WaitForBeingVisible(Name);
             WaitForBeingVisible(Surname);
             WaitForBeingVisible(DeliveryAddress);
-            _name().SendKeys(name);
             _surname().SendKeys(surname);
-            _deliveryAddress().SendKeys(deliveryAddres);
+            _deliveryAddress().SendKeys(deliveryAddress);
 
             //Elemento de selección para el método de pago
             SelectElement selectElement = new SelectElement(_paymentMethod());
 
             //Seleccionar opción del DropDown menú
             selectElement.SelectByText(paymentMethod);
+        }
+
+        public void FillDeviceQuantity(string quantity, string brand)
+        {
+            WaitForBeingClickable(By.Id("quantity_" + brand));
+            _driver.FindElement(By.Id("quantity_" + brand)).Clear();
+            _driver.FindElement(By.Id("quantity_" + brand)).SendKeys(quantity);
         }
 
         public void PressAllquilarMisDispositivos()
@@ -57,9 +62,10 @@ namespace AppForSEII2526.UIT.UC_RentDevices
             _driver.FindElement(By.Id("ModifyDevices")).Click();
         }
 
-        public bool CheckListOfDevices(List<String[]> expectedRentalItems)
+        public bool CheckListOfDevices(List<String[]> expectedRentalItems, string quantity, string brand)
         {
-            return CheckBodyTable(expectedRentalItems, By.Id("TableOfRentalItems"));
+            return CheckBodyTable(expectedRentalItems, By.Id("TableOfRentalItems")) && _driver.FindElement(By.Id("quantity_" + brand)).GetAttribute("value") == quantity;
+
         }
 
         public bool CheckTotalPrice(string expectedTotalPrice)
