@@ -41,6 +41,12 @@ namespace AppForSEII2526.UIT.CU_PurchaseDevices
             selectPaymentMethod.SelectByText(paymentMethod);
 
         }
+        public void deleteUser()
+        {
+            WaitForBeingClickable(inputName);
+            nameElement().Clear();
+            
+        }
 
         public void FillInPurchaseQuantity(string quantity, string model)
         {
