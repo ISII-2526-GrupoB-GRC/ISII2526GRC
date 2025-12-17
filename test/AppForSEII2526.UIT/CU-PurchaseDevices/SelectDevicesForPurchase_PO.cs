@@ -62,5 +62,31 @@ namespace AppForSEII2526.UIT.CU_PurchaseDevices
 
             return _driver.FindElement(buttonPurchaseDevices).Displayed == false;
         }
+
+
+
+        public bool CheckMessageErrorNotAvailableDevices(string expectedError)
+
+
+        {
+
+
+            return _driver.PageSource.Contains(expectedError);
+
+
+        }
+        public void PurchaseDevices()
+
+
+        {
+
+
+            WaitForBeingClickable(buttonPurchaseDevices);
+
+
+            _driver.FindElement(buttonPurchaseDevices).Click();
+
+
+        }
     }
 }

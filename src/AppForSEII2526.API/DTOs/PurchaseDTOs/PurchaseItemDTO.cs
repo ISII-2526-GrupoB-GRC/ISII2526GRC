@@ -7,6 +7,7 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
         public string nameModel { get; set; }
         public string colour { get; set; }
         public double price { get; set; }
+        [Required]
         public int quantity { get; set; }
         public string description { get; set; }
 

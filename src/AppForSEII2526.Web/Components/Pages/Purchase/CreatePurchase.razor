@@ -20,14 +20,12 @@
 <h3>CreatePurchase</h3>
 <EditForm Model="purchase" OnValidSubmit="OpenDialog">
     <div class="row">
-
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-        <ValidationSummary class="row alert alert-danger"></ValidationSummary>
-            </div>
-            <div class="row alert alert-danger" role="alert" hidden="@hideErrors">
-                <p id="ErrorsShown">Errors: @messageError></p>
-            </div>
+    <DataAnnotationsValidator />
+    <ValidationSummary class="row alert alert-danger" />
+ </div>
+<div class="row alert alert-danger" role="alert" hidden="@hideErrors">
+   <p id="ErrorsShown">Errors: @messageError></p>
+</div
 
     <div class="row g-3">
 
@@ -106,7 +104,7 @@
         <div class="col-md">
             <div class="form-floating">
                 @*this button will be used to ask the user if he want to proceed to purchase de devices*@
-                <button class="btn btn-primary" type="submit" id="=Submit">
+                <button class="btn btn-primary" type="submit" id="Submit">
                     Purchase your devices
                 </button>
             </div>

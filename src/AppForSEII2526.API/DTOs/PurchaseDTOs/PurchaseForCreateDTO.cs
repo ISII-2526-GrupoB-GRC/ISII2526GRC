@@ -5,10 +5,20 @@ namespace AppForSEII2526.API.DTOs.PurchaseDTOs
     public class PurchaseForCreateDTO
     {
         public IList<PurchaseItemDTO> purchaseItems { get; set; }
+
+        [DataType(System.ComponentModel.DataAnnotations.DataType.MultilineText)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Introduce tu nombre")]
         public string name { get; set; }
         //public int id { get; set; }
+
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Introduce tus apellidos")]
         public string surnames { get; set; }
+        [DataType(System.ComponentModel.DataAnnotations.DataType.MultilineText)]
+        [Display(Name = "Dirección de envío")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Introduce tu direccion de envio")]
         public string deliveryAddress { get; set; }
+
+        [Required]
         public PaymentMethodTypes paymentMethod { get; set; }
 
         public PurchaseForCreateDTO(IList<PurchaseItemDTO> purchaseItems, string name, string surnames, string deliveryAddress, PaymentMethodTypes paymentMethod)
