@@ -12,11 +12,12 @@ namespace AppForSEII2526.UIT.UC_RentDevices
         {
         }
 
-        public bool CheckRentalDetail(string nameSurname, string delivery, DateTime rentalDate, double totalPrice, DateTime rentalDateFrom, DateTime rentalDateTo)
+        public bool CheckRentalDetail(string surname, string delivery, DateTime rentalDate, double totalPrice, DateTime rentalDateFrom, DateTime rentalDateTo)
         {
             WaitForBeingVisible(By.Id("TotalPrice"));
             bool result = true;
-            result = result && _driver.FindElement(By.Id("NameSurname")).Text.Contains(nameSurname);
+            //result = result && _driver.FindElement(By.Id("Name")).Text.Contains(name);
+            result = result && _driver.FindElement(By.Id("Surname")).Text.Contains(surname);
             result = result && _driver.FindElement(By.Id("DeliveryAddress")).Text.Contains(delivery);
             result = result && _driver.FindElement(By.Id("TotalPrice")).Text.Contains(totalPrice.ToString());
 
