@@ -38,15 +38,15 @@ namespace AppForSEII2526.UIT.UC_RentDevices
         private const string deviceBrand1 = "Apple";
         private const string deviceModel1 = "iPhone 14 Pro";
         private const string deviceColor1 = "Negro";
-        private const string devicePriceForRent1 = "50.0";
+        private const string devicePriceForRent1 = "50 €";
         private const int quantity1 = 1;
 
         private const int deviceId2 = 2;
         private const string deviceName2 = "Galaxy S23 Ultra";
         private const string deviceBrand2 = "Samsung";
-        private const string deviceModel2 = "Galaxy S23";
+        private const string deviceModel2 = "Samsung Galaxy S23";
         private const string deviceColor2 = "Blanco";
-        private const string devicePriceForRent2 = "45.0";
+        private const string devicePriceForRent2 = "45 €";
         private const int quantity2 = 2;
 
         public UC_RentDevices_UIT(ITestOutputHelper output) : base(output)
@@ -81,9 +81,8 @@ namespace AppForSEII2526.UIT.UC_RentDevices
         }
 
         [Theory]
-        [InlineData(deviceName1, deviceModel1, deviceBrand1, "2023", deviceColor1, devicePriceForRent1, "iPhone 14 Pro", null)] // Busca por modelo 
-        [InlineData(deviceName2, deviceModel2, deviceBrand2, "2023", deviceColor2, devicePriceForRent2, "", "45")]             // Busca por precio
-        // [InlineData(deviceName1, deviceBrand1, deviceModel1, deviceColor1, devicePriceForRent1, "iPhone 14 Pro", 50.0)]
+        [InlineData(deviceName1, deviceModel1, deviceBrand1, "2023", deviceColor1, devicePriceForRent1, "iPhone 14 Pro", "")]
+        [InlineData(deviceName2, deviceModel2, deviceBrand2, "2023", deviceColor2, devicePriceForRent2, "", "45")]
         [Trait("LevelTesting", "Functional Testing")]
         public void UC2_AF1_UC2_5_6_filtering(string devicename, string devicemodel, string devicebrand, string año, string devicecolor, string devicepricerent, string filterModel, string filterPriceRent)
         {
@@ -93,14 +92,15 @@ namespace AppForSEII2526.UIT.UC_RentDevices
             // Espera para que cargue la página completamente
             Thread.Sleep(1000);
             
+            // El orden debe coincidir con las columnas HTML: Name | Brand | Model | Brand | Año | Color | Price
             var expectedDevices = new List<string[]> { 
                 new string[] { 
-                    devicename,    // "iPhone 14 Pro Max" o "Galaxy S23 Ultra"
-                    devicemodel,   // "iPhone 14 Pro" o "Galaxy S23"
-                    devicebrand,   // "Apple" o "Samsung"
-                    año,           // "2023"
-                    devicecolor,   // "Negro" o "Blanco"
-                    devicepricerent // "50.0" o "45.0"
+                    devicename,      // "iPhone 14 Pro Max" o "Galaxy S23 Ultra"
+                    devicemodel,     // "iPhone 14 Pro" o "Galaxy S23"
+                    devicebrand,     // "Apple" o "Samsung"
+                    año,             // "2023"
+                    devicecolor,     // "Negro" o "Blanco"
+                    devicepricerent  // "50" o "45"
                 } 
             };
 
@@ -125,14 +125,13 @@ namespace AppForSEII2526.UIT.UC_RentDevices
             new string[] {
                 deviceBrand1,
                 deviceModel1,
-                devicePriceForRent1,
-                quantity1.ToString(),
+                devicePriceForRent1
             },
             };
 
             // Act
-            selectDevicesForRental_PO.AddDeviceToRentingCart(deviceModel1);
-            selectDevicesForRental_PO.AddDeviceToRentingCart(deviceModel2);
+            selectDevicesForRental_PO.AddDeviceToRentingCart(deviceBrand1);
+            selectDevicesForRental_PO.AddDeviceToRentingCart(deviceBrand2);
             selectDevicesForRental_PO.RentDevices();
 
             postRental_PO.FillDeviceQuantity(quantity1, deviceBrand1);
@@ -147,16 +146,16 @@ namespace AppForSEII2526.UIT.UC_RentDevices
             Assert.True(postRental_PO.CheckListOfDevices(expectedDevices, quantity1.ToString(), deviceBrand1));
         }
 
-
-
+        [Fact]
+        [Trait("LevelTesting", "Functional Testing")]
         public void UC2_AF3_UC2_8_NoDevicesInRentingCart()
         {
             // Arrange
             InitialStepsForRentingDevices();
 
             // Act
-            selectDevicesForRental_PO.AddDeviceToRentingCart(deviceModel1);
-            selectDevicesForRental_PO.RemoveDeviceFromRentingCart(deviceModel1);
+            selectDevicesForRental_PO.AddDeviceToRentingCart(deviceBrand1);
+            selectDevicesForRental_PO.RemoveDeviceFromRentingCart(deviceBrand1);
 
             // Assert
             Assert.True(selectDevicesForRental_PO.RentingNotAvailable());

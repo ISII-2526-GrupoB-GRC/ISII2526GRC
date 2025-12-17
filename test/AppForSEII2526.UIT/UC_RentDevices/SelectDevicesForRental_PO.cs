@@ -20,24 +20,39 @@ namespace AppForSEII2526.UIT.UC_RentDevices
 
         public void SearchDevices(string model, string priceForRent)
         {
-            // Esperar a que el campo de modelo esté visible y luego ingresar el modelo
-            WaitForBeingClickable(inputRentPrice);
-            _driver.FindElement(inputRentPrice).Clear();
-            _driver.FindElement(inputRentPrice).SendKeys(priceForRent);
+            // Esperar a que el dropdown de modelo esté visible
+            WaitForBeingVisible(inputModel);
 
-            SelectElement selectElement = new SelectElement(_driver.FindElement(inputModel));
+            // Seleccionar el modelo del dropdown si no es null o vacío
+            if (!string.IsNullOrEmpty(model))
+            {
+                var modelElement = _driver.FindElement(inputModel);
+                var selectElement = new SelectElement(modelElement);
 
-            if (string.IsNullOrEmpty(model))
-            {
-                selectElement.SelectByText("All"); // <-- SOLUCIÓN
+                // Seleccionar por el valor (value) del option
+                selectElement.SelectByValue(model);
+
+                // Espera breve para que se aplique la selección
+                Thread.Sleep(300);
             }
-            else
+
+            // Rellenar el campo de precio si no es null o vacío
+            if (!string.IsNullOrEmpty(priceForRent))
             {
-                selectElement.SelectByText(model);
+                WaitForBeingClickable(inputRentPrice);
+                var priceElement = _driver.FindElement(inputRentPrice);
+                priceElement.Clear();
+                Thread.Sleep(100);
+                priceElement.SendKeys(priceForRent);
             }
-            // Si 'model' es "" o null, esta parte se salta, dejando el filtro de modelo sin aplicar (o con su valor por defecto, que es lo esperado).
+
+            // Click en el botón de búsqueda
+            Thread.Sleep(300);
+            WaitForBeingClickable(buttonSearchDevices);
             _driver.FindElement(buttonSearchDevices).Click();
 
+            // Esperar a que se actualicen los resultados
+            Thread.Sleep(1500);
         }
 
         public bool CheckListOfDevices(List<string[]> expectedDevices)
