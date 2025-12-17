@@ -18,7 +18,7 @@ namespace AppForSEII2526.UIT.CU_PurchaseDevices
         private const string deviceModel1 = "iPhone 14 Pro";
         private const string deviceColour1 = "Negro";
         private const string devicePrice1 = "1199,99";
-
+        private const string quantity1 = "1";
 
         
         public UC_PurchaseMovies_UIT(ITestOutputHelper output) : base(output)
@@ -40,6 +40,9 @@ namespace AppForSEII2526.UIT.CU_PurchaseDevices
             _driver.FindElement(By.Id("CreatePurchase")).Click();
 
         }
+
+
+       
 
         
         [Theory]
