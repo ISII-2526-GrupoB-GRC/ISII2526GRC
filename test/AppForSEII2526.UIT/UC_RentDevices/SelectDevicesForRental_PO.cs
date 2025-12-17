@@ -39,7 +39,7 @@ namespace AppForSEII2526.UIT.UC_RentDevices
         public bool CheckMessageError(string errorMessage)
         {
             IWebElement actualErrorShown = _driver.FindElement(errorShownBy);
-            _output.WriteLine($"MEnsaje actual: {actualErrorShown.Text}");
+            _output.WriteLine($"Mensaje actual: {actualErrorShown.Text}");
             return actualErrorShown.Text.Contains(errorMessage);
         }
 
