@@ -127,7 +127,7 @@ namespace AppForSEII2526.UIT.CU_PurchaseDevices
         }
 
         [Theory]
-        [InlineData(deviceModel1,"",surnames,deliveryAddress,paymentMethod1,quantity1, "Errors: (*) Error!. UserName is not registered>")]
+        [InlineData(deviceModel1,"",surnames,deliveryAddress,paymentMethod1,quantity1, "Introduce tu nombre")]
         [InlineData(deviceModel1, userEmail, surnames, "", paymentMethod1, quantity1, "You must put a delivery addres")]
         public void UC_AF4_9_10_11(string model, string name, string surnames, string deliveryAddres, string paymentMethod, string quantity, string expectedError)
         {
