@@ -6,7 +6,7 @@
 
 <h3>DetailReceipt</h3>
 
-@attribute [Authorize]
+@*attribute [Authorize]*@
 
 @if (receipt == null)
 {
@@ -17,7 +17,7 @@ else
     <table class="table table-borderless table-sm">
         <tr>
             <th>Name and Surname</th>
-            <td id="NameSurname">@receipt.Surname</td>
+            <td id="NameSurname">@receipt.Username @receipt.Surname</td>
         </tr>
         <tr>
             <th>Delivery Address</th>
@@ -25,18 +25,18 @@ else
         </tr>
         <tr>
             <th>Receipt Date</th>
-            <td id="PaymentMethod">@receipt.Date</td>
+            <td id="ReceiptDate">@receipt.Date</td>
         </tr>
-    </table>    
+    </table>
     <h4>Repairs requested: </h4>
     <table class="table" id="RepairsRequested">
         <thread>
-             <tr>
+            <tr>
                 <th scope="col">Name</th>
                 <th scope="col">Scale</th>
                 <th scope="col">Cost</th>
                 <th scope="col">Model</th>
-             </tr>
+            </tr>
         </thread>
         <tbody>
             @foreach (var repair in receipt.Receiptitems)
@@ -51,8 +51,8 @@ else
         </tbody>
         <tfoot>
             @*colspan is used to state that TWO columns are collapsed*@
-            <th scope="row" colspan="2" class="text-end">Total Cost</th>
-            <td id="TotalPrice">@receipt.TotalPrice €</td>
+        <th scope="row" colspan="2" class="text-end">Total Cost</th>
+        <td id="TotalPrice">@receipt.TotalPrice €</td>
         </tfoot>
     </table>
 }

@@ -14,7 +14,7 @@ namespace AppForSEII2526.UIT.UC_Receipt
         By RepairButton = By.Id("RepairButton");
         By tableOfRepairsBy = By.Id("TableofRepairs");
         public SelectRepairs_PO(IWebDriver driver, ITestOutputHelper output) : base(driver, output) { }
-        public void SearchMovies(string name, string scale) {
+        public void SearchRepairs(string name, string scale) {
             WaitForBeingClickable(inputName);
             _driver.FindElement(inputName).SendKeys(name);
             

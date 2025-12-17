@@ -8,10 +8,10 @@ public class ApplicationUser : IdentityUser
 
     public ApplicationUser() { }
 
-    public ApplicationUser(int id, string name, string surname, string address)
+    public ApplicationUser(int id, string name, string surname, string address,string username)
     {
         this.Id = id;
-
+        this.UserName = username;
         this.Name = name;
         this.Surname = surname;
         //esto aqui no va

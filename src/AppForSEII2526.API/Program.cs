@@ -90,7 +90,7 @@ using (var scope = app.Services.CreateScope()) {
 
 
         //it sees the database
-        //SeedData.Initialize(db, scope.ServiceProvider, logger);
+        DbSeeder.Initialize(db, scope.ServiceProvider, logger);
     }
     catch (Exception ex) {
         logger.LogError(ex, "An error occurred seeding the DB.");
@@ -113,27 +113,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 // Después de la construcción de la app y antes de app.Run()
-
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    try
-    {
-        var context = services.GetRequiredService<ApplicationDbContext>();
-        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-
-        // Aplicar migraciones pendientes
-        await context.Database.MigrateAsync();
-
-        // Poblar la base de datos
-        await DbSeeder.SeedAsync(context, userManager);
-    }
-    catch (Exception ex)
-    {
-        logger.LogError(ex, "Ocurrió un error al poblar la base de datos.");
-    }
-}
-
 
 
 app.Run();
