@@ -32,7 +32,7 @@ namespace AppForSEII2526.UIT.UC_Receipt
         private const string AddToReceipt = "Add to Receipt";
 
         private const string name = "Rodrigo";
-        private const string username = "rdiaz";
+        private const string username = "rdiaz@example.com";
         private const string surname = "Díaz Quintanar";
         private const string deliveryAddress = "Calle Prueba";
         private const string paymentMethod1 = "Credit Card";

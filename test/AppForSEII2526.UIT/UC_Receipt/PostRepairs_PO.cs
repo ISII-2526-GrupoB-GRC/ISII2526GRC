@@ -27,6 +27,7 @@ namespace AppForSEII2526.UIT.UC_Receipt
         public void FillInReceiptInfo(string name, string surname, string deliveryAddress, string paymentMethod) 
         {
             WaitForBeingClickable(inputName);
+            _driver.FindElement(inputName).Clear();
             nameElement().SendKeys(name);
             surnameElement().SendKeys(surname);
             addressElement().SendKeys(deliveryAddress);

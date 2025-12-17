@@ -5,7 +5,9 @@
 @inject ILogger<SelectRepair> Logger
 @inject NavigationManager navigation
 @inject ReceiptStateContainer receiptStateContainer
+@using Microsoft.AspNetCore.Authorization
 
+@attribute [Authorize]
 <h3>Select Repairs</h3>
 <div class="container-fluid">
     <div class="row alert alert-danger" role="alert" hidden="@hideErrors">

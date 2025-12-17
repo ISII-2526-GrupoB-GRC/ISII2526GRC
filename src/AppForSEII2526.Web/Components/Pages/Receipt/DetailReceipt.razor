@@ -4,9 +4,9 @@
 @using Microsoft.AspNetCore.Authorization
 @inject AppForSEII2526APIClient apiclient
 
-<h3>DetailReceipt</h3>
+<h3>Detail Receipt</h3>
 
-@*attribute [Authorize]*@
+@attribute [Authorize]
 
 @if (receipt == null)
 {
@@ -30,14 +30,14 @@ else
     </table>
     <h4>Repairs requested: </h4>
     <table class="table" id="RepairsRequested">
-        <thread>
+        <thead>
             <tr>
                 <th scope="col">Name</th>
                 <th scope="col">Scale</th>
                 <th scope="col">Cost</th>
                 <th scope="col">Model</th>
             </tr>
-        </thread>
+        </thead>
         <tbody>
             @foreach (var repair in receipt.Receiptitems)
             {
