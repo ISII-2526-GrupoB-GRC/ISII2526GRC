@@ -36,9 +36,9 @@ namespace AppForSEII2526.UIT.UC_Receipt
         }
 
         public void FillInModelInfo(string model, string name) {
-            WaitForBeingClickable(By.Id("RepairData_"+name));
-            _driver.FindElement(By.Id("RepairData_" + name)).Clear();
-            _driver.FindElement(By.Id("RepairData_" + name)).SendKeys(model);
+            WaitForBeingClickable(By.Id("model_"+name));
+            _driver.FindElement(By.Id("model_" + name)).Clear();
+            _driver.FindElement(By.Id("model_" + name)).SendKeys(model);
         }
 
         public void PressSubmitReceipt() { 
@@ -51,7 +51,11 @@ namespace AppForSEII2526.UIT.UC_Receipt
         }
 
         public bool CheckListOfReceiptItems(List<string[]> expectedReceiptItems, string model, string name) {
-            return CheckBodyTable(expectedReceiptItems, By.Id("TableOfReceiptItems")) && _driver.FindElement(By.Id("RepairData_" + name)).GetAttribute("value") == model;
+            var result = true;
+            result = result && CheckBodyTable(expectedReceiptItems, By.Id("TableOfReceiptItems"));
+            result = result && _driver.FindElement(By.Id("model_" + name)).GetAttribute("value") == model;
+
+            return result;
         }
 
         public bool CheckValidationError(string expectedError) {
