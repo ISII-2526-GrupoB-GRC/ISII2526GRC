@@ -205,5 +205,30 @@ namespace AppForSEII2526.UIT.UC_Receipt
             Assert.True(postRepairs_PO.CheckListOfReceiptItems(expectedReceiptItems, modelo, repairName1));
 
         }
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void examen() {
+            InitialStepsForReceiptUC();
+            var expectedReceiptItems = new List<string[]> {
+                new string[] {repairName1, repairScale1, cost1Number, modelo },
+            };
+            //Act
+            selectRepairs_PO.AddRepairToReceipt(repairName2);
+            selectRepairs_PO.SearchRepairs("", "Lujo");
+            selectRepairs_PO.AddRepairToReceipt(repairName1);
+            selectRepairs_PO.RemoveRepairFromReceipt(repairName2);
+            selectRepairs_PO.DoReceipt();
+            Thread.Sleep(2000);
+            //Arrange
+            postRepairs_PO.FillInReceiptInfo(username, (name + " " + surname), deliveryAddress, paymentMethod2);
+            postRepairs_PO.FillInModelInfo(modelo, repairName1);
+            postRepairs_PO.PressSubmitReceipt();
+            postRepairs_PO.PressOkModalDialog();
+
+            //Assert
+            Assert.True(detailsRepairs_PO.CheckReceiptDetail(name + " " + surname, deliveryAddress, DateTime.Now, cost1NoDecimals), "Receipt details are not correct");
+            Assert.True(detailsRepairs_PO.CheckListOfDetailsRepairs(expectedReceiptItems), "Receipt items are not correct");
+
+        }
     }
 }
