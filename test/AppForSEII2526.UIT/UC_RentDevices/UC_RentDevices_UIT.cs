@@ -220,5 +220,34 @@ namespace AppForSEII2526.UIT.UC_RentDevices
             // Compruebo el detalle:
             Assert.True(detailsRental_PO.CheckRentalDetail(surname, deliveryAddress, DateTime.Today, 50.0, DateTime.Today.AddDays(1), DateTime.Today.AddDays(2)));
         }
+
+        // Modificación Examen Sprint 3: ***
+        [Theory]
+        [InlineData(surname, deliveryAddress, paymentMethod2, quantity1, deviceModel2)]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void Examen_Sprint3(string surname, string deliveryAddress, string paymentMethods, int quantity, string filtroModelo)
+        {
+            //Arrange
+            InitialStepsForRentingDevices();
+
+            //Act
+
+            selectDevicesForRental_PO.AddDeviceToRentingCart(deviceBrand1); // 1) Añade elemento
+            selectDevicesForRental_PO.SearchDevices(filtroModelo, "");      // 2) Filtra por modelo
+            selectDevicesForRental_PO.AddDeviceToRentingCart(deviceBrand2); // 3) Añade elemento
+            selectDevicesForRental_PO.RemoveDeviceFromRentingCart(deviceBrand1); // 4) Elimina 1er elemento
+
+            selectDevicesForRental_PO.RentDevices();                             // 5) Resto del proceso...
+
+            postRental_PO.FillRentalInfo(surname, deliveryAddress, paymentMethods);
+            postRental_PO.FillDeviceQuantity(quantity, deviceBrand2);
+            postRental_PO.PressAllquilarMisDispositivos();
+            postRental_PO.PressOkModalDialog();
+
+            //Assert
+            // Compruebo el detalle:
+            Assert.True(detailsRental_PO.CheckRentalDetail(surname, deliveryAddress, DateTime.Today, 45.0, DateTime.Today.AddDays(1), DateTime.Today.AddDays(2)));
+        }
+
     }
 }
