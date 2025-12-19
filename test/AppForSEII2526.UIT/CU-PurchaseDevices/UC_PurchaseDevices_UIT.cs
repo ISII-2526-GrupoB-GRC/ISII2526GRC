@@ -79,6 +79,30 @@ namespace AppForSEII2526.UIT.CU_PurchaseDevices
             
         }*/
 
+        [Fact]
+        [Trait("LevelTesting", "Funcional Testing")]
+        public void UC_Examen()
+        {
+            InitialStepsForPurchasingDevices();
+
+            var expectedPurchaseItems = new List<string[]> { new string[] { deviceBrand1, deviceModel1, deviceColour1, devicePrice1, quantity1 }, };
+
+            selectDevicesForPurchase_PO.AddMovieToPurchasingCart(deviceModel2);
+            selectDevicesForPurchase_PO.searchDevice("","Negro");
+            selectDevicesForPurchase_PO.AddMovieToPurchasingCart(deviceModel1);
+            selectDevicesForPurchase_PO.RemoveFromRentingCart(deviceModel2);
+
+            selectDevicesForPurchase_PO.PurchaseDevices();
+
+            createPurchase_PO.FillInPurchaseInfo("", surnames, deliveryAddress, paymentMethod1);
+            createPurchase_PO.FillInPurchaseQuantity(quantity1, deviceModel1);
+            createPurchase_PO.PressPurchaseYourDevices();
+            createPurchase_PO.PressOkModalDialog();
+
+
+
+            Assert.True(detailPurchase_PO.CheckListOfPurchaseItems(expectedPurchaseItems));
+        }
 
         [Theory]
         [InlineData(deviceModel1, userEmail, surnames, deliveryAddress, paymentMethod1, quantity1,description2)]
