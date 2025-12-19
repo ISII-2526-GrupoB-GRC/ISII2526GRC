@@ -56,24 +56,28 @@ namespace AppForSEII2526.UT.RentalsController_test
             var rentalItems1 = new List<RentalItemDTO>() { new RentalItemDTO("Dell", "Portátil", 45d, 2), new RentalItemDTO("Lenovo", "Ordenador de Sobremesa", 22, 3) }; //Lista de dispositivos para alquilar válida
             var rentalItems2 = new List<RentalItemDTO>() { new RentalItemDTO("HP", "Portátil", 50d, 100) }; // Lista de dispositivo con cantidad que supera la disponible
 
-            var rentalNoName = new RentalForCreateDTO(null, "Martín", "Calle Guerrero 3, Madrid", PaymentMethodTypes.PayPal, today.AddDays(1), today.AddDays(5), rentalItems1); // 1 - Nombre nulo
-            var RentalApplicationUser = new RentalForCreateDTO("ignacio.schwarzenegger@example.com", "Martín", "Calle Guerrero 3, Madrid", PaymentMethodTypes.PayPal, today.AddDays(1), today.AddDays(5), rentalItems1); // 2 - UserName no registrado
-            var rentalNoSurname = new RentalForCreateDTO("Pedro", null, "Calle Guerrero 3, Madrid", PaymentMethodTypes.PayPal, today.AddDays(1), today.AddDays(5), rentalItems1); // 3 - Apellido nulo
+            var rentalNoName = new RentalForCreateDTO(null, "Martín", "Avenida Guerrero 3, Madrid", PaymentMethodTypes.PayPal, today.AddDays(1), today.AddDays(5), rentalItems1); // 1 - Nombre nulo
+            var RentalApplicationUser = new RentalForCreateDTO("ignacio.schwarzenegger@example.com", "Martín", "Avenida Guerrero 3, Madrid", PaymentMethodTypes.PayPal, today.AddDays(1), today.AddDays(5), rentalItems1); // 2 - UserName no registrado
+            var rentalNoSurname = new RentalForCreateDTO("Pedro", null, "Avenida Guerrero 3, Madrid", PaymentMethodTypes.PayPal, today.AddDays(1), today.AddDays(5), rentalItems1); // 3 - Apellido nulo
             var rentalNoAddress = new RentalForCreateDTO("Pedro", "Martín", null, PaymentMethodTypes.PayPal, today.AddDays(1), today.AddDays(5), rentalItems1); // 4 - Dirección nula
-            var rentalFechaAntesHoy = new RentalForCreateDTO("Pedro", "Martín", "Calle Guerrero 3, Madrid", PaymentMethodTypes.PayPal, today.AddDays(-1), today.AddDays(5), rentalItems1); // 5 - RentalDateFrom < today (debe fallar)
+            var rentalFechaAntesHoy = new RentalForCreateDTO("Pedro", "Martín", "Avenida Guerrero 3, Madrid", PaymentMethodTypes.PayPal, today.AddDays(-1), today.AddDays(5), rentalItems1); // 5 - RentalDateFrom < today (debe fallar)
 
             var from = today.AddDays(5); // Empezar dentro de 5 dias
             var to = today.AddDays(2);   // Acabar Pasado mañana
-            var rentalToAntesDeFrom = new RentalForCreateDTO("Pedro", "Martín", "Calle Guerrero 3, Madrid", PaymentMethodTypes.PayPal, from, to, rentalItems1); // 6 - RentalDateTo < RentalDateFrom
+            var rentalToAntesDeFrom = new RentalForCreateDTO("Pedro", "Martín", "Avenida Guerrero 3, Madrid", PaymentMethodTypes.PayPal, from, to, rentalItems1); // 6 - RentalDateTo < RentalDateFrom
 
-            var rentalNoItem = new RentalForCreateDTO("Pedro", "Martín", "Calle Guerrero 3, Madrid", PaymentMethodTypes.CreditCard, today.AddDays(1), today.AddDays(5), new List<RentalItemDTO>()); // 7 Lista vacía - Item nulo
-            var rentalDeviceNoAvailable = new RentalForCreateDTO("Pedro", "Martín", "Calle Guerrero 3, Madrid", PaymentMethodTypes.PayPal, today.AddDays(1), today.AddDays(5), new List<RentalItemDTO>(rentalItems2)); // 8 - rentalItems2 tiene un dispositivo con cantidad 100 que supera la disponible 15
+            var rentalNoItem = new RentalForCreateDTO("Pedro", "Martín", "Avenida Guerrero 3, Madrid", PaymentMethodTypes.CreditCard, today.AddDays(1), today.AddDays(5), new List<RentalItemDTO>()); // 7 Lista vacía - Item nulo
+            var rentalDeviceNoAvailable = new RentalForCreateDTO("Pedro", "Martín", "Avenida Guerrero 3, Madrid", PaymentMethodTypes.PayPal, today.AddDays(1), today.AddDays(5), new List<RentalItemDTO>(rentalItems2)); // 8 - rentalItems2 tiene un dispositivo con cantidad 100 que supera la disponible 15
 
-            var rentalDeviceNoBrand = new RentalForCreateDTO("Pedro", "Martín", "Calle Guerrero 3, Madrid", PaymentMethodTypes.PayPal, today.AddDays(1), today.AddDays(5), new List<RentalItemDTO>() { new RentalItemDTO(null, "Portátil", 50d, 2) }); // 9 - Marca nula
-            var rentalDeviceNoModel = new RentalForCreateDTO("Pedro", "Martín", "Calle Guerrero 3, Madrid", PaymentMethodTypes.PayPal, today.AddDays(1), today.AddDays(5), new List<RentalItemDTO>() { new RentalItemDTO("HP", null, 50d, 2) }); // 10 - Modelo nulo
+            var rentalDeviceNoBrand = new RentalForCreateDTO("Pedro", "Martín", "Avenida Guerrero 3, Madrid", PaymentMethodTypes.PayPal, today.AddDays(1), today.AddDays(5), new List<RentalItemDTO>() { new RentalItemDTO(null, "Portátil", 50d, 2) }); // 9 - Marca nula
+            var rentalDeviceNoModel = new RentalForCreateDTO("Pedro", "Martín", "Avenida Guerrero 3, Madrid", PaymentMethodTypes.PayPal, today.AddDays(1), today.AddDays(5), new List<RentalItemDTO>() { new RentalItemDTO("HP", null, 50d, 2) }); // 10 - Modelo nulo
 
             //Modificación:
-            var rentalAddressInvalida = new RentalForCreateDTO("Pedro", "Martín", "Guerrero 3, Madrid", PaymentMethodTypes.PayPal, today.AddDays(1), today.AddDays(5), new List<RentalItemDTO>() { new RentalItemDTO("HP", "Portátil", 50d, 2) }); // 11 - DeliveryAddress sin clave "Calle" o "Carreteera"
+            //var rentalAddressInvalida = new RentalForCreateDTO("Pedro", "Martín", "Guerrero 3, Madrid", PaymentMethodTypes.PayPal, today.AddDays(1), today.AddDays(5), new List<RentalItemDTO>() { new RentalItemDTO("HP", "Portátil", 50d, 2) }); // 11 - DeliveryAddress sin clave "Calle" o "Carreteera"
+
+            // Modificación Recuperación ***:
+            var rentalAddressInvalidaRecu = new RentalForCreateDTO("Pedro", "Martín", "Guerrero 3, Madrid", PaymentMethodTypes.PayPal, today.AddDays(1), today.AddDays(5), new List<RentalItemDTO>() { new RentalItemDTO("HP", "Portátil", 50d, 2) }); // 11 - DeliveryAddress sin clave "Calle" o "Carreteera"
+
 
             var allTests = new List<object[]>
             {
@@ -88,7 +92,10 @@ namespace AppForSEII2526.UT.RentalsController_test
                 new object[] { rentalDeviceNoBrand, "Error! Campos Modelo: 'Portátil' Marca: '' vacíos o se supera cantidad disponible", }, // 9
                 new object[] { rentalDeviceNoModel, "Error! Campos Modelo: '' Marca: 'HP' vacíos o se supera cantidad disponible", }, // 10
                 //Modificación:
-                new object[] { rentalAddressInvalida , "Error en la dirección. Debe contener 'Calle' o 'Carretera'", }, // 11
+                //new object[] { rentalAddressInvalida , "Error en la dirección. Debe contener 'Calle' o 'Carretera'", }, // 11
+
+                // Modificación Recuperación: ***
+                new object[] { rentalAddressInvalidaRecu , "Error en la dirección. Debe empezar por 'Avenida' o 'Pase'", }, // 11
             };
 
             return allTests;
@@ -115,44 +122,8 @@ namespace AppForSEII2526.UT.RentalsController_test
             Assert.StartsWith(errorExpected, errorActual);
         }
 
-        [Fact]
-        [Trait("LevelTesting", "Unit Testing")]
-        public async Task CreateRental_Success_test()
-        {
-            // Arrange
-            var mock = new Mock<ILogger<RentalsController>>();
-            ILogger<RentalsController> logger = mock.Object;
+        // Modificación de la Recuperación: ***
 
-            var controller = new RentalsController(_context, logger);
-
-            //we use always relative dates to avoid errors if the test is run some years later
-
-            DateTime today = DateTime.Today;
-            DateTime from = today.AddDays(2);
-            DateTime to = today.AddDays(5);
-
-            RentalForCreateDTO rentalDTO = new RentalForCreateDTO("Pedro", "Martín", "Calle Guerrero 3, Madrid", PaymentMethodTypes.PayPal, from, to, new List<RentalItemDTO>() { new RentalItemDTO("Dell", "Portátil", 45d, 2) });
-
-            //Calculo del total price:
-            var numDays = (to - from).Days;
-            double totalPrice = 45d * 2 * numDays;
-
-            //the id is 2 because there is another rental in the database
-            RentalDetailDTO expectedrentalDetailDTO = new RentalDetailDTO(2, "Pedro", "Martín", "Calle Guerrero 3, Madrid", today, totalPrice, from, to, new List<RentalItemDTO>());
-            expectedrentalDetailDTO.RentedDevices.Add(new RentalItemDTO("Dell", "Portátil", 45d, 2));
-
-            // Act
-            var result = await controller.CreateRental(rentalDTO);
-
-            //Assert
-            //we check that the response type is BadRequest and obtain the error returned
-            var createdResult = Assert.IsType<CreatedAtActionResult>(result);
-            var actualRentalDetailDTO = Assert.IsType<RentalDetailDTO>(createdResult.Value);
-
-            Assert.Equal(expectedrentalDetailDTO, actualRentalDetailDTO);
-        }
-
-        //Modificación:
         [Fact]
         [Trait("LevelTesting", "Unit Testing")]
         public async Task CreateRental_Success2_test()
@@ -169,14 +140,14 @@ namespace AppForSEII2526.UT.RentalsController_test
             DateTime from = today.AddDays(2);
             DateTime to = today.AddDays(5);
 
-            RentalForCreateDTO rentalDTO = new RentalForCreateDTO("Pedro", "Martín", "Carretera Guerrero 3, Madrid", PaymentMethodTypes.PayPal, from, to, new List<RentalItemDTO>() { new RentalItemDTO("Dell", "Portátil", 45d, 2) });
+            RentalForCreateDTO rentalDTO = new RentalForCreateDTO("Pedro", "Martín", "Avenida Guerrero 3, Madrid", PaymentMethodTypes.PayPal, from, to, new List<RentalItemDTO>() { new RentalItemDTO("Dell", "Portátil", 45d, 2) });
 
             //Calculo del total price:
             var numDays = (to - from).Days;
             double totalPrice = 45d * 2 * numDays;
 
             //the id is 2 because there is another rental in the database
-            RentalDetailDTO expectedrentalDetailDTO = new RentalDetailDTO(2, "Pedro", "Martín", "Carretera Guerrero 3, Madrid", today, totalPrice, from, to, new List<RentalItemDTO>());
+            RentalDetailDTO expectedrentalDetailDTO = new RentalDetailDTO(2, "Pedro", "Martín", "Avenida Guerrero 3, Madrid", today, totalPrice, from, to, new List<RentalItemDTO>());
             expectedrentalDetailDTO.RentedDevices.Add(new RentalItemDTO("Dell", "Portátil", 45d, 2));
 
             // Act
@@ -189,5 +160,43 @@ namespace AppForSEII2526.UT.RentalsController_test
 
             Assert.Equal(expectedrentalDetailDTO, actualRentalDetailDTO);
         }
+
+        [Fact]
+        [Trait("LevelTesting", "Unit Testing")]
+        public async Task CreateRental_Success3_test()
+        {
+            // Arrange
+            var mock = new Mock<ILogger<RentalsController>>();
+            ILogger<RentalsController> logger = mock.Object;
+
+            var controller = new RentalsController(_context, logger);
+
+            //we use always relative dates to avoid errors if the test is run some years later
+
+            DateTime today = DateTime.Today;
+            DateTime from = today.AddDays(2);
+            DateTime to = today.AddDays(5);
+
+            RentalForCreateDTO rentalDTO = new RentalForCreateDTO("Pedro", "Martín", "Pase Guerrero 3, Madrid", PaymentMethodTypes.PayPal, from, to, new List<RentalItemDTO>() { new RentalItemDTO("Dell", "Portátil", 45d, 2) });
+
+            //Calculo del total price:
+            var numDays = (to - from).Days;
+            double totalPrice = 45d * 2 * numDays;
+
+            //the id is 2 because there is another rental in the database
+            RentalDetailDTO expectedrentalDetailDTO = new RentalDetailDTO(2, "Pedro", "Martín", "Pase Guerrero 3, Madrid", today, totalPrice, from, to, new List<RentalItemDTO>());
+            expectedrentalDetailDTO.RentedDevices.Add(new RentalItemDTO("Dell", "Portátil", 45d, 2));
+
+            // Act
+            var result = await controller.CreateRental(rentalDTO);
+
+            //Assert
+            //we check that the response type is BadRequest and obtain the error returned
+            var createdResult = Assert.IsType<CreatedAtActionResult>(result);
+            var actualRentalDetailDTO = Assert.IsType<RentalDetailDTO>(createdResult.Value);
+
+            Assert.Equal(expectedrentalDetailDTO, actualRentalDetailDTO);
+        }
+
     }
 }
